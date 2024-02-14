@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://srkrdt5tx8ca"]
+
+[ext_resource type="Material" uid="uid://b0ipq6sagtgs2" path="res://Scenes/Particles/fire_partical.tres" id="1_jigwt"]
+[ext_resource type="QuadMesh" uid="uid://dprwdbeuoy3ys" path="res://Scenes/Particles/fire_texture.tres" id="2_f76k3"]
+
+[node name="Fire" type="Node3D"]
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+amount = 50
+lifetime = 0.5
+visibility_aabb = AABB(-0.481784, -2.04012, -0.248887, 0.963569, 7.10857, 0.497774)
+process_material = ExtResource("1_jigwt")
+draw_pass_1 = ExtResource("2_f76k3")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="GPUParticles3D"]
+light_color = Color(1, 0.733333, 0, 1)
+light_energy = 3.0
+light_size = 3.0

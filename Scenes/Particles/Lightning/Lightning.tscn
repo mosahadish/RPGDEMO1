@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://dmx6tbspn3ien"]
+
+[ext_resource type="Material" uid="uid://dlua1tm58k501" path="res://Scenes/Particles/Lightning/Lightning1.tres" id="1_pcml6"]
+[ext_resource type="QuadMesh" uid="uid://cvxlgq52a2677" path="res://Scenes/Particles/Lightning/Lightning2.tres" id="2_tt0ch"]
+
+[node name="Lightning" type="Node3D"]
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 1.09342, 0)
+amount = 3
+lifetime = 0.5
+explosiveness = 0.08
+process_material = ExtResource("1_pcml6")
+draw_pass_1 = ExtResource("2_tt0ch")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="GPUParticles3D"]
+transform = Transform3D(3.33333, 0, 0, 0, 3.33333, 0, 0, 0, 3.33333, 0, 3.48651, 1.07767)
+light_color = Color(0.46166, 0.674133, 0.999999, 1)
+light_energy = 1.5
+shadow_enabled = true
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="GPUParticles3D"]
+transform = Transform3D(3.33333, 0, 0, 0, 3.33333, 0, 0, 0, 3.33333, 0, 0.367054, -1.32524)
+light_color = Color(0.46166, 0.674133, 0.999999, 1)
+light_energy = 1.5
+shadow_enabled = true

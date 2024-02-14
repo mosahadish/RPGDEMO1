@@ -1,0 +1,126 @@
+[gd_scene load_steps=3 format=3 uid="uid://yb43ks5ned6a"]
+
+[ext_resource type="PackedScene" uid="uid://dmsjjurjggdpo" path="res://Scenes/UI/NewInventory/inv_slot.tscn" id="1_4u5be"]
+[ext_resource type="Script" path="res://Scenes/UI/NewInventory/inventory.gd" id="1_e2yvg"]
+
+[node name="Inventory" type="Control" node_paths=PackedStringArray("inventory", "equipment", "hotbar", "head_slot", "body_slot", "legs_slot", "right_hand", "left_hand", "hot_bar1", "hot_bar2", "hot_bar3", "hot_bar4")]
+layout_mode = 3
+anchor_left = 0.405
+anchor_top = 0.394
+anchor_right = 0.405
+anchor_bottom = 0.394
+offset_left = 0.599976
+offset_top = 0.0800171
+offset_right = 232.6
+offset_bottom = 299.08
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_e2yvg")
+inventory = NodePath("PanelContainer/VBoxContainer/InventoryGrid")
+equipment = NodePath("PanelContainer/VBoxContainer/EquipmentGrid")
+hotbar = NodePath("PanelContainer/VBoxContainer/GridContainer")
+head_slot = NodePath("PanelContainer/VBoxContainer/EquipmentGrid/equip_head")
+body_slot = NodePath("PanelContainer/VBoxContainer/EquipmentGrid/equip_body")
+legs_slot = NodePath("PanelContainer/VBoxContainer/EquipmentGrid/equip_legs")
+right_hand = NodePath("PanelContainer/VBoxContainer/EquipmentGrid/equip_righthand")
+left_hand = NodePath("PanelContainer/VBoxContainer/EquipmentGrid/equip_lefthand")
+hot_bar1 = NodePath("PanelContainer/VBoxContainer/GridContainer/hot_bar1")
+hot_bar2 = NodePath("PanelContainer/VBoxContainer/GridContainer/hot_bar2")
+hot_bar3 = NodePath("PanelContainer/VBoxContainer/GridContainer/hot_bar3")
+hot_bar4 = NodePath("PanelContainer/VBoxContainer/GridContainer/hot_bar4")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.007
+anchor_top = 0.013
+anchor_right = 0.009
+anchor_bottom = 0.013
+offset_left = 0.376
+offset_top = -2.887
+offset_right = 224.912
+offset_bottom = 184.113
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="EquipmentGrid" type="GridContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+columns = 5
+
+[node name="equip_head" parent="PanelContainer/VBoxContainer/EquipmentGrid" instance=ExtResource("1_4u5be")]
+layout_mode = 2
+slot_type = "HEAD"
+
+[node name="equip_body" parent="PanelContainer/VBoxContainer/EquipmentGrid" instance=ExtResource("1_4u5be")]
+layout_mode = 2
+slot_type = "BODY"
+
+[node name="equip_legs" parent="PanelContainer/VBoxContainer/EquipmentGrid" instance=ExtResource("1_4u5be")]
+layout_mode = 2
+slot_type = "LEGS"
+
+[node name="equip_righthand" parent="PanelContainer/VBoxContainer/EquipmentGrid" instance=ExtResource("1_4u5be")]
+layout_mode = 2
+slot_type = "RIGHT_HAND"
+
+[node name="equip_lefthand" parent="PanelContainer/VBoxContainer/EquipmentGrid" instance=ExtResource("1_4u5be")]
+layout_mode = 2
+slot_type = "LEFT_HAND"
+
+[node name="InventoryGrid" type="GridContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+columns = 4
+
+[node name="InvSlot1" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("1_4u5be")]
+layout_mode = 2
+
+[node name="InvSlot2" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("1_4u5be")]
+layout_mode = 2
+
+[node name="InvSlot3" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("1_4u5be")]
+layout_mode = 2
+
+[node name="InvSlot4" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("1_4u5be")]
+layout_mode = 2
+
+[node name="InvSlot5" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("1_4u5be")]
+layout_mode = 2
+
+[node name="InvSlot6" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("1_4u5be")]
+layout_mode = 2
+
+[node name="InvSlot7" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("1_4u5be")]
+layout_mode = 2
+
+[node name="InvSlot8" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("1_4u5be")]
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+columns = 4
+
+[node name="hot_bar1" parent="PanelContainer/VBoxContainer/GridContainer" instance=ExtResource("1_4u5be")]
+layout_mode = 2
+
+[node name="hot_bar2" parent="PanelContainer/VBoxContainer/GridContainer" instance=ExtResource("1_4u5be")]
+layout_mode = 2
+
+[node name="hot_bar3" parent="PanelContainer/VBoxContainer/GridContainer" instance=ExtResource("1_4u5be")]
+layout_mode = 2
+
+[node name="hot_bar4" parent="PanelContainer/VBoxContainer/GridContainer" instance=ExtResource("1_4u5be")]
+layout_mode = 2

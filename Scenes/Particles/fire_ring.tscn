@@ -1,0 +1,68 @@
+[gd_scene load_steps=7 format=3 uid="uid://qbgvtf3dqio6"]
+
+[ext_resource type="Texture2D" uid="uid://d3pcx87k1kj23" path="res://Scenes/Particles/particle_sprite_smoke.webp" id="1_0eucy"]
+[ext_resource type="Material" uid="uid://ba87f3piferoj" path="res://Scenes/Particles/firering_partical.tres" id="1_ifm3g"]
+
+
+[sub_resource type="Curve" id="Curve_hac87"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.816176, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ma6lu"]
+curve = SubResource("Curve_hac87")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vr7yh"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_0eucy")
+refraction_scale = 1.0
+refraction_texture = SubResource("CurveTexture_ma6lu")
+billboard_mode = 3
+particles_anim_h_frames = 8
+particles_anim_v_frames = 8
+particles_anim_loop = false
+grow_amount = 1.28
+proximity_fade_distance = 0.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_85p0o"]
+material = SubResource("StandardMaterial3D_vr7yh")
+
+[node name="FireRing" type="Node3D"]
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+amount = 1000
+lifetime = 3.0
+visibility_aabb = AABB(-0.481784, -2.04012, -0.248887, 0.963569, 7.10857, 0.497774)
+process_material = ExtResource("1_ifm3g")
+draw_pass_1 = SubResource("QuadMesh_85p0o")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.79752, 0.88772, 0)
+light_color = Color(1, 0.733333, 0, 1)
+light_energy = 10.0
+omni_range = 5.862
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.97205, 0.88772, 0)
+light_color = Color(1, 0.733333, 0, 1)
+light_energy = 10.0
+omni_range = 5.862
+
+[node name="OmniLight3D3" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00763071, 0.88772, 2.02741)
+light_color = Color(1, 0.733333, 0, 1)
+light_energy = 10.0
+omni_range = 5.862
+
+[node name="OmniLight3D4" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0308238, 0.88772, -1.99742)
+light_color = Color(1, 0.733333, 0, 1)
+light_energy = 10.0
+omni_range = 5.862
+
+[node name="OmniLight3D5" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0308238, 0.88772, 1.19209e-07)
+light_color = Color(1, 0.733333, 0, 1)
+light_energy = 10.0
+omni_range = 5.862
