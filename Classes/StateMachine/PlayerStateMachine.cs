@@ -93,6 +93,7 @@ namespace Game
 				Animation.Transition("Bow" + CurrentAttunement, Animations.Release);
 				Animation.OneShot("Bow");
 				(Attack as PlayerAttack).ReleaseArrow(CurrentAttunement);
+				Attack.ReadyToShoot = false;
 			}
 		}
 
