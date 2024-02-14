@@ -20,7 +20,7 @@ namespace Game
         // }
 
         public override void Enter(Dictionary<string, Vector2> Msg)
-        {
+        {   
             if (Msg.ContainsKey(Actions.Jump))
             {
                 if (Msg[Actions.Jump] != Vector2.Zero) Anim = Animations.JumpRunning;

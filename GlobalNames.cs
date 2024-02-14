@@ -34,6 +34,8 @@ namespace Globals
 
     public class Actions
     {
+        public const string LockOn = "LockOn";
+        public const string LockOff = "LockOff";
         public const string Jump = "Jump";
         public const string AttackLight = "AttackLight";
         public const string AttackHeavy = "AttackHeavy";

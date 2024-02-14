@@ -7,11 +7,17 @@ namespace Game
 	[GlobalClass]
 	public partial class AI : Actor
 	{
-        public void Roam()
-        {
-            Velocity = Velocity + Vector3.Down;
+        [Export] public Actor Target;
+		[Export] public Raycasts Raycasts;
 
-            MoveAndSlide();
-        }
+
+		private Vector3 desiredVelo;
+		
+
+		public void ApplySteeringForce(Vector3 globalTargetPos, double delta)
+		{
+			desiredVelo = (globalTargetPos - GlobalPosition);
+			Velocity = desiredVelo + Velocity;
+		}
     }
 }

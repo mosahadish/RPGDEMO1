@@ -10,6 +10,7 @@ namespace Game
 
        public void Transition(string stateName)
        {
+            GD.Print(stateName);
             AnimTree.Set("parameters/conditions/" + stateName, true);
        }
     }

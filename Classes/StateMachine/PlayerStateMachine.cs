@@ -216,11 +216,31 @@ namespace Game
 
 		public void HandleCameraInput(string action)
 		{
-			if (Actor.HasAimingWeapon() == false) return;
+			Aim(action);
+			LockOn(action);
+		}
+
+		private void LockOn(string action)
+		{
+			if (action == Actions.LockOn)
+			{
+				if ((Actor as Player).Camera.FindClosestTarget() == false) return;
+				
+				(Actor as Player).Camera.LockOnTarget();
+			}
+			if (action == Actions.LockOff)
+			{
+				(Actor as Player).Camera.ReleaseLockOn();
+			}
+		}
+
+		private void Aim(string action)
+		{
 			if (Actor._IsDodging) return;
-			
+			if (Actor.HasAimingWeapon() == false) return;
 			if (action == Actions.Aim)
 			{
+				
 				CancelSprint();
 
 				(Actor as Player).Camera._AimOn = true;

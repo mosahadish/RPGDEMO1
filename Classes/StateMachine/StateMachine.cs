@@ -23,7 +23,9 @@ namespace Game
         public async override void _Ready()
         {
             await ToSignal(GetParent(), "ready");
+            Dictionary<string, Vector2> Msg = new();
             state = initialState;
+            
             Movement = Actor.Movement;
             Attack = Actor.Attack;
 
@@ -43,6 +45,8 @@ namespace Game
                     (c as PlayerAttackState).SetCamera((Actor as Player).Camera);
                     
             }
+
+            state.Enter(Msg);
         }
         
         public override void _Process(double delta)

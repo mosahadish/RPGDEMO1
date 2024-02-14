@@ -36,12 +36,9 @@ namespace Game
 
 		public override void PhysicsUpdate(double delta)
 		{
-			// GD.Print(AnimTransition);
-			// GD.Print(Anim);
-			// GD.Print(WeaponName);
 			moveDir = CalcMoveDirection(InputDir);
 			//Running around according to the camera's direction
-			if (!InputDir.Equals(Vector2.Zero) && camera._LockOn == false && camera._AimOn == false)
+			if ((!InputDir.Equals(Vector2.Zero) && camera._LockOn == false && camera._AimOn == false) || Movement.Sprinting)
 			{
 				InputDir = new Vector2(0, InputDir.Length());
 				(Movement as PlayerMovement).HandleFreeMovement(moveDir, delta);
@@ -51,7 +48,7 @@ namespace Game
 			{
 				Movement.HandleMovement(moveDir ,delta);
 			}
-			if (Anim.Contains(Animations.Movement) || Anim.Contains(Animations.Walk))
+			if (Anim.Contains(Animations.Movement) || Anim.Contains(Animations.Walk)) //basically if not sprinting
 				{
 					InputDir.X = -1*InputDir.X;
 					Animation.BlendPosition(Anim, InputDir);

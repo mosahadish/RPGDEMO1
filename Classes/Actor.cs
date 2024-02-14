@@ -13,6 +13,7 @@ namespace Game
 		[Export] public Attack Attack;
 		[Export] public Animate Animation;
 		[Export] public Stamina Stam;
+		[Export] public Sprite3D LockOn;
 
 
 		public bool _IsDodging = false;
@@ -50,5 +51,14 @@ namespace Game
 			if (HasWeapon() == false) return false;
 			return CurrentWeapon._CanAim;
 		}
+
+		public void LookInDirection(Vector3 Dir)
+        {
+            float TargetAngle = Mathf.Atan2(Dir.X, Dir.Z);
+            Vector3 newRotation = Rotation;
+            newRotation.Y = (float)Mathf.LerpAngle(Rotation.Y, TargetAngle, 0.2);
+
+            Rotation = newRotation;
+        }
 	}
 }

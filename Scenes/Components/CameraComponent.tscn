@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://ic8kqaf1atnb"]
+[gd_scene load_steps=3 format=3 uid="uid://ic8kqaf1atnb"]
 
 [ext_resource type="Script" path="res://Classes/PlayerComponents/CameraComponent.cs" id="1_10htj"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hivp6"]
+size = Vector3(4, 4, 4)
 
 [node name="CameraComponent" type="Node3D"]
 top_level = true
@@ -12,3 +15,13 @@ vSensitivity = 3.0
 collision_mask = 9
 
 [node name="Camera3D" type="Camera3D" parent="CameraContainer"]
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 16
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("BoxShape3D_hivp6")
+
+[connection signal="body_entered" from="Area3D" to="." method="OnArea3DEntered"]
+[connection signal="body_exited" from="Area3D" to="." method="OnArea3DExited"]

@@ -8,6 +8,7 @@ namespace Game
     [GlobalClass]
     public partial class AIStateMachine : StateMachine
     {
+        
         public override void HandleAttackInput(Dictionary<string, bool> Msg)
         {
             

@@ -67,7 +67,8 @@ namespace Game
 			//Tween tween = CreateTween();
 
 			//direction = direction.Normalized();
-			player.LookAt(player.Position - direction, Vector3.Up);
+			//player.LookAt(player.Position - direction, Vector3.Up);
+			player.LookInDirection(direction);
 			//tween.TweenMethod(Callable.From((Vector3 target) => LookAt(target, Vector3.Up)), player.Position, (player.Position - direction), 0.01 * delta);
 			HandleMovement(direction, delta);
 		}

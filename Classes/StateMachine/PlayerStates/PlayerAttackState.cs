@@ -36,8 +36,10 @@ namespace Game
                 Animation.Transition(AnimTransition, Anim);
                 Animation.OneShot(WeaponName);
             }
+
+            if (camera.Target != null) Direction = Actor.GlobalPosition.DirectionTo(camera.Target.GlobalPosition);
             // global_transform.basis.z instaed of PositiveZ marker? NOT WORKING
-            if (InputDir == Vector2.Zero) Direction = ((Actor as Player).PositiveZ.GlobalPosition - Actor.GlobalPosition).Normalized();
+            else if (InputDir == Vector2.Zero) Direction = ((Actor as Player).PositiveZ.GlobalPosition - Actor.GlobalPosition).Normalized();
             else 
             {
                 Direction = new Vector3(InputDir.X, 0, InputDir.Y).Rotated(Vector3.Up, camera.Rotation.Y).Normalized();
@@ -50,7 +52,7 @@ namespace Game
         public override void PhysicsUpdate(double delta)
         {
             // GD.Print(InputDir);
-            LookInDirection(Direction);
+            Actor.LookInDirection(Direction);
             Movement.HandleMovement(Direction, delta);
         }
 
@@ -59,14 +61,6 @@ namespace Game
            
         }
 
-        private void LookInDirection(Vector3 Dir)
-        {
-            float TargetAngle = Mathf.Atan2(Dir.X, Dir.Z);
-            Vector3 newRotation = Actor.Rotation;
-            newRotation.Y = (float)Mathf.LerpAngle(Actor.Rotation.Y, TargetAngle, 0.2);
-
-            Actor.Rotation = newRotation;
-        }
 
         public void SetCamera(CameraComponent camera)
 		{
