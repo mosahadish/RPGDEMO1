@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
+using Globals;
 using Godot;
 
 namespace Game
@@ -7,28 +8,25 @@ namespace Game
     [GlobalClass]
     public partial class Animate : Node
     {
-       [Export] public AnimationTree AnimTree;
-       [Export] public AnimationPlayer AnimPlayer;
+        [Export] public AnimationTree AnimTree;
+        [Export] public AnimationPlayer AnimPlayer;
 
-       public void Transition(string transitionType, string transitionName)
-       {
-            AnimTree.Set("parameters/" + transitionType + "/transition_request", transitionName);
-       }
+        public virtual void Transition(string transitionType, string transitionName) {}
 
-       public void BlendPosition(string blendType, Vector2 blendValue)
-       {
+        public void BlendPosition(string blendType, Vector2 blendValue)
+        {
             AnimTree.Set("parameters/" + blendType + "/blend_position", blendValue);
-       }    
+        }    
 
         public void OneShot(string name)
         {
-            AbortOneShot();
+            AbortOneShot(name);
             AnimTree.Set("parameters/"+name+"/request", (int)AnimationNodeOneShot.OneShotRequest.Fire);
         }
 
-        public void AbortOneShot()
+        public void AbortOneShot(string name)
         {
-            AnimTree.Set("parameters/OneAttack/request", (int)AnimationNodeOneShot.OneShotRequest.Abort);
+            AnimTree.Set("parameters/"+name+"/request", (int)AnimationNodeOneShot.OneShotRequest.Abort);
         }
     }
 }

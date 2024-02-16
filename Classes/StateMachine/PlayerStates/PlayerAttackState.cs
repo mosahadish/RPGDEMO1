@@ -26,15 +26,9 @@ namespace Game
                 
                 chain = (int)Msg[Actions.AttackLight].Y;
 
-                if (chain == 1) Anim = WeaponName+Animations.Attack1;
-                if (chain == 2) Anim = WeaponName+Animations.Attack2;
-                if (chain ==3) Anim = WeaponName+Animations.Attack3;
-                
-                Stam.DecreaseStamina(Actor.CurrentWeapon.LightAttackStamConsumption);
-                Stam.Regen = false;
-
-                Animation.Transition(AnimTransition, Anim);
-                Animation.OneShot(WeaponName);
+                if (chain == 1) (Actor as Player).Attack1();
+                if (chain == 2) (Actor as Player).Attack2();
+                if (chain ==3) (Actor as Player).Attack3();
             }
 
             if (camera.Target != null) Direction = Actor.GlobalPosition.DirectionTo(camera.Target.GlobalPosition);
@@ -43,7 +37,6 @@ namespace Game
             else 
             {
                 Direction = new Vector3(InputDir.X, 0, InputDir.Y).Rotated(Vector3.Up, camera.Rotation.Y).Normalized();
-                GD.Print(InputDir);
                 InputDir = Vector2.Zero;
             }
         }
@@ -51,7 +44,6 @@ namespace Game
 
         public override void PhysicsUpdate(double delta)
         {
-            // GD.Print(InputDir);
             Actor.LookInDirection(Direction);
             Movement.HandleMovement(Direction, delta);
         }
@@ -69,9 +61,7 @@ namespace Game
 
         public override void Exit()
         {
-            Stam.Regen = true;
-            Movement.SetSpeed(Movement.Speed);
-            Actor._IsAttacking = false;
+            (Actor as Player).FinishAttacking();
         }
     }
 }

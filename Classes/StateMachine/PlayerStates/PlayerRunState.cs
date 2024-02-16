@@ -48,7 +48,8 @@ namespace Game
 			{
 				Movement.HandleMovement(moveDir ,delta);
 			}
-			if (Anim.Contains(Animations.Movement) || Anim.Contains(Animations.Walk)) //basically if not sprinting
+			//if (Anim.Contains(Animations.Movement) || Anim.Contains(Animations.Walk)) //basically if not sprinting
+			if (Movement.Sprinting == false)
 				{
 					InputDir.X = -1*InputDir.X;
 					Animation.BlendPosition(Anim, InputDir);

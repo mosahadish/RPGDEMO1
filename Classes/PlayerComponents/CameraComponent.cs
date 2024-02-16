@@ -8,10 +8,14 @@ namespace Game
 	[GlobalClass]
 	public partial class CameraComponent : Node3D
 	{
-		[Export] private float lockOnMaxSensitivity = 60.0f;
-		[Export] private float lockOnMinSensitivity = -35.0f;
+		[ExportCategory("Camera Settings")]
+		[Export] private float deadZone = 0.15f;
+		[Export] private float lockOnMaxAngle = 60.0f;
+		[Export] private float lockOnMinAngle = -35.0f;
 		[Export] private float hSensitivity;
 		[Export] private float vSensitivity;
+
+		[ExportCategory("Dependencies")]
 		[Export] Player player;
 		[Export] private Camera3D camera;
 		[Export] PlayerStateMachine sMachine;
@@ -39,7 +43,7 @@ namespace Game
 		{
 			//Since camera is Top Level, we need to manually follow
 			FollowPlayer();
-			rotationDir = Input.GetVector("rotate_right", "rotate_left", "rotate_up", "rotate_down");
+			rotationDir = Input.GetVector("rotate_right", "rotate_left", "rotate_up", "rotate_down", deadZone);
 			
 			if (_AimOn) AimedRotation(delta);
 			else if (_LockOn) LockedRotation(delta);

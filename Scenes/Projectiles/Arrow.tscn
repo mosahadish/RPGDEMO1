@@ -100,14 +100,16 @@ shadow_mesh = SubResource("ArrayMesh_0igaq")
 radius = 0.015
 height = 0.22
 
-[node name="Arrow" type="RigidBody3D"]
+[node name="Arrow" type="RigidBody3D" node_paths=PackedStringArray("hitArea", "timer")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0.398703)
 collision_layer = 4
 collision_mask = 24
 mass = 0.01
 script = ExtResource("1_hxvo3")
 Damage = 1.0
-Speed = 40.0
+Speed = 10.0
+hitArea = NodePath("AreaHit")
+timer = NodePath("Timer")
 
 [node name="Arrow" type="MeshInstance3D" parent="."]
 transform = Transform3D(-6.71735e-10, -0.915756, 6.71735e-10, 0, -4.0029e-08, -0.0153675, 0.0153675, -4.0029e-08, 2.93625e-17, 0, 0, 0)
@@ -125,6 +127,3 @@ shape = SubResource("CapsuleShape3D_4860u")
 [node name="Timer" type="Timer" parent="."]
 wait_time = 8.0
 one_shot = true
-
-[connection signal="body_entered" from="AreaHit" to="." method="_on_area_hit_body_entered"]
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

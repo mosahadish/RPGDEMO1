@@ -34,6 +34,7 @@ namespace Game
                 Animation.Transition(AnimTransition, Anim);
             }
 
+            Actor._CanRotate = false;
             Actor._InAir = true;
         }
 
@@ -55,6 +56,7 @@ namespace Game
         public override void Exit()
         {
             Actor._InAir = false;
+            Actor._CanRotate = true;
         }
     }
 }

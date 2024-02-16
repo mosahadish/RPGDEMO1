@@ -125,25 +125,18 @@ namespace Game
 		{
 			Actor._IsBlocking = true;
 
-			Animation.Transition("Shield", Animations.Block);
+			//Animation.Transition("Shield", Animations.Block);
+			//Animation.Block();
 			Walk();
-
 			CancelSprint();
-
-			Stam.Degen = true;
-			Stam.Regen = false;
+			(Actor as Player).Block();
 		}
 
 		private void BlockRelease()
 		{
-			if (Actor._IsBlocking == false) return;
 
-			Actor._IsBlocking = false;
-			Animation.Transition("Shield", Animations.BlockRelease);
 			CancelWalk();
-				
-			Stam.Degen = false;
-			Stam.Regen = true;
+			(Actor as Player).BlockRelease();
 		}
 
 		public override void HandleMovementInput(Dictionary<string, Vector2> Msg)
@@ -264,11 +257,13 @@ namespace Game
 		
 		public void OnAnimationFinished(string anim)
 		{
-			GD.Print(anim);
+			//GD.Print(anim);
 			Dictionary<string, Vector2> msg = new()
 			{
 				{ "input_dir", Vector2.Zero }
 			};
+
+			if (anim == Animations.Block) (Actor as Player).BlockHold();
 
 			if (anim.Contains(Animations.DrawBow))
 			{
@@ -369,7 +364,6 @@ namespace Game
 
 		public void OnOffhandChanged(Weapon weapon)
 		{
-			GD.Print(weapon);
 			if (weapon == null)
 			{
 				Animation.AnimTree.Set("parameters/OffhandBlend/blend_amount", 0.0);

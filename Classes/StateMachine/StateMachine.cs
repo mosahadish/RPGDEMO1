@@ -19,11 +19,11 @@ namespace Game
         public Movement Movement;
         public Attack Attack;
     
+        public Dictionary<string, Vector2> Msg = new();
 
         public async override void _Ready()
         {
             await ToSignal(GetParent(), "ready");
-            Dictionary<string, Vector2> Msg = new();
             state = initialState;
             
             Movement = Actor.Movement;
@@ -70,8 +70,8 @@ namespace Game
             }
         }
 
+        public abstract void HandleMovementInput(Dictionary<string, Vector2> Msg);
         public abstract void HandleAttackInput(Dictionary<string, bool> Msg);
 
-        public abstract void HandleMovementInput(Dictionary<string, Vector2> Msg);
     }
 }

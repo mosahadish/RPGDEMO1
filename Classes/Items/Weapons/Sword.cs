@@ -5,5 +5,5 @@ namespace Game
 	[GlobalClass]
 	public partial class Sword : Weapon
 	{
-	}
+    }
 }

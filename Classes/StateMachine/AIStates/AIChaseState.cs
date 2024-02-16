@@ -15,8 +15,6 @@ namespace Game
         {
             (Animation as AnimateAI).Transition("Chase");
             Movement.SetSpeed(Movement.Speed);
-
-            target = (Actor as AI).Target;
         }
 
         public override void Exit()
@@ -27,7 +25,6 @@ namespace Game
         public override void PhysicsUpdate(double delta)
         {
             ChaseTarget(delta);
-            GD.Print("Chasing");
         }
 
         public override void Update(double delta)
@@ -44,6 +41,11 @@ namespace Game
             Actor.LookInDirection(direction);
 
             Movement.HandleMovement(direction, delta);
+        }
+
+        public void SetTarget(Actor target)
+        {
+            this.target = target;
         }
     }
 }

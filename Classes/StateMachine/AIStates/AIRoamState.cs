@@ -36,7 +36,6 @@ namespace Game
             //gravity
             
             RandomWandering(delta);
-
             Actor.MoveAndSlide();
         }
 

@@ -24,15 +24,16 @@ namespace Game
             if (msg.ContainsKey(Actions.Dodge)) InputDir = msg[Actions.Dodge];
             if (InputDir == Vector2.Zero) InputDir = Vector2.Down;
 
-            Stam.DecreaseStamina(Stam.DodgeConsumption);
-            Stam.Regen = false;
-            Movement.CurrentSpeed = Movement.DodgeSpeed;
-            Actor._IsDodging = true;
+            // Stam.DecreaseStamina(Stam.DodgeConsumption);
+            // Stam.Regen = false;
+            // Movement.CurrentSpeed = Movement.DodgeSpeed;
+            // Actor._IsDodging = true;
+            // Actor._CanRotate = false;
 
             direction = new Vector3(InputDir.X, 0, InputDir.Y).Rotated(Vector3.Up, camera.Rotation.Y);
-
-            SetAnim(Animations.TransitionMovement, Animations.Dodge);
-            Animation.Transition(AnimTransition, Anim);
+            (Actor as Player).Dodge();
+            //SetAnim(Animations.TransitionMovement, Animations.Dodge);
+           // Animation.Transition(AnimTransition, Anim);
         }
 
         public override void PhysicsUpdate(double delta)
@@ -51,9 +52,11 @@ namespace Game
 
         public override void Exit()
         {
-            Movement.CurrentSpeed = Movement.Speed;
-            Stam.Regen = true;
-            Actor._IsDodging = false;
+            (Actor as Player).FinishDodging();
+            // Movement.CurrentSpeed = Movement.Speed;
+            // Stam.Regen = true;
+            // Actor._IsDodging = false;
+            // Actor._CanRotate = true;
         }
     }
 

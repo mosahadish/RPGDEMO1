@@ -140,16 +140,18 @@ shadow_mesh = SubResource("ArrayMesh_dsrrf")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4860u"]
 radius = 0.015
-height = 0.22
+height = 0.403211
 
-[node name="FireArrow" type="RigidBody3D"]
+[node name="FireArrow" type="RigidBody3D" node_paths=PackedStringArray("hitArea", "timer")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0.398703)
 collision_layer = 4
-collision_mask = 24
+collision_mask = 8
 mass = 0.01
 script = ExtResource("1_46xhd")
 Damage = 2.0
-Speed = 40.0
+Speed = 10.0
+hitArea = NodePath("AreaHit")
+timer = NodePath("Timer")
 
 [node name="Arrow" type="MeshInstance3D" parent="."]
 transform = Transform3D(-6.71735e-10, -0.915756, 6.71735e-10, 0, -4.0029e-08, -0.0153675, 0.0153675, -4.0029e-08, 2.93625e-17, 0, 0, 0)
@@ -162,19 +164,17 @@ mesh = SubResource("ArrayMesh_x3blv")
 skeleton = NodePath("")
 
 [node name="AreaHit" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0160587, 0, 7.0195e-10)
 collision_layer = 4
 collision_mask = 59
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="AreaHit"]
-transform = Transform3D(-4.37114e-08, -1, 0, -4.37114e-08, 1.91069e-15, -1, 1, -4.37114e-08, -4.37114e-08, 0.313163, 0, 0)
+transform = Transform3D(-4.37114e-08, -1, 0, -4.37114e-08, 1.91069e-15, -1, 1, -4.37114e-08, -4.37114e-08, 0.215264, 0, -4.27929e-09)
 shape = SubResource("CapsuleShape3D_4860u")
 
 [node name="Fire" parent="." instance=ExtResource("2_7qgoy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.401389, 0, -0.00966488)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.372376, 0, -0.00966488)
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 8.0
 one_shot = true
-
-[connection signal="body_entered" from="AreaHit" to="." method="_on_area_hit_body_entered"]
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -1,0 +1,53 @@
+[gd_scene load_steps=4 format=3 uid="uid://bn2rkgkomsyao"]
+
+[ext_resource type="Script" path="res://Classes/GenericComponents/DamageFloater.gd" id="1_xfgpj"]
+
+[sub_resource type="Animation" id="Animation_56fww"]
+resource_name = "FloatDamage"
+length = 0.9
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.8),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"remove"
+}]
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Label:alpha_hash_scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.3, 0.7)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gjdxu"]
+_data = {
+"FloatDamage": SubResource("Animation_56fww")
+}
+
+[node name="DamageFloater" type="Node3D" node_paths=PackedStringArray("label", "animation")]
+top_level = true
+script = ExtResource("1_xfgpj")
+label = NodePath("Label")
+animation = NodePath("AnimationPlayer")
+
+[node name="Label" type="Label3D" parent="."]
+billboard = 1
+alpha_hash_scale = 0.0
+modulate = Color(0.580392, 0, 0, 1)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_gjdxu")
+}

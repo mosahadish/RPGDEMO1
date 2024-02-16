@@ -10,7 +10,7 @@ namespace Game
 	public delegate void NotifyAttunement(string msg);
 	public delegate void NotifyWeapon(Weapon weapon);
 	[GlobalClass]
-	public partial class Player : Actor
+	public partial class Player : Actor, IBlocker, IMeleeAttacker, IDodger
 	{
 
 		public event NotifyAttunement AttunementChanged;
@@ -44,10 +44,7 @@ namespace Game
 
 		public override void _Ready()
 		{
-			base._Ready();
 			AttunementChanged.Invoke(CurrentAttunement);
-			//GD.Print(Animation);
-			//Animation.AnimTree.Connect("AnimationFinished", new Callable(SMachine, "OnAnimationFinished"));
 		}
 
 		public override void _Process(double delta)
@@ -227,6 +224,111 @@ namespace Game
 		{
 			return aim.GetAimPoint();
 		}
-	}
+
+		public void Block()
+        {
+            Animation.Transition("Shield", Animations.Block);
+			Animation.Transition(CurrentWeapon.Name+Animations.TransitionMovement, CurrentWeapon.Name + Animations.Walk);
+			_IsBlocking = true;
+			Stam.Degen = true;
+			Stam.Regen = false;
+        }
+
+		public void BlockAttack()
+        {
+            Animation.Transition("Shield", Animations.BlockedAttack);
+			_IsBlocking = false;
+        }
+
+        public void BlockHold()
+        {
+            Animation.Transition("Shield", Animations.BlockHold);
+			_IsBlocking = true;
+        }
+
+        public void BlockRelease()
+        {
+			if (_IsBlocking == false) return;
+
+			Animation.Transition("Shield", Animations.BlockRelease);
+			Animation.Transition(CurrentWeapon.Name+Animations.TransitionMovement, CurrentWeapon.Name+Animations.Movement);
+            
+			_IsBlocking = false;
+			Stam.Degen = false;
+			Stam.Regen = true;
+        }
+
+        public bool IsBlocking()
+        {
+            return _IsBlocking;
+        }
+
+        public void Attack1()
+        {
+            _IsAttacking = true;
+			Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.Attack1);
+			Animation.OneShot(CurrentWeapon.Name);
+
+			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
+            Stam.Regen = false;
+        }
+
+        public void Attack2()
+        {
+            _IsAttacking = true;
+			Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.Attack2);
+			Animation.OneShot(CurrentWeapon.Name);
+
+			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
+            Stam.Regen = false;
+        }
+
+        public void Attack3()
+        {
+            _IsAttacking = true;
+			Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.Attack3);
+			Animation.OneShot(CurrentWeapon.Name);
+
+			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
+            Stam.Regen = false;
+		}
+
+		public void FinishAttacking()
+		{
+			_IsAttacking = false;
+			Stam.Regen = true;
+			Movement.SetSpeed(Movement.Speed);
+		}
+
+        public bool IsAttacking()
+        {
+            return _IsAttacking;
+        }
+
+        public void Dodge()
+        {
+			Stam.DecreaseStamina(Stam.DodgeConsumption);
+            Stam.Regen = false;
+            Movement.CurrentSpeed = Movement.DodgeSpeed;
+            _IsDodging = true;
+            _CanRotate = false;
+			if (HasWeapon())
+            	Animation.Transition(CurrentWeapon.Name + Animations.TransitionMovement, CurrentWeapon.Name + Animations.Dodge);
+			else Animation.Transition(Animations.TransitionMovement, Animations.Dodge);
+        }
+
+		public void FinishDodging()
+		{
+			Movement.CurrentSpeed = Movement.Speed;
+            Stam.Regen = true;
+            _IsDodging = false;
+            _CanRotate = true;
+		}
+
+        public bool IsDodging()
+        {
+            return _IsDodging;
+        }
+    }
 }
 
