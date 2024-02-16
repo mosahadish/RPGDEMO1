@@ -25,10 +25,10 @@ namespace Game
             if (target != null) distToTargetSqr = Actor.GlobalPosition.DistanceSquaredTo(target.GlobalPosition);
             else distToTargetSqr = 9999;
 
-            // if (distToTargetSqr > 125 && target != null) TargetGone();
-            // if (target != null && distToTargetSqr > 4 && distToTargetSqr <= 16) TargetInCircleRange();
-            // if (target != null && distToTargetSqr <= 4) TargetInAttackRange();
-            // if (target != null && distToTargetSqr > 16) TargetInChaseRange();
+            if (distToTargetSqr > 125 && target != null) TargetGone();
+            if (target != null && distToTargetSqr > 4 && distToTargetSqr <= 16) TargetInCircleRange();
+            if (target != null && distToTargetSqr <= 4) TargetInAttackRange();
+            if (target != null && distToTargetSqr > 16) TargetInChaseRange();
         }
 
         private void TargetInCircleRange()

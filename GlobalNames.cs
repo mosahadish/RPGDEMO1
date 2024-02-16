@@ -15,6 +15,11 @@ namespace Globals
         public const string Attack1 = "Attack1";
         public const string Attack2 = "Attack2";
         public const string Attack3 = "Attack3";
+        public const string SprintLightAttack = "SprintLightAttack";
+        public const string SprintHeavyAttack = "SprintHeavyAttack";
+        public const string DodgeAttack = "DodgeAttack";
+        public const string CounterAttack = "CounterAttack";
+        public const string JumpAttack = "JumpAttack";
         public const string AttackGeneral = "Attack";
         public const string Block = "Block";
         public const string BlockRelease = "BlockRelease";
@@ -39,6 +44,7 @@ namespace Globals
         public const string Jump = "Jump";
         public const string AttackLight = "AttackLight";
         public const string AttackHeavy = "AttackHeavy";
+        public const string AttackSprint = "AttackSprint";
         public const string Block = "Block";
         public const string Aim = "Aim";
         public const string AimCancel = "AimCancel";

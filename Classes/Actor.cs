@@ -26,7 +26,7 @@ namespace Game
 		public bool _BlockedAttack = false; //For counter attacking
 		public bool _CanRotate = true;
 		
-		public Weapon CurrentWeapon = null;
+		[Export] public Weapon CurrentWeapon = null;
 		public Weapon CurrentOffhand = null;
 
 		private float damageToTake;
@@ -35,6 +35,7 @@ namespace Game
 
 		public void OnHit(float incDamage, Vector3 hitterGlobalPos, string hittingObject)
 		{
+			
 			if (_IsDodging) return;
 
 			damageToTake = incDamage - defense;

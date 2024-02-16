@@ -33,13 +33,12 @@ namespace Game
 				hitArea.BodyEntered += OnBodyEnteredHitArea;
 				hitArea.BodyExited += OnBodyExitedHitArea;
 			}
-
-			if (Wielder is AI) hitArea.SetCollisionMaskValue(2, false);
-			if (Wielder is Player) hitArea.SetCollisionMaskValue(1, false);
         }
 
         private void OnBodyEnteredHitArea(Node3D body)
 		{
+			if (body == Wielder) return;
+
 			if (body is Actor actor)
 			{
 				bodiesToDamage.Add(actor);
@@ -57,6 +56,8 @@ namespace Game
 
 		private void OnBodyExitedHitArea(Node3D body)
 		{
+			if (body == Wielder) return;
+
 			if (body is Actor actor)
 				if (bodiesToDamage.Contains(actor)) bodiesToDamage.Remove(actor);
 		}

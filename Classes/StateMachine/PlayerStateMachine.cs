@@ -39,7 +39,7 @@ namespace Game
 			{	
 				if (Actor._IsBlocking) return; //change this later to add counter attack
 
-				CancelSprint();
+				//CancelSprint();
 
 				if (Msg.ContainsKey(Actions.AttackLight)) LightAttack(Msg[Actions.AttackLight]);
 				if (Msg.ContainsKey(Actions.AttackHeavy)) HeavyAttack(Msg[Actions.AttackHeavy]);
@@ -150,13 +150,14 @@ namespace Game
 				return;
 			}
 
-			Move(Msg);	
+			Move(Msg);
 
 			if (state is PlayerAttackState) return;
-			
+
+			Sprint(Msg);
 			Jump(Msg);
 			Dodge(Msg);
-			Sprint(Msg);
+			
 		}
 
 		private void Move(Dictionary<string, Vector2> Msg)
@@ -282,6 +283,7 @@ namespace Game
 			if (anim.Contains(Animations.Dodge)) TransitionTo("PlayerRunState",  msg);
 			if (anim.Contains(Animations.AttackGeneral) && Buffer.IsEmpty()) 
 			{
+				state.GetInput(Vector2.Zero);
 				TransitionTo("PlayerRunState",  msg);
 				Buffer.Chain = 1;
 			}

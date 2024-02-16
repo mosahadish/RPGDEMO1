@@ -11,8 +11,6 @@ namespace Game
 	{
 		[Export] public Raycasts Raycasts;
 		
-		[Export] new Weapon CurrentWeapon;
-
 		private Vector3 desiredVelo;
 		private List<AI> bodiesToNotifyOfTarget = new();
 
@@ -60,6 +58,30 @@ namespace Game
         public bool IsAttacking()
         {
             return _IsAttacking;
+        }
+
+        public void DodgeAttack()
+        {
+            
+        }
+
+        public void JumpAttack()
+        {
+            
+        }
+
+        public void HeavyAttack()
+        {
+            
+        }
+
+        public void SprintLightAttack()
+        {
+            
+        }
+
+        public void SprintHeavyAttack()
+        {
         }
     }
 }

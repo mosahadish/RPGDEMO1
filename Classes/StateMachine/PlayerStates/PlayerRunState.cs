@@ -25,12 +25,16 @@ namespace Game
         public override void Enter(Dictionary<string, Vector2> Msg)
 		{
 		
-			HandleSprint(Msg);
+			if (HandleSprint(Msg) == false)
+			{
+				SetAnim(Animations.TransitionMovement, Animations.Movement);
+				Movement.SetSpeed(Movement.Speed);
+			}
+			
 
 			if (Msg.ContainsKey("input_dir")) InputDir = Msg["input_dir"];
 
 			Animation.Transition(AnimTransition, Anim);
-			
 		}
 
 
@@ -85,7 +89,7 @@ namespace Game
 			this.camera = camera;
 		}
 
-		private void HandleSprint(Dictionary<string, Vector2> Msg)
+		private bool HandleSprint(Dictionary<string, Vector2> Msg)
 		{
 			if (Msg.ContainsKey(Actions.Sprint)) 
 			{
@@ -94,6 +98,7 @@ namespace Game
 				Movement.SetSpeed(Movement.SprintSpeed);
 				Stam.Regen = false;
 				Stam.Degen = true;
+				return true;
 			}
 
 			if (Msg.ContainsKey(Actions.SprintRelease)) 
@@ -103,7 +108,9 @@ namespace Game
 				Movement.SetSpeed(Movement.Speed);
 				Stam.Regen = true;
 				Stam.Degen = false;
+				return true;
 			}
+			return false;
 		}
 	}
 }

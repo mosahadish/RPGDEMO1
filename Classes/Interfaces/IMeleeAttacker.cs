@@ -10,6 +10,16 @@ namespace Game
 
         void Attack3();
 
+        void SprintLightAttack();
+
+        void SprintHeavyAttack();
+
+        void DodgeAttack();
+
+        void JumpAttack();
+
+        void HeavyAttack();
+
         bool IsAttacking();
 
         void FinishAttacking();

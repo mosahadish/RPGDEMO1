@@ -6,23 +6,34 @@ namespace Game
 	public partial class OnScreen : Control
 	{
 		[Export] private Stamina stam;
-		[Export] private ProgressBar stam_bar;
+		[Export] private Health health;
+		[Export] private ProgressBar stamBar;
+		[Export] private ProgressBar healthBar;
 	// Called when the node enters the scene tree for the first time.
 		public override void _Ready()
 		{
 			stam.StaminaChanged += OnStaminaChanged;
-			stam_bar.MaxValue = stam.MaxValue;
-			stam_bar.Value = stam.MaxValue;
+			stamBar.MaxValue = stam.MaxValue;
+			stamBar.Value = stam.MaxValue;
+
+			health.ValueChangedWithArgument += OnHealthChanged;
+			healthBar.MaxValue = health.MaxValue;
+			healthBar.Value = health.MaxValue;
 		}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-		public override void _Process(double delta)
+        private void OnHealthChanged(float value)
+        {
+            healthBar.Value = value;
+        }
+
+        // Called every frame. 'delta' is the elapsed time since the previous frame.
+        public override void _Process(double delta)
 		{
 		}
 
 		private void OnStaminaChanged(float new_val)
 		{
-			stam_bar.Value = new_val;
+			stamBar.Value = new_val;
 		}
 	}	
 }

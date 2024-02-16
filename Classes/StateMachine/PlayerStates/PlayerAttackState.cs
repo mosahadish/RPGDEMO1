@@ -20,15 +20,20 @@ namespace Game
 
         public override void Enter(Dictionary<string, Vector2> Msg)
         {
-            Actor._IsAttacking = true;
             if (Msg.ContainsKey(Actions.AttackLight))
             {
-                
-                chain = (int)Msg[Actions.AttackLight].Y;
+                if (Movement.Sprinting == true)
+                {
+                    (Actor as Player).SprintLightAttack();
+                }
+                else
+                {
+                    chain = (int)Msg[Actions.AttackLight].Y;
 
-                if (chain == 1) (Actor as Player).Attack1();
-                if (chain == 2) (Actor as Player).Attack2();
-                if (chain ==3) (Actor as Player).Attack3();
+                    if (chain == 1) (Actor as Player).Attack1();
+                    if (chain == 2) (Actor as Player).Attack2();
+                    if (chain ==3) (Actor as Player).Attack3();
+                }
             }
 
             if (camera.Target != null) Direction = Actor.GlobalPosition.DirectionTo(camera.Target.GlobalPosition);

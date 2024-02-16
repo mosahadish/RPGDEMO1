@@ -49,7 +49,7 @@ namespace Game
 
 		public override void _Process(double delta)
 		{
-			if (Input.IsActionJustPressed(Actions.ChangeAttunement) && _IsAttacking == false)
+			if (Input.IsActionJustPressed(Actions.ChangeAttunement) && _IsAttacking == false && Attack.ReadyToShoot == false)
 			{
 				AttunementIterator +=1;
 				if (AttunementIterator == arrAttunement.Length) AttunementIterator = 0;
@@ -228,7 +228,9 @@ namespace Game
 		public void Block()
         {
             Animation.Transition("Shield", Animations.Block);
-			Animation.Transition(CurrentWeapon.Name+Animations.TransitionMovement, CurrentWeapon.Name + Animations.Walk);
+			if (HasWeapon())
+				Animation.Transition(CurrentWeapon.Name+Animations.TransitionMovement, CurrentWeapon.Name + Animations.Walk);
+			else Animation.Transition(Animations.TransitionMovement, Animations.Walk);
 			_IsBlocking = true;
 			Stam.Degen = true;
 			Stam.Regen = false;
@@ -251,7 +253,9 @@ namespace Game
 			if (_IsBlocking == false) return;
 
 			Animation.Transition("Shield", Animations.BlockRelease);
-			Animation.Transition(CurrentWeapon.Name+Animations.TransitionMovement, CurrentWeapon.Name+Animations.Movement);
+			if (HasWeapon())
+				Animation.Transition(CurrentWeapon.Name+Animations.TransitionMovement, CurrentWeapon.Name+Animations.Movement);
+			else Animation.Transition(Animations.TransitionMovement, Animations.Movement);
             
 			_IsBlocking = false;
 			Stam.Degen = false;
@@ -292,6 +296,38 @@ namespace Game
 			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
             Stam.Regen = false;
 		}
+
+		public void SprintLightAttack()
+        {
+            _IsAttacking = true;
+			Movement.Sprinting = false;
+
+			Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.SprintLightAttack);
+			Animation.Transition(CurrentWeapon.Name + Animations.Movement, CurrentWeapon.Name+Animations.SprintLightAttack);
+			Animation.OneShot(CurrentWeapon.Name);
+        }
+
+		public void SprintHeavyAttack()
+        {
+            // _IsAttacking = true;
+			// Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.SprintAttack);
+			// Animation.OneShot(CurrentWeapon.Name);
+        }
+
+        public void DodgeAttack()
+        {
+            
+        }
+
+        public void JumpAttack()
+        {
+
+        }
+
+        public void HeavyAttack()
+        {
+
+        }
 
 		public void FinishAttacking()
 		{
