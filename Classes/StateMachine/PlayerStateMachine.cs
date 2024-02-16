@@ -258,13 +258,15 @@ namespace Game
 		
 		public void OnAnimationFinished(string anim)
 		{
-			//GD.Print(anim);
+			GD.Print(anim);
 			Dictionary<string, Vector2> msg = new()
 			{
 				{ "input_dir", Vector2.Zero }
 			};
 
 			if (anim == Animations.Block) (Actor as Player).BlockHold();
+			if (anim.Contains(Animations.BlockedAttack) && Actor._IsBlocking) 
+				(Actor as Player).BlockHold();
 
 			if (anim.Contains(Animations.DrawBow))
 			{

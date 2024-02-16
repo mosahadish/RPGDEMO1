@@ -45,7 +45,7 @@ namespace Game
 			{
 				//play block audio
 				//play attack blocked animation
-				(this as IBlocker).BlockHold();
+				(this as IBlocker).BlockAttack();
 				Stam.DecreaseStamina(damageToTake);
 			}
 

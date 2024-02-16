@@ -75,7 +75,6 @@ namespace Game
         private void OnAnimationFinished(string anim)
         {
             Msg.Clear();
-            GD.Print(anim);
             if (target == null) 
             {
                 TransitionTo("AIRoamState", Msg);

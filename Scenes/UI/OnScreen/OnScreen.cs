@@ -26,11 +26,6 @@ namespace Game
             healthBar.Value = value;
         }
 
-        // Called every frame. 'delta' is the elapsed time since the previous frame.
-        public override void _Process(double delta)
-		{
-		}
-
 		private void OnStaminaChanged(float new_val)
 		{
 			stamBar.Value = new_val;

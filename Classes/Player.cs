@@ -49,6 +49,7 @@ namespace Game
 
 		public override void _Process(double delta)
 		{
+			GD.Print(_IsBlocking);
 			if (Input.IsActionJustPressed(Actions.ChangeAttunement) && _IsAttacking == false && Attack.ReadyToShoot == false)
 			{
 				AttunementIterator +=1;
@@ -239,7 +240,7 @@ namespace Game
 		public void BlockAttack()
         {
             Animation.Transition("Shield", Animations.BlockedAttack);
-			_IsBlocking = false;
+			_BlockedAttack = true;
         }
 
         public void BlockHold()
