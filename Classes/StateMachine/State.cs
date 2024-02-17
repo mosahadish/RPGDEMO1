@@ -1,5 +1,6 @@
 using Godot;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Game
 {
@@ -18,10 +19,16 @@ namespace Game
         public string WeaponName = "";
 
        
-        public async override void _Ready()
+        public override async void _Ready()
         {
+            //await Task.Run(WaitForParent);
             await ToSignal(GetParent(), "ready");
         }
+
+        // private async void WaitForParent()
+        // {
+        //     await ToSignal(GetParent(), "ready");
+        // }
 
         public abstract void Update(double delta);
 

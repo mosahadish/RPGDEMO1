@@ -23,7 +23,7 @@ namespace Game
             }
         }
 
-        public void PlayAudio(string audioName)
+        public void Play(string audioName)
         {
             audio = FindInactivePlayer();
             if (audio == null) return;                          

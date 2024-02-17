@@ -14,21 +14,19 @@ namespace Game
         [Export] public float DodgeConsumption;
         [Export] private float RegenPerSec;
         [Export] private float DegenPerSec;
-        
-        
-        // [ExportCategory("Dependencies")]
-        // [Export] StateMachine SMachine;
 
         public bool Regen = true;
         public bool Degen = false;
+        
         private float currentValue = 0;
         private float regenRate = 0;
         private float degenRate = 0;
 
         public override void _Ready()
         {
-            regenRate = RegenPerSec/60;
-            degenRate = DegenPerSec/60;
+            regenRate = RegenPerSec/ Engine.PhysicsTicksPerSecond;
+            degenRate = DegenPerSec/ Engine.PhysicsTicksPerSecond;
+            
             IncreaseStamina(MaxValue);
         }
 

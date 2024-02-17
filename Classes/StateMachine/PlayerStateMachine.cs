@@ -16,20 +16,23 @@ namespace Game
 		[Export] InputBuffer Buffer;
 		private string CurrentAttunement;
 		private string CurrentWeaponName;
+		private Player player;
 
 		public override void _Ready()
 		{
 			base._Ready();
-			//Animation.AnimTree.Connect("AnimationFinished", new Callable(this, nameof(OnAnimationFinished)));
-			(Actor as Player).AttunementChanged += OnAttunementChanged;
-			(Actor as Player).WeaponChanged += OnWeaponChanged;
-			(Actor as Player).OffhandChanged += OnOffhandChanged;
+			player = Actor as Player;
+
+			player.AttunementChanged += OnAttunementChanged;
+			player.WeaponChanged += OnWeaponChanged;
+			player.OffhandChanged += OnOffhandChanged;
+
 			Stam.StaminaChanged += OnStaminaChanged;
 		}
 
 		public override void HandleAttackInput(Dictionary<string, bool> Msg)
 		{
-			if (Actor._IsDodging) return;
+			if (player.IsDodging()) return;
 			if (Actor.HasBlockWeapon())
 			{
 				if (Msg.ContainsKey(Actions.Block)) HandleBlock(Msg[Actions.Block]);
@@ -37,7 +40,7 @@ namespace Game
 
 			if (Actor.HasWeapon())
 			{	
-				if (Actor._IsBlocking && Actor._BlockedAttack == false) return;
+				if (player.IsBlocking() && player.CanCounter() == false) return;
 				if (Msg.ContainsKey(Actions.AttackLight)) LightAttack(Msg[Actions.AttackLight]);
 				if (Msg.ContainsKey(Actions.AttackHeavy)) HeavyAttack(Msg[Actions.AttackHeavy]);
 			}
@@ -120,20 +123,18 @@ namespace Game
 
 		private void Block()
 		{
-			Actor._IsBlocking = true;
-
 			//Animation.Transition("Shield", Animations.Block);
 			//Animation.Block();
 			Walk();
 			CancelSprint();
-			(Actor as Player).Block();
+			player.Block();
 		}
 
 		private void BlockRelease()
 		{
 
 			CancelWalk();
-			(Actor as Player).BlockRelease();
+			player.BlockRelease();
 		}
 
 		public override void HandleMovementInput(Dictionary<string, Vector2> Msg)
@@ -172,16 +173,16 @@ namespace Game
 		}
 		private void Sprint(Dictionary<string, Vector2> Msg)
 		{
-			if ((Actor as Player).Camera._AimOn) return;
+			if (player.Camera._AimOn) return;
 
-			if (Msg.ContainsKey(Actions.Sprint) && Actor._IsBlocking == false) 
+			if (Msg.ContainsKey(Actions.Sprint) && player.IsBlocking() == false) 
 			{
 				//state.SetAnim(Animations.TransitionMovement, Animations.Sprint);
 				if (state.Anim == Animations.Sprint) return;
 				TransitionTo("PlayerRunState", Msg);
 			}
 
-			if (Msg.ContainsKey(Actions.SprintRelease) && Actor._IsBlocking == false)
+			if (Msg.ContainsKey(Actions.SprintRelease) && player.IsBlocking() == false)
 			{
 				//state.SetAnim(Animations.TransitionMovement, Animations.SprintRelease);
 				TransitionTo("PlayerRunState", Msg);
@@ -215,19 +216,19 @@ namespace Game
 		{
 			if (action == Actions.LockOn)
 			{
-				if ((Actor as Player).Camera.FindClosestTarget() == false) return;
+				if (player.Camera.FindClosestTarget() == false) return;
 				
-				(Actor as Player).Camera.LockOnTarget();
+				player.Camera.LockOnTarget();
 			}
 			if (action == Actions.LockOff)
 			{
-				(Actor as Player).Camera.ReleaseLockOn();
+				player.Camera.ReleaseLockOn();
 			}
 		}
 
 		private void Aim(string action)
 		{
-			if (Actor._IsDodging) return;
+			if (player.IsDodging()) return;
 			if (Actor.HasAimingWeapon() == false) return;
 			if (action == Actions.Aim)
 			{
@@ -247,7 +248,7 @@ namespace Game
 
 			if (action == Actions.AimCancel)
 			{
-				(Actor as Player).Camera._AimOn = false;
+				player.Camera._AimOn = false;
 				Attack.ReadyToShoot = false;
 				CancelWalk();	
 			}
@@ -261,27 +262,27 @@ namespace Game
 				{ "input_dir", Vector2.Zero }
 			};
 
-			if (anim == Animations.Block) (Actor as Player).BlockHold();
-			else if (anim.Contains(Animations.CounterAttack)) 
-			{
-				(Actor as Player).BlockRelease();
-				state.GetInput(Vector2.Zero);
-				TransitionTo("PlayerRunState",  msg);
-				Buffer.Chain = 1;
-			}
-			else if (anim.Contains(Animations.BlockedAttack) && Actor._IsBlocking) 
-				(Actor as Player).BlockHold();
+			if (anim == Animations.Block) player.BlockHold();
+			// else if (anim.Contains(Animations.CounterAttack)) 
+			// {
+			// 	(Actor as Player).BlockRelease();
+			// 	state.GetInput(Vector2.Zero);
+			// 	TransitionTo("PlayerRunState",  msg);
+			// 	Buffer.Chain = 1;
+			// }
+			else if (anim.Contains(Animations.BlockedAttack) && player.IsBlocking()) 
+				player.BlockHold();
 
 			else if (anim.Contains(Animations.DrawBow))
 			{
-				if ((Actor as Player).Camera._AimOn)
+				if (player.Camera._AimOn)
 				{
 					Attack.ReadyToShoot = true;
 				}
 			}
 			else if (anim.Contains(Animations.Release))
 			{
-				if ((Actor as Player).Camera._AimOn)
+				if (player.Camera._AimOn)
 				{
 					DrawBow();
 				}
@@ -295,25 +296,6 @@ namespace Game
 			}
 			
 			else ExecuteBufferInput(anim);
-		}
-
-		public void ExecuteBufferInput(string anim)
-		{
-			if (anim.Contains(Animations.AttackGeneral))
-			{
-				// if (Buffer.IsEmpty())
-				// 	TransitionTo("PlayerRunState",  msg);
-				
-				// msg[Buffer.Pop()[Actions.AttackLight] = true;
-				if (Buffer.IsEmpty() == false)
-				{
-					Dictionary<string, bool> m = new()
-					{
-						{Actions.AttackLight, true}
-					};
-					HandleAttackInput(m);
-				}
-			}
 		}
 
 		public void OnAttunementChanged(string attun)
@@ -383,7 +365,25 @@ namespace Game
 			}
 		}
 
-
+		public void ExecuteBufferInput(string anim)
+		{
+			if (anim.Contains(Animations.AttackGeneral))
+			{
+				// if (Buffer.IsEmpty())
+				// 	TransitionTo("PlayerRunState",  msg);
+				
+				// msg[Buffer.Pop()[Actions.AttackLight] = true;
+				if (Buffer.IsEmpty() == false)
+				{
+					Dictionary<string, bool> m = new()
+					{
+						{Actions.AttackLight, true}
+					};
+					HandleAttackInput(m);
+				}
+			}
+		}
+		
 		//These functions are to avoid repeating lines
 		private void CancelSprint()
 		{

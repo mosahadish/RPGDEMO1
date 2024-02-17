@@ -14,7 +14,6 @@ namespace Game
         private double wanderTime;
         private Vector3 wanderDirection = Vector3.Zero;
 
-
         private RandomNumberGenerator rng = new();
         public override void Enter(Dictionary<string, Vector2> msg)
         {
@@ -29,14 +28,7 @@ namespace Game
 
         public override void PhysicsUpdate(double delta)
         {
-            //gravity
-            newVelo = Actor.Velocity;
-            newVelo.Y += -Movement.Gravity * (float)delta;
-            Actor.Velocity = newVelo;
-            //gravity
-            
             RandomWandering(delta);
-            Actor.MoveAndSlide();
         }
 
         public override void Update(double delta)
@@ -89,6 +81,7 @@ namespace Game
             Actor.Velocity = Vector3.Zero;
             Animation.BlendPosition("Roam", Vector2.Zero);
             waitTime -= delta;
+            Actor.MoveAndSlide();
         }
 
         private void SetWaitTime()

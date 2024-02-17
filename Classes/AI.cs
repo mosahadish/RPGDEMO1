@@ -12,7 +12,6 @@ namespace Game
 		[Export] public Raycasts Raycasts;
 		
 		private Vector3 desiredVelo;
-		private List<AI> bodiesToNotifyOfTarget = new();
 
         public override void _Ready()
         {
@@ -20,9 +19,7 @@ namespace Game
 			CurrentWeapon.Wielder = this;
 
 			if (GetParent() is Map map)
-			{
-				ActorDeathWithArgument += map.OnAIDeath;
-			}
+			    ActorDeathWithArgument += map.OnAIDeath;
 		}
 
         public void ApplySteeringForce(Vector3 globalTargetPos, double delta)

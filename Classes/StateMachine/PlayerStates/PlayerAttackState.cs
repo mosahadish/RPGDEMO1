@@ -11,38 +11,44 @@ namespace Game
         private Vector3 Direction;
         private int chain = 1;
 
+        private Player player;
+
         private CameraComponent camera;
     
         public override void _Ready()
         {
             base._Ready();
+            //await ToSignal(Owner, "ready");
+            GD.Print(Actor);
+            player = Actor as Player; //why doesn't this work
         }
 
         public override void Enter(Dictionary<string, Vector2> Msg)
         {
+            if (player == null) player = (Actor as Player);
             if (Msg.ContainsKey(Actions.AttackLight))
             {
-                if (Movement.Sprinting == true)
+                if (Movement._Sprinting == true)
                 {
-                    (Actor as Player).SprintLightAttack();
+                    player.SprintLightAttack();
                 }
-                else if (Actor._BlockedAttack)
+                else if (player.CanCounter())
                 {
-                    (Actor as Player).BlockCounterAttack();
+                    player.BlockCounterAttack();
                 }
                 else
                 {
                     chain = (int)Msg[Actions.AttackLight].Y;
 
-                    if (chain == 1) (Actor as Player).Attack1();
-                    if (chain == 2) (Actor as Player).Attack2();
-                    if (chain ==3) (Actor as Player).Attack3();
+                    if (chain == 1) player.Attack1();
+                    if (chain == 2) player.Attack2();
+                    if (chain ==3) player.Attack3();
                 }
             }
 
             if (camera.Target != null) Direction = Actor.GlobalPosition.DirectionTo(camera.Target.GlobalPosition);
             // global_transform.basis.z instaed of PositiveZ marker? NOT WORKING
-            else if (InputDir == Vector2.Zero) Direction = ((Actor as Player).PositiveZ.GlobalPosition - Actor.GlobalPosition).Normalized();
+            else if (InputDir == Vector2.Zero) Direction = (player.PositiveZ.GlobalPosition - Actor.GlobalPosition).Normalized();
             else 
             {
                 Direction = new Vector3(InputDir.X, 0, InputDir.Y).Rotated(Vector3.Up, camera.Rotation.Y).Normalized();
@@ -70,7 +76,7 @@ namespace Game
 
         public override void Exit()
         {
-            (Actor as Player).FinishAttacking();
+            player.FinishAttacking();
         }
     }
 }

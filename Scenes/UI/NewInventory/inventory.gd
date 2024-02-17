@@ -57,7 +57,7 @@ func _ready():
 
 func _process(_delta):
 	handles_drag_and_drop()
-	
+	if (player.IsDodging()): return;
 	if Input.is_action_just_pressed("ui_accept"):
 		if not current_slot.is_empty():
 			#check if current slot is an equip slot

@@ -1,0 +1,10 @@
+[gd_resource type="Sky" load_steps=3 format=3 uid="uid://dqhjluxpjk3u4"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_jr8wc"]
+load_path = "res://.godot/imported/sky_2.png-3246d9ba45b69131effdf515c69428b4.s3tc.ctex"
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_tiaac"]
+panorama = SubResource("CompressedTexture2D_jr8wc")
+
+[resource]
+sky_material = SubResource("PanoramaSkyMaterial_tiaac")

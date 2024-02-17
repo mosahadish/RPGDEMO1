@@ -20,14 +20,33 @@ namespace Game
 		[Export(PropertyHint.Enum, Attunements.Lightning+
 		 "," + Attunements.Fire)]
 		public string CurrentAttunement {get; set;} = Attunements.Fire;
+        private bool _isBlocking = false;
+		bool IBlocker.Blocking
+    	{
+        get { return _isBlocking; }
+        set { _isBlocking = value; }
+    	}
 
-		[ExportCategory("Equipment Attachments")]
+        private bool _attackBlocked = false;
+		bool IBlocker.AttackBlocked
+    	{
+        get { return _attackBlocked; }
+        set { _attackBlocked = value; }
+    	}
+
+		private bool _isDodging = false;
+		bool IDodger.Dodging
+    	{
+        get { return _isDodging; }
+        set { _isDodging = value; }
+    	}
+
+        [ExportCategory("Equipment Attachments")]
 		[Export] private BoneAttachment3D RightHand;
 		[Export] private BoneAttachment3D LeftHand;
 		[Export] private BoneAttachment3D RightEquip;
 		[Export] private BoneAttachment3D LeftEquip;
 		[Export] private BoneAttachment3D BackEquip;
-		// [Export] string CurrentAttunement;
 
 		[ExportCategory("Dependencies")]
 		[Export] public CameraComponent Camera;
@@ -39,12 +58,11 @@ namespace Game
 		private Dictionary<Item, Node3D> EquippedItems = new();
 		private int AttunementIterator = 0;
 		private string[] arrAttunement = {Attunements.Fire, Attunements.Lightning};
-
-		// string CurrentAttunement = Attunements.Fire;
-
-		public override void _Ready()
+    
+        public override void _Ready()
 		{
 			AttunementChanged.Invoke(CurrentAttunement);
+			_isBlocking = false;
 		}
 
 		public override void _Process(double delta)
@@ -62,7 +80,7 @@ namespace Game
 
 		private void OnInventoryChangedWeapon(Weapon weap)
 		{
-			if (_IsDodging || _IsBlocking || _IsAttacking) return;
+			if (_isDodging || _isBlocking || _IsAttacking) return;
 			if (HasWeapon())
 			{
 				if (CurrentWeapon == weap)
@@ -170,7 +188,7 @@ namespace Game
 
 		public void OnInventoryEquippedItem(Item item)
 		{
-			if (_IsDodging || _IsBlocking || _IsAttacking) return;
+			if (_isDodging || _isBlocking || _IsAttacking) return;
 			if (item is Weapon) EquipWeapon(item as Weapon);
 		}
 
@@ -231,20 +249,22 @@ namespace Game
 			if (HasWeapon())
 				Animation.Transition(CurrentWeapon.Name+Animations.TransitionMovement, CurrentWeapon.Name + Animations.Walk);
 			else Animation.Transition(Animations.TransitionMovement, Animations.Walk);
-			_IsBlocking = true;
+			_isBlocking = true;
 			Stam.Degen = true;
 			Stam.Regen = false;
         }
 
-		public void BlockedAttack()
+		public void BlockedAttack(float damageToTake)
         {
             Animation.Transition("Shield", Animations.BlockedAttack);
-			Audio.PlayAudio(SoundEffects.ShieldBlock);
-			_BlockedAttack = true;
+			audio.Play(SoundEffects.ShieldBlock);
+			_attackBlocked = true;
+			Stam.DecreaseStamina(damageToTake);
         }
 
 		public void BlockCounterAttack()
 		{
+			BlockRelease();
 			_IsAttacking = true;
 			Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.CounterAttack);
 			Animation.OneShot(CurrentWeapon.Name);
@@ -252,33 +272,38 @@ namespace Game
 			
 			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
             Stam.Regen = false;
-			_BlockedAttack = false;
-			_IsBlocking = false;
+			_attackBlocked = false;
+			//_IsBlocking = false;
 		}
 
         public void BlockHold()
         {
             Animation.Transition("Shield", Animations.BlockHold);
-			_IsBlocking = true;
+			_isBlocking = true;
         }
 
         public void BlockRelease()
         {
-			//if (_IsBlocking == false) return;
-
+			if (_isBlocking == false) return;
+			
+			_attackBlocked = false;
 			Animation.Transition("Shield", Animations.BlockRelease);
 			if (HasWeapon())
 				Animation.Transition(CurrentWeapon.Name+Animations.TransitionMovement, CurrentWeapon.Name+Animations.Movement);
 			else Animation.Transition(Animations.TransitionMovement, Animations.Movement);
             
-			_IsBlocking = false;
+			_isBlocking = false;
 			Stam.Degen = false;
 			Stam.Regen = true;
         }
 
         public bool IsBlocking()
         {
-            return _IsBlocking;
+            return _isBlocking;
+        }
+		public bool CanCounter()
+        {
+            return _attackBlocked;
         }
 
         public void Attack1()
@@ -314,7 +339,7 @@ namespace Game
 		public void SprintLightAttack()
         {
             _IsAttacking = true;
-			Movement.Sprinting = false;
+			Movement._Sprinting = false;
 
 			Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.SprintLightAttack);
 			Animation.Transition(CurrentWeapon.Name + Animations.Movement, CurrentWeapon.Name+Animations.SprintLightAttack);
@@ -360,7 +385,7 @@ namespace Game
 			Stam.DecreaseStamina(Stam.DodgeConsumption);
             Stam.Regen = false;
             Movement.CurrentSpeed = Movement.DodgeSpeed;
-            _IsDodging = true;
+            _isDodging = true;
             _CanRotate = false;
 			if (HasWeapon())
             	Animation.Transition(CurrentWeapon.Name + Animations.TransitionMovement, CurrentWeapon.Name + Animations.Dodge);
@@ -371,13 +396,13 @@ namespace Game
 		{
 			Movement.CurrentSpeed = Movement.Speed;
             Stam.Regen = true;
-            _IsDodging = false;
+            _isDodging = false;
             _CanRotate = true;
 		}
 
         public bool IsDodging()
         {
-            return _IsDodging;
+            return _isDodging;
         }
     }
 }

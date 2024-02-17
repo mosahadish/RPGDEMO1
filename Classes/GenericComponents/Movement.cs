@@ -14,7 +14,7 @@ namespace Game
         public float DodgeSpeed;
         public float WalkSpeed;
         public float CurrentSpeed;
-        public bool Sprinting = false;
+        public bool _Sprinting = false;
 
         [ExportCategory("MovementStats")]
         [Export] public float Speed;

@@ -11,28 +11,32 @@ namespace Game
     public partial class AIStateMachine : StateMachine
     {
 
-        private List<AI> bodiesToNotifyOfTarget = new();
+        [Export] Label3D StateLabel;
+         private List<AI> bodiesToNotifyOfTarget = new();
         private float distToTargetSqr; //Distance squared is faster to calculate
-        private Actor target;
+        private Actor target = null;
 
         bool chaseFlag = true;
 
         public override void _PhysicsProcess(double delta)
         {
             base._PhysicsProcess(delta);
+            StateLabel.Text = state.Name;
             if (Actor.IsOnFloor() == false)
 			{
 				if ((state is AIAirState) == false) TransitionTo("AIAirState", Msg);
-				return;
 			}
+            else
+            {
+                if(target == null && state is AIRoamState == false) TransitionTo("AIRoamState", Msg);
+                if (target != null) distToTargetSqr = Actor.GlobalPosition.DistanceSquaredTo(target.GlobalPosition);
+                else distToTargetSqr = 9999;
 
-            if (target != null) distToTargetSqr = Actor.GlobalPosition.DistanceSquaredTo(target.GlobalPosition);
-            else distToTargetSqr = 9999;
-
-            if (distToTargetSqr > 125 && target != null) TargetGone();
-            if (target != null && distToTargetSqr > 4 && distToTargetSqr <= 16) TargetInCircleRange();
-            if (target != null && distToTargetSqr <= 4) TargetInAttackRange();
-            if (target != null && distToTargetSqr > 16) TargetInChaseRange();
+                if (distToTargetSqr > 125 && target != null) TargetGone();
+                if (target != null && distToTargetSqr > 4 && distToTargetSqr <= 16) TargetInCircleRange();
+                if (target != null && distToTargetSqr <= 4) TargetInAttackRange();
+                if (target != null && distToTargetSqr > 16) TargetInChaseRange();
+            }
         }
 
         private void TargetInCircleRange()

@@ -44,7 +44,7 @@ namespace Game
 			{
 				sprintTimerToggle = true;
 
-				if (Sprinting == false)
+				if (_Sprinting == false)
 				{
 					if (sprintTimer > 10) WantsSprint();
 				}
@@ -54,7 +54,7 @@ namespace Game
 			{
 				sprintTimerToggle = false;
 				if (sprintTimer < 10) WantsDodge(inputDir);
-				if (Sprinting == true) WantsReleaseSprint();
+				if (_Sprinting == true) WantsReleaseSprint();
 			}
 
 			if (sprintTimerToggle == true) sprintTimer += 1;

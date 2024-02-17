@@ -1,0 +1,29 @@
+[gd_resource type="Environment" load_steps=2 format=3 uid="uid://dabdma102tg7f"]
+
+[ext_resource type="Sky" uid="uid://dqhjluxpjk3u4" path="res://Scenes/Maps/Map2/new_sky.tres" id="1_upo48"]
+
+[resource]
+background_mode = 2
+background_energy_multiplier = 1.25
+sky = ExtResource("1_upo48")
+sky_rotation = Vector3(0, 1.13446, 0)
+ambient_light_color = Color(0.352941, 0.215686, 0.529412, 1)
+ambient_light_sky_contribution = 0.2
+ambient_light_energy = 0.5
+tonemap_mode = 3
+tonemap_white = 1.2
+glow_enabled = true
+fog_light_color = Color(0.996078, 0.886275, 0.784314, 1)
+fog_light_energy = 0.1
+fog_sun_scatter = 0.02
+fog_density = 0.0
+fog_sky_affect = 0.54
+fog_height = 50.0
+fog_height_density = 0.03
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.03
+volumetric_fog_length = 15.0
+volumetric_fog_temporal_reprojection_enabled = false
+adjustment_enabled = true
+adjustment_contrast = 1.15
+adjustment_saturation = 1.1

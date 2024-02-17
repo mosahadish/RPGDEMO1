@@ -42,7 +42,7 @@ namespace Game
 		{
 			moveDir = CalcMoveDirection(InputDir);
 			//Running around according to the camera's direction
-			if ((!InputDir.Equals(Vector2.Zero) && camera._LockOn == false && camera._AimOn == false) || Movement.Sprinting)
+			if ((!InputDir.Equals(Vector2.Zero) && camera._LockOn == false && camera._AimOn == false) || Movement._Sprinting)
 			{
 				InputDir = new Vector2(0, InputDir.Length());
 				(Movement as PlayerMovement).HandleFreeMovement(moveDir, delta);
@@ -53,7 +53,7 @@ namespace Game
 				Movement.HandleMovement(moveDir ,delta);
 			}
 			//if (Anim.Contains(Animations.Movement) || Anim.Contains(Animations.Walk)) //basically if not sprinting
-			if (Movement.Sprinting == false)
+			if (Movement._Sprinting == false)
 				{
 					InputDir.X = -1*InputDir.X;
 					Animation.BlendPosition(Anim, InputDir);
@@ -94,7 +94,7 @@ namespace Game
 			if (Msg.ContainsKey(Actions.Sprint)) 
 			{
 				SetAnim(Animations.TransitionMovement, Animations.Sprint);
-				Movement.Sprinting = true;
+				Movement._Sprinting = true;
 				Movement.SetSpeed(Movement.SprintSpeed);
 				Stam.Regen = false;
 				Stam.Degen = true;
@@ -104,7 +104,7 @@ namespace Game
 			if (Msg.ContainsKey(Actions.SprintRelease)) 
 			{
 				SetAnim(Animations.TransitionMovement, Animations.Movement);
-				Movement.Sprinting = false;
+				Movement._Sprinting = false;
 				Movement.SetSpeed(Movement.Speed);
 				Stam.Regen = true;
 				Stam.Degen = false;

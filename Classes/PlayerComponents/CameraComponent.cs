@@ -108,7 +108,7 @@ namespace Game
 			newRotation = GlobalPosition.DirectionTo(Target.GlobalPosition); //new rotatoin Dir
 			targetAngle = Mathf.Atan2(newRotation.X, newRotation.Z);
 			
-			if (player.Movement.Sprinting == false)
+			if (player.Movement._Sprinting == false)
 				player.LookInDirection(newRotation);
 			newRotation = Rotation;
 			newRotation.Y = (float)Mathf.LerpAngle(newRotation.Y, targetAngle, 0.8);
