@@ -49,7 +49,6 @@ namespace Game
 
 		public override void _Process(double delta)
 		{
-			GD.Print(_IsBlocking);
 			if (Input.IsActionJustPressed(Actions.ChangeAttunement) && _IsAttacking == false && Attack.ReadyToShoot == false)
 			{
 				AttunementIterator +=1;
@@ -237,11 +236,25 @@ namespace Game
 			Stam.Regen = false;
         }
 
-		public void BlockAttack()
+		public void BlockedAttack()
         {
             Animation.Transition("Shield", Animations.BlockedAttack);
+			Audio.PlayAudio(SoundEffects.ShieldBlock);
 			_BlockedAttack = true;
         }
+
+		public void BlockCounterAttack()
+		{
+			_IsAttacking = true;
+			Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.CounterAttack);
+			Animation.OneShot(CurrentWeapon.Name);
+			//Audio.PlayAudio(SoundEffects.ShieldBlock);
+			
+			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
+            Stam.Regen = false;
+			_BlockedAttack = false;
+			_IsBlocking = false;
+		}
 
         public void BlockHold()
         {
@@ -251,7 +264,7 @@ namespace Game
 
         public void BlockRelease()
         {
-			if (_IsBlocking == false) return;
+			//if (_IsBlocking == false) return;
 
 			Animation.Transition("Shield", Animations.BlockRelease);
 			if (HasWeapon())

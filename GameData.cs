@@ -13,20 +13,20 @@ namespace Game
         private Dictionary<string, PackedScene> items;
         // private Dictionary<string, PackedScene> enemies;
         private Dictionary<string, PackedScene> projectiles;
-        // private Dictionary<string, PackedScene> soundEffects;
+        private Dictionary<string, AudioStream > soundEffects;
 
         private const string DIR_ITEMS_PATH = "C:\\Users\\moses\\Documents\\RPGDEMO\\Scenes\\Items";
         // private const string DIR_ENEMIES_PATH = "res://Scenes/Models/Enemies/";
         private const string DIR_PROJECTILES_PATH = "C:\\Users\\moses\\Documents\\RPGDEMO\\Scenes\\Projectiles";
-        // private const string DIR_SOUND_PATH = "res://Resources/SoundEffects/";
+        private const string DIR_SOUND_PATH = "C:\\Users\\moses\\Documents\\RPGDEMO\\Assets\\Sounds";
 
         public override void _Ready()
         {
             items = GetDirContents(DIR_ITEMS_PATH, ".tscn");
             //enemies = GetDirContents(DIR_ENEMIES_PATH, ".tscn");
             projectiles = GetDirContents(DIR_PROJECTILES_PATH, ".tscn");
-            //soundEffects = GetDirContents(DIR_SOUND_PATH, ".mp3");
-            //soundEffects.Merge(GetDirContents(DIR_SOUND_PATH, ".wav"));
+            soundEffects = GetAudioContents(DIR_SOUND_PATH, ".mp3");
+            Merge(soundEffects, GetAudioContents(DIR_SOUND_PATH, ".wav"));
             Instance = this;
         }
 
@@ -59,17 +59,12 @@ namespace Game
         //     return null;
         // }
 
-        // public PackedScene FetchSound(string sound)
-        // {
-        //     if (soundEffects.ContainsKey(sound))
-        //     {
-        //         return soundEffects[sound];
-        //     }
-        //     else
-        //     {
-        //         return null;
-        //     }
-        // }
+        public AudioStream FetchSound(string sound)
+        {
+            if (soundEffects.ContainsKey(sound)) return soundEffects[sound];
+            
+            return null;
+        }
 
         // private Dictionary<string, PackedScene> GetDirContents(string path, string filesSuffix)
         // {
@@ -81,6 +76,53 @@ namespace Game
 
         //     return null;
         // }
+
+        private Dictionary<string, AudioStream > GetAudioContents(string path, string filesSuffix)
+        {
+            // Check if the directory exists
+            if (Directory.Exists(path))
+            {
+                // Initialize the dictionary to hold the file contents
+                var fileContents = new Dictionary<string, AudioStream>();
+
+                // Get all files in the directory
+                string[] files = Directory.GetFileSystemEntries(path);
+                // Iterate over each file in the directory
+                foreach (string filePath in files)
+                {
+                    // Check if the file has the specified suffix
+                    if (filePath.EndsWith(filesSuffix))
+                    {
+                        // Get the file name without the suffix
+                        string fileName = Path.GetFileNameWithoutExtension(filePath);
+                        fileName = fileName.Replace(".remap", "");
+                        fileName = fileName.Replace(".import", "");
+                        GD.Print("Loading file: " + filePath);
+                        // Load the PackedScene from the file path
+                        AudioStream audioStream = (AudioStream )ResourceLoader.Load(filePath);
+
+                        // Add the file name (without suffix) and its corresponding PackedScene to the dictionary
+                        fileContents[fileName] = audioStream;
+                    }
+                    else
+                    {
+                        // Check if it's a directory
+                        if (File.GetAttributes(filePath).HasFlag(FileAttributes.Directory))
+                        {
+                            Merge(fileContents, GetAudioContents(filePath, filesSuffix));
+                        }
+                    }
+                }
+
+                // Return the dictionary containing file contents
+                return fileContents;
+            }
+            else
+            {
+                // Directory does not exist, return null
+                return null;
+            }
+        }
 
         private Dictionary<string, PackedScene> GetDirContents(string path, string filesSuffix)
         {
@@ -100,6 +142,8 @@ namespace Game
                     {
                         // Get the file name without the suffix
                         string fileName = Path.GetFileNameWithoutExtension(filePath);
+                        fileName = fileName.Replace(".remap", "");
+                        fileName = fileName.Replace(".import", "");
                         GD.Print("Loading file: " + filePath);
                         // Load the PackedScene from the file path
                         PackedScene packedScene = (PackedScene)ResourceLoader.Load(filePath);

@@ -26,6 +26,10 @@ namespace Game
                 {
                     (Actor as Player).SprintLightAttack();
                 }
+                else if (Actor._BlockedAttack)
+                {
+                    (Actor as Player).BlockCounterAttack();
+                }
                 else
                 {
                     chain = (int)Msg[Actions.AttackLight].Y;

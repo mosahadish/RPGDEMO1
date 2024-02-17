@@ -19,9 +19,13 @@ namespace Game
 
         public override void _PhysicsProcess(double delta)
         {
-            //GD.Print(state.Name);
-            //GD.Print(distToTarget);
             base._PhysicsProcess(delta);
+            if (Actor.IsOnFloor() == false)
+			{
+				if ((state is AIAirState) == false) TransitionTo("AIAirState", Msg);
+				return;
+			}
+
             if (target != null) distToTargetSqr = Actor.GlobalPosition.DistanceSquaredTo(target.GlobalPosition);
             else distToTargetSqr = 9999;
 
@@ -104,7 +108,6 @@ namespace Game
             (state as AIChaseState).SetTarget(target);
         }
 
-
         public override void HandleAttackInput(Dictionary<string, bool> Msg)
         {
         }
@@ -126,6 +129,7 @@ namespace Game
 				bodiesToNotifyOfTarget.Add(aI);
 			}
 		}
+
         private void OnArea3DExited(Node3D body)
 		{
 			if (body is Player)

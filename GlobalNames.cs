@@ -1,5 +1,12 @@
 namespace Globals
 {
+
+    public class SoundEffects
+    {
+        public const string ShieldBlock = "ShieldBlock";
+        public const string ArrowBodyImpact = "ArrowBodyImpact";
+        public const string SwordFleshHit = "SwordFleshHit";
+    }
     public class Animations
     {
         public const string JumpRunning = "RunningJump";

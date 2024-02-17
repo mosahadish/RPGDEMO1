@@ -37,10 +37,7 @@ namespace Game
 
 			if (Actor.HasWeapon())
 			{	
-				if (Actor._IsBlocking) return; //change this later to add counter attack
-
-				//CancelSprint();
-
+				if (Actor._IsBlocking && Actor._BlockedAttack == false) return;
 				if (Msg.ContainsKey(Actions.AttackLight)) LightAttack(Msg[Actions.AttackLight]);
 				if (Msg.ContainsKey(Actions.AttackHeavy)) HeavyAttack(Msg[Actions.AttackHeavy]);
 			}
@@ -265,32 +262,39 @@ namespace Game
 			};
 
 			if (anim == Animations.Block) (Actor as Player).BlockHold();
-			if (anim.Contains(Animations.BlockedAttack) && Actor._IsBlocking) 
+			else if (anim.Contains(Animations.CounterAttack)) 
+			{
+				(Actor as Player).BlockRelease();
+				state.GetInput(Vector2.Zero);
+				TransitionTo("PlayerRunState",  msg);
+				Buffer.Chain = 1;
+			}
+			else if (anim.Contains(Animations.BlockedAttack) && Actor._IsBlocking) 
 				(Actor as Player).BlockHold();
 
-			if (anim.Contains(Animations.DrawBow))
+			else if (anim.Contains(Animations.DrawBow))
 			{
 				if ((Actor as Player).Camera._AimOn)
 				{
 					Attack.ReadyToShoot = true;
 				}
 			}
-			if (anim.Contains(Animations.Release))
+			else if (anim.Contains(Animations.Release))
 			{
 				if ((Actor as Player).Camera._AimOn)
 				{
 					DrawBow();
 				}
 			}
-			if (anim.Contains(Animations.Dodge)) TransitionTo("PlayerRunState",  msg);
-			if (anim.Contains(Animations.AttackGeneral) && Buffer.IsEmpty()) 
+			else if (anim.Contains(Animations.Dodge)) TransitionTo("PlayerRunState",  msg);
+			else if (anim.Contains(Animations.AttackGeneral) && Buffer.IsEmpty()) 
 			{
 				state.GetInput(Vector2.Zero);
 				TransitionTo("PlayerRunState",  msg);
 				Buffer.Chain = 1;
 			}
 			
-			ExecuteBufferInput(anim);
+			else ExecuteBufferInput(anim);
 		}
 
 		public void ExecuteBufferInput(string anim)

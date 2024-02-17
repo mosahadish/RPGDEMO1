@@ -9,7 +9,9 @@ namespace Game
 
         void BlockHold();
 
-        void BlockAttack();
+        void BlockedAttack();
+
+        void BlockCounterAttack();
 
         bool IsBlocking();
     }

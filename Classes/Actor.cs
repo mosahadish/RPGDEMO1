@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Reflection.Metadata;
+using Globals;
 
 namespace Game
 {
@@ -16,6 +17,8 @@ namespace Game
 		[Export] public Animate Animation;
 		[Export] public Stamina Stam;
 		[Export] public Health HP;
+		[Export] public AudioHandler Audio;
+		
 		[Export] public Sprite3D LockOn;
 
 
@@ -45,7 +48,7 @@ namespace Game
 			{
 				//play block audio
 				//play attack blocked animation
-				(this as IBlocker).BlockAttack();
+				(this as IBlocker).BlockedAttack();
 				Stam.DecreaseStamina(damageToTake);
 			}
 
@@ -53,6 +56,13 @@ namespace Game
 			else
 			{
 				HP.TakeDamage(damageToTake);
+				if (Audio != null)
+				{
+					if (hittingObject == "Arrow")
+						Audio.PlayAudio(SoundEffects.ArrowBodyImpact);
+					if (hittingObject == "Sword")
+						Audio.PlayAudio(SoundEffects.SwordFleshHit);
+				}
 			}
 		}
 
