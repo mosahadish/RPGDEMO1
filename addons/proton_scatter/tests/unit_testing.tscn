@@ -1,7 +1,7 @@
 [gd_scene load_steps=205 format=3 uid="uid://chgskywnqfgv"]
 
 [ext_resource type="Script" path="res://addons/proton_scatter/src/scatter.gd" id="1_hld6g"]
-[ext_resource type="Texture2D" uid="uid://6xc5b38d25gf" path="res://Map2/assets/textures/grid.png" id="1_xpx1h"]
+[ext_resource type="Texture2D" uid="uid://6xc5b38d25gf" path="res://Scenes/Maps/Map1/assets/textures/grid.png" id="1_xpx1h"]
 [ext_resource type="Script" path="res://addons/proton_scatter/src/stack/modifier_stack.gd" id="2_y5xi5"]
 [ext_resource type="Script" path="res://addons/proton_scatter/src/modifiers/create_inside_random.gd" id="3_6h2s3"]
 [ext_resource type="Script" path="res://addons/proton_scatter/src/scatter_item.gd" id="4_w0gix"]

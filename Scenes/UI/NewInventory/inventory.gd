@@ -43,6 +43,9 @@ func _ready():
 	await owner.ready;
 	
 	drawn_weapon.connect(player.OnInventoryChangedWeapon);
+	equipped_item.connect(player.OnInventoryEquippedItem);
+	unequipped_item.connect(player.OnInventoryUnequippedItem);
+	
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	var data = GameData;
 	#add_item(GameData.FetchItem("greatsword")

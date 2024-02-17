@@ -1,0 +1,223 @@
+[gd_scene load_steps=13 format=3 uid="uid://b03dm5foy3tid"]
+
+[ext_resource type="Script" path="res://Scenes/Game.gd" id="1_01bgg"]
+[ext_resource type="PackedScene" uid="uid://degt6oc40mi1t" path="res://Scenes/Models/Player/Player.tscn" id="1_ctsb1"]
+[ext_resource type="PackedScene" uid="uid://dlfpn58g0wlys" path="res://Scenes/UI/Debug.tscn" id="3_17a4f"]
+[ext_resource type="PackedScene" uid="uid://bwcnco5r8xygd" path="res://Scenes/Models/TestEnemy/TestEnemy.tscn" id="4_qau5q"]
+[ext_resource type="PackedScene" uid="uid://yb43ks5ned6a" path="res://Scenes/UI/NewInventory/inventory.tscn" id="5_nsixv"]
+[ext_resource type="PackedScene" uid="uid://j53ipofpbddx" path="res://Scenes/Maps/Map1/Map1.tscn" id="6_tqqof"]
+[ext_resource type="Script" path="res://Scenes/UI/OnScreen/OnScreen.cs" id="7_27c3j"]
+[ext_resource type="Texture2D" uid="uid://ddc422hhrh3xp" path="res://Assets/Icons/add.svg" id="7_ma0te"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bb8dq"]
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_64myj"]
+bg_color = Color(0.192157, 0.537255, 0.207843, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nei27"]
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yom12"]
+bg_color = Color(0.866667, 0.227451, 0.164706, 1)
+border_width_left = 2
+border_width_top = 2
+border_color = Color(0.00392157, 0.00392157, 0.00392157, 1)
+
+[node name="Game" type="Node"]
+script = ExtResource("1_01bgg")
+
+[node name="PlayerUI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1152.0
+offset_bottom = 649.0
+
+[node name="DEBUG" parent="PlayerUI" node_paths=PackedStringArray("player", "state", "attun", "aiming", "canShoot") instance=ExtResource("3_17a4f")]
+offset_left = 13.0
+offset_top = 195.0
+offset_right = 264.0
+offset_bottom = 539.0
+player = NodePath("../../Map1/Player")
+state = NodePath("VBoxContainer/State")
+attun = NodePath("VBoxContainer/Attun")
+aiming = NodePath("VBoxContainer/Aiming")
+canShoot = NodePath("VBoxContainer/CanShoot")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerUI/DEBUG"]
+layout_mode = 0
+offset_right = 192.0
+offset_bottom = 290.0
+
+[node name="State" type="Label" parent="PlayerUI/DEBUG/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="Aiming" type="Label" parent="PlayerUI/DEBUG/VBoxContainer"]
+layout_mode = 2
+
+[node name="CanShoot" type="Label" parent="PlayerUI/DEBUG/VBoxContainer"]
+layout_mode = 2
+
+[node name="Attun" type="Label" parent="PlayerUI/DEBUG/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Attun: "
+
+[node name="Inventory" parent="PlayerUI" instance=ExtResource("5_nsixv")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+
+[node name="OnScreen" type="Control" parent="PlayerUI" node_paths=PackedStringArray("stam", "health", "stamBar", "healthBar")]
+anchors_preset = 0
+offset_right = 1155.0
+offset_bottom = 651.0
+script = ExtResource("7_27c3j")
+stam = NodePath("../../Map1/Player/Stamina")
+health = NodePath("../../Map1/Player/Health")
+stamBar = NodePath("StaminaBar")
+healthBar = NodePath("HealthBar")
+
+[node name="StaminaBar" type="ProgressBar" parent="PlayerUI/OnScreen"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.012
+anchor_top = 0.055
+anchor_right = 0.213
+anchor_bottom = 0.097
+offset_left = 0.14
+offset_top = 0.194996
+offset_right = -0.0150146
+offset_bottom = -0.147003
+theme_override_styles/background = SubResource("StyleBoxFlat_bb8dq")
+theme_override_styles/fill = SubResource("StyleBoxFlat_64myj")
+max_value = 10.0
+value = 3.0
+show_percentage = false
+
+[node name="HealthBar" type="ProgressBar" parent="PlayerUI/OnScreen"]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 9.0
+offset_right = 246.0
+offset_bottom = 36.0
+theme_override_styles/background = SubResource("StyleBoxFlat_nei27")
+theme_override_styles/fill = SubResource("StyleBoxFlat_yom12")
+value = 5.0
+show_percentage = false
+
+[node name="TextureRect" type="TextureRect" parent="PlayerUI/OnScreen"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_ma0te")
+
+[node name="Map1" parent="." instance=ExtResource("6_tqqof")]
+
+[node name="TestEnemy" parent="Map1" instance=ExtResource("4_qau5q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 184.067, 150.724, 892.319)
+
+[node name="Player" parent="Map1" instance=ExtResource("1_ctsb1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 177.821, 150.585, 875.347)
+
+[node name="Skeleton3D" parent="Map1/Player/Visuals/Armature" index="0"]
+bones/0/position = Vector3(-0.220852, 0.371876, -98.7899)
+bones/0/rotation = Quaternion(-0.727482, -0.0451751, 0.0109006, 0.684551)
+bones/1/rotation = Quaternion(-0.0285584, 0.0122486, 0.022418, 0.999266)
+bones/2/rotation = Quaternion(0.0111635, -2.59766e-05, 0.0144599, 0.999833)
+bones/3/rotation = Quaternion(0.0686564, 0.00128428, 0.0146454, 0.997532)
+bones/4/rotation = Quaternion(0.0509395, -0.000598784, 0.00252709, 0.998698)
+bones/5/rotation = Quaternion(-0.072976, 0.0092247, -0.00212749, 0.997289)
+bones/6/rotation = Quaternion(-0.598937, -0.433668, 0.509672, -0.439819)
+bones/7/rotation = Quaternion(0.535911, 0.174536, 0.21139, 0.79853)
+bones/8/rotation = Quaternion(-1.40411e-08, -5.29272e-08, 0.0294013, 0.999568)
+bones/9/rotation = Quaternion(0.0398104, -0.274917, 0.0259557, 0.960293)
+bones/11/rotation = Quaternion(-0.140123, 0.0839613, -0.234632, 0.958261)
+bones/12/rotation = Quaternion(-0.12211, -0.0693344, 0.0235327, 0.989812)
+bones/13/rotation = Quaternion(0.0697142, 0.000324101, 0.00892024, 0.997527)
+bones/14/rotation = Quaternion(0.150258, -9.67447e-07, -0.0154038, 0.988527)
+bones/15/rotation = Quaternion(0.0720906, -1.31093e-07, -0.00738762, 0.997371)
+bones/16/rotation = Quaternion(0.140014, -0.00396606, -0.0233443, 0.989866)
+bones/17/rotation = Quaternion(0.14974, -2.16537e-08, -0.0153448, 0.988606)
+bones/18/rotation = Quaternion(0.158533, -1.73729e-07, -0.0162458, 0.98722)
+bones/19/rotation = Quaternion(0.185597, -0.00444005, -0.0323634, 0.982083)
+bones/20/rotation = Quaternion(0.181024, -1.56193e-06, -0.0185592, 0.983304)
+bones/21/rotation = Quaternion(0.156221, -1.5807e-07, -0.016009, 0.987592)
+bones/22/rotation = Quaternion(0.235699, -0.00369534, -0.0487719, 0.970594)
+bones/23/rotation = Quaternion(0.151393, -5.61638e-05, -0.0158795, 0.988346)
+bones/24/rotation = Quaternion(0.143758, 3.30705e-05, -0.0145042, 0.989507)
+bones/25/rotation = Quaternion(0.601705, -0.432653, 0.525218, 0.418221)
+bones/26/rotation = Quaternion(0.461736, -0.265941, -0.22413, 0.815991)
+bones/27/rotation = Quaternion(1.37264e-06, 1.20711e-07, -0.0590606, 0.998254)
+bones/28/rotation = Quaternion(0.0587915, 0.170352, -0.00378605, 0.98362)
+bones/30/rotation = Quaternion(-0.142089, -0.0737728, 0.273935, 0.948329)
+bones/31/rotation = Quaternion(-0.155126, 0.0746203, -0.0264862, 0.984716)
+bones/32/rotation = Quaternion(0.0631889, -0.000552122, -0.0117404, 0.997932)
+bones/33/rotation = Quaternion(0.153252, 6.98267e-07, 0.0124883, 0.988108)
+bones/34/rotation = Quaternion(0.0710983, -5.68267e-08, 0.00579186, 0.997453)
+bones/35/rotation = Quaternion(0.132048, 0.00391, 0.0185297, 0.991062)
+bones/36/rotation = Quaternion(0.156547, 2.68599e-07, 0.0127527, 0.987588)
+bones/37/rotation = Quaternion(0.160827, 2.09002e-08, 0.0131015, 0.986896)
+bones/38/rotation = Quaternion(0.178288, 0.00456201, 0.0264529, 0.983612)
+bones/39/rotation = Quaternion(0.189108, 1.70391e-06, 0.015413, 0.981835)
+bones/40/rotation = Quaternion(0.157212, 8.5146e-08, 0.012807, 0.987482)
+bones/41/rotation = Quaternion(0.228766, 0.00355101, 0.0427324, 0.972537)
+bones/42/rotation = Quaternion(0.154602, 1.39681e-06, 0.0126042, 0.987896)
+bones/43/rotation = Quaternion(0.14364, -1.1463e-06, 0.0116911, 0.989561)
+bones/44/rotation = Quaternion(0.137499, 0.0650989, 0.985629, -0.0734325)
+bones/45/rotation = Quaternion(-0.125965, -0.00986951, 0.0325463, 0.991452)
+bones/46/rotation = Quaternion(0.539027, -0.0173411, -0.030351, 0.841563)
+bones/47/rotation = Quaternion(0.270754, -0.0323694, -0.0145648, 0.961994)
+bones/48/rotation = Quaternion(-0.09087, -0.008373, 0.995569, -0.0227124)
+bones/49/rotation = Quaternion(-0.0799904, 0.0816479, -0.0255702, 0.993117)
+bones/50/rotation = Quaternion(0.570384, 0.0116853, -0.0083153, 0.821253)
+bones/51/rotation = Quaternion(0.287927, 0.031896, 0.0141027, 0.957017)
+
+[node name="RightHandAttachment" parent="Map1/Player/Visuals/Armature/Skeleton3D" index="2"]
+transform = Transform3D(0.409727, 0.0260374, 0.911836, 0.911151, 0.0364233, -0.410459, -0.0438993, 0.998997, -0.00880034, -24.9964, -0.478295, -83.6407)
+
+[node name="LeftHandAttachment" parent="Map1/Player/Visuals/Armature/Skeleton3D" index="3"]
+transform = Transform3D(0.155159, 0.0162864, -0.987755, -0.981455, 0.116477, -0.152249, 0.112571, 0.99306, 0.0340567, 25.4691, 3.19492, -86.2571)
+
+[node name="RightEquipAttachment" parent="Map1/Player/Visuals/Armature/Skeleton3D" index="4"]
+transform = Transform3D(-0.96634, -0.00322644, -0.257246, -0.257082, 0.0499174, 0.965099, 0.00972722, 0.998748, -0.0490667, -9.64032, -0.0285057, -92.5705)
+
+[node name="LeftEquipAttachment" parent="Map1/Player/Visuals/Armature/Skeleton3D" index="5"]
+transform = Transform3D(-0.975544, 0.103725, 0.193789, 0.209921, 0.178279, 0.961327, 0.0651655, 0.978498, -0.195693, 8.5297, 1.44337, -91.7297)
+
+[node name="BackRightEquipAttachment" parent="Map1/Player/Visuals/Armature/Skeleton3D" index="6"]
+transform = Transform3D(0.99747, -0.0561254, -0.0436395, 0.0458089, 0.0379654, 0.998229, -0.0543692, -0.997702, 0.0404404, 0.221108, -4.13714, -133.647)
+
+[editable path="Map1"]
+[editable path="Map1/Player"]
+[editable path="Map1/Player/CameraComponent"]
