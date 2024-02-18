@@ -101,7 +101,7 @@ namespace Game
 
 		#region Equip/Unequip/Sheathe
 
-		private void OnInventoryChangedWeapon(Weapon weap)
+		public void OnInventoryChangedWeapon(Weapon weap)
 		{
 			if (_isDodging || _isBlocking || _IsAttacking) return;
 			if (HasWeapon())
@@ -233,7 +233,7 @@ namespace Game
 			audio.Play(SoundEffects.EquipItem);
 		}
 
-		private void OnInventoryUnequippedItem(Item item)
+		public void OnInventoryUnequippedItem(Item item)
 		{
 			if (item is Weapon) UnequipWeapon(item as Weapon);
 		}

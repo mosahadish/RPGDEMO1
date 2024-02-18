@@ -1,7 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://b03dm5foy3tid"]
+[gd_scene load_steps=3 format=3 uid="uid://b03dm5foy3tid"]
 
 [ext_resource type="Script" path="res://Scripts/GameWindow.cs" id="1_bhfox"]
-[ext_resource type="PackedScene" uid="uid://bwcnco5r8xygd" path="res://Scenes/Models/TestEnemy/TestEnemy.tscn" id="4_qau5q"]
 [ext_resource type="PackedScene" uid="uid://j53ipofpbddx" path="res://Scenes/Maps/Map1/Map1.tscn" id="6_tqqof"]
 
 [node name="Game" type="Node" node_paths=PackedStringArray("currentMapInstance")]
@@ -9,8 +8,5 @@ script = ExtResource("1_bhfox")
 currentMapInstance = NodePath("Map1")
 
 [node name="Map1" parent="." instance=ExtResource("6_tqqof")]
-
-[node name="TestEnemy" parent="Map1" instance=ExtResource("4_qau5q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 184.067, 150.724, 892.319)
 
 [editable path="Map1"]

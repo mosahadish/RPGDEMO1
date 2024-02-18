@@ -1,9 +1,9 @@
 [gd_scene load_steps=3 format=3 uid="uid://yb43ks5ned6a"]
 
 [ext_resource type="PackedScene" uid="uid://dmsjjurjggdpo" path="res://Scenes/UI/NewInventory/inv_slot.tscn" id="1_4u5be"]
-[ext_resource type="Script" path="res://Scenes/UI/NewInventory/inventory.gd" id="1_e2yvg"]
+[ext_resource type="Script" path="res://Classes/GenericComponents/Inventory.cs" id="1_76x8l"]
 
-[node name="Inventory" type="Control" node_paths=PackedStringArray("inventory", "equipment", "hotbar", "head_slot", "body_slot", "legs_slot", "right_hand", "left_hand", "hot_bar1", "hot_bar2", "hot_bar3", "hot_bar4")]
+[node name="Inventory" type="Control" node_paths=PackedStringArray("inventory", "equipment", "hotbar", "headSlot", "bodySlot", "legsSlot", "rightHandSlot", "leftHandSlot")]
 layout_mode = 3
 anchor_left = 0.405
 anchor_top = 0.394
@@ -15,19 +15,15 @@ offset_right = 232.6
 offset_bottom = 299.08
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_e2yvg")
+script = ExtResource("1_76x8l")
 inventory = NodePath("PanelContainer/VBoxContainer/InventoryGrid")
 equipment = NodePath("PanelContainer/VBoxContainer/EquipmentGrid")
 hotbar = NodePath("PanelContainer/VBoxContainer/GridContainer")
-head_slot = NodePath("PanelContainer/VBoxContainer/EquipmentGrid/equip_head")
-body_slot = NodePath("PanelContainer/VBoxContainer/EquipmentGrid/equip_body")
-legs_slot = NodePath("PanelContainer/VBoxContainer/EquipmentGrid/equip_legs")
-right_hand = NodePath("PanelContainer/VBoxContainer/EquipmentGrid/equip_righthand")
-left_hand = NodePath("PanelContainer/VBoxContainer/EquipmentGrid/equip_lefthand")
-hot_bar1 = NodePath("PanelContainer/VBoxContainer/GridContainer/hot_bar1")
-hot_bar2 = NodePath("PanelContainer/VBoxContainer/GridContainer/hot_bar2")
-hot_bar3 = NodePath("PanelContainer/VBoxContainer/GridContainer/hot_bar3")
-hot_bar4 = NodePath("PanelContainer/VBoxContainer/GridContainer/hot_bar4")
+headSlot = NodePath("PanelContainer/VBoxContainer/EquipmentGrid/equip_head")
+bodySlot = NodePath("PanelContainer/VBoxContainer/EquipmentGrid/equip_body")
+legsSlot = NodePath("PanelContainer/VBoxContainer/EquipmentGrid/equip_legs")
+rightHandSlot = NodePath("PanelContainer/VBoxContainer/EquipmentGrid/equip_righthand")
+leftHandSlot = NodePath("PanelContainer/VBoxContainer/EquipmentGrid/equip_lefthand")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -57,23 +53,23 @@ columns = 5
 
 [node name="equip_head" parent="PanelContainer/VBoxContainer/EquipmentGrid" instance=ExtResource("1_4u5be")]
 layout_mode = 2
-slot_type = "HEAD"
+Type = "HEAD"
 
 [node name="equip_body" parent="PanelContainer/VBoxContainer/EquipmentGrid" instance=ExtResource("1_4u5be")]
 layout_mode = 2
-slot_type = "BODY"
+Type = "BODY"
 
 [node name="equip_legs" parent="PanelContainer/VBoxContainer/EquipmentGrid" instance=ExtResource("1_4u5be")]
 layout_mode = 2
-slot_type = "LEGS"
+Type = "LEGS"
 
 [node name="equip_righthand" parent="PanelContainer/VBoxContainer/EquipmentGrid" instance=ExtResource("1_4u5be")]
 layout_mode = 2
-slot_type = "RIGHT_HAND"
+Type = "RIGHT_HAND"
 
 [node name="equip_lefthand" parent="PanelContainer/VBoxContainer/EquipmentGrid" instance=ExtResource("1_4u5be")]
 layout_mode = 2
-slot_type = "LEFT_HAND"
+Type = "LEFT_HAND"
 
 [node name="InventoryGrid" type="GridContainer" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2

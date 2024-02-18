@@ -1,5 +1,16 @@
+using System.Collections.Generic;
+using System.Data;
+
 namespace Globals
 {
+    public class CurrentInputDevice
+    {
+        public static string CurrentDevice = "";
+        public const string PS4InputMapName = "PS4 Controller"; //Godot's given name
+        public const string PS4Controller = "Sony"; //Godot's action input's name
+        
+        public static Dictionary<string,string> InputActions = new();
+    }
 
     public class SoundEffects
     {
@@ -61,8 +72,8 @@ namespace Globals
         public const string Sprint = "Sprint";
         public const string SprintRelease = "SprintRelease";
         public const string DrawRightWeapon = "DrawRightWeapon";
-    
         public const string ChangeAttunement = "ChangeAttunement";
+        public const string PickUp = "PickUp";
     }
 
     public class Slots
