@@ -19,7 +19,6 @@ namespace Game
         {
             base._Ready();
             //await ToSignal(Owner, "ready");
-            GD.Print(Actor);
             player = Actor as Player; //why doesn't this work
         }
 

@@ -19,7 +19,10 @@ namespace Game
 		[Export] public bool _CanBlock = false; 
 		[Export] public bool _CanAim = false;
 
+		[ExportCategory("Gameplay")]
 		[Export] private Area3D hitArea;
+		[Export] private Node3D Fire;
+		[Export] private Node3D Lightning;
 		
 		public bool _DamageOn = false; //Set this to true when swinging etc
 
@@ -34,6 +37,26 @@ namespace Game
 				hitArea.BodyExited += OnBodyExitedHitArea;
 			}
         }
+
+		public void SetAttunement(string attun)
+		{
+			if (attun == Attunements.Fire)
+			{
+				Lightning.Hide();
+				Fire.Show();
+			}
+			if(attun == Attunements.Lightning)
+			{
+				Fire.Hide();
+				Lightning.Show();
+			}
+		}
+
+		public void NoAttunements()
+		{
+			Fire.Hide();
+			Lightning.Hide();
+		}
 
         private void OnBodyEnteredHitArea(Node3D body)
 		{

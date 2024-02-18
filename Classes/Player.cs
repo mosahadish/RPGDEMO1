@@ -12,15 +12,42 @@ namespace Game
 	[GlobalClass]
 	public partial class Player : Actor, IBlocker, IMeleeAttacker, IDodger
 	{
+		#region Events
 
 		public event NotifyAttunement AttunementChanged;
 		public event NotifyWeapon WeaponChanged;
 		public event NotifyWeapon OffhandChanged;
+		
+		#endregion
 
+		#region Exported members
 		[Export(PropertyHint.Enum, Attunements.Lightning+
 		 "," + Attunements.Fire)]
 		public string CurrentAttunement {get; set;} = Attunements.Fire;
-        private bool _isBlocking = false;
+
+        [ExportCategory("Equipment Attachments")]
+		[Export] private BoneAttachment3D RightHand;
+		[Export] private BoneAttachment3D LeftHand;
+		[Export] private BoneAttachment3D RightEquip;
+		[Export] private BoneAttachment3D LeftEquip;
+		[Export] private BoneAttachment3D BackEquip;
+
+		[ExportCategory("Dependencies")]
+		[Export] public CameraComponent Camera;
+
+		[ExportCategory("Help")]
+		[Export] public Marker3D PositiveZ;
+		[Export] private Aim aim;
+
+		#endregion
+
+		#region Private members
+
+		private Dictionary<Item, Node3D> EquippedItems = new();
+		private int AttunementIterator = 0;
+		private string[] arrAttunement = {Attunements.Fire, Attunements.Lightning};
+
+		private bool _isBlocking = false;
 		bool IBlocker.Blocking
     	{
         get { return _isBlocking; }
@@ -41,23 +68,7 @@ namespace Game
         set { _isDodging = value; }
     	}
 
-        [ExportCategory("Equipment Attachments")]
-		[Export] private BoneAttachment3D RightHand;
-		[Export] private BoneAttachment3D LeftHand;
-		[Export] private BoneAttachment3D RightEquip;
-		[Export] private BoneAttachment3D LeftEquip;
-		[Export] private BoneAttachment3D BackEquip;
-
-		[ExportCategory("Dependencies")]
-		[Export] public CameraComponent Camera;
-
-		[ExportCategory("Help")]
-		[Export] public Marker3D PositiveZ;
-		[Export] private Aim aim;
-
-		private Dictionary<Item, Node3D> EquippedItems = new();
-		private int AttunementIterator = 0;
-		private string[] arrAttunement = {Attunements.Fire, Attunements.Lightning};
+		#endregion
     
         public override void _Ready()
 		{
@@ -73,10 +84,22 @@ namespace Game
 				if (AttunementIterator == arrAttunement.Length) AttunementIterator = 0;
 				CurrentAttunement = arrAttunement[AttunementIterator];
 
+				if (HasWeapon())
+				{
+					CurrentWeapon.SetAttunement(CurrentAttunement);
+				}
+
 				AttunementChanged?.Invoke(CurrentAttunement);
 			}
 			
 		}
+
+		public Vector3 GetAimPoint()
+		{
+			return aim.GetAimPoint();
+		}
+
+		#region Equip/Unequip/Sheathe
 
 		private void OnInventoryChangedWeapon(Weapon weap)
 		{
@@ -136,6 +159,7 @@ namespace Game
 				
 				if (weap == CurrentWeapon)
 				{
+					CurrentWeapon.NoAttunements();
 					CurrentWeapon = null;
 					WeaponChanged?.Invoke(CurrentWeapon);
 				}
@@ -181,6 +205,7 @@ namespace Game
 				else
 				{
 					CurrentWeapon = weap;
+					CurrentWeapon.SetAttunement(CurrentAttunement);
 					WeaponChanged?.Invoke(CurrentWeapon);
 				}
 			}
@@ -205,6 +230,7 @@ namespace Game
 				EquippedItems[weap] = (Node3D)BackEquip.GetNode(weap.Name);
 				EquippedItems[weap].AddChild(weap);
 			}
+			audio.Play(SoundEffects.EquipItem);
 		}
 
 		private void OnInventoryUnequippedItem(Item item)
@@ -238,10 +264,9 @@ namespace Game
 			
 		}
 
-		public Vector3 GetAimPoint()
-		{
-			return aim.GetAimPoint();
-		}
+		#endregion
+
+		#region Block
 
 		public void Block()
         {
@@ -306,11 +331,17 @@ namespace Game
             return _attackBlocked;
         }
 
+		#endregion
+		
+		#region Attack
+
         public void Attack1()
         {
             _IsAttacking = true;
 			Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.Attack1);
 			Animation.OneShot(CurrentWeapon.Name);
+
+			audio.Play(CurrentAttunement + CurrentWeapon.Name + Animations.Attack1);
 
 			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
             Stam.Regen = false;
@@ -322,6 +353,8 @@ namespace Game
 			Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.Attack2);
 			Animation.OneShot(CurrentWeapon.Name);
 
+			audio.Play(CurrentAttunement + CurrentWeapon.Name + Animations.Attack2);
+
 			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
             Stam.Regen = false;
         }
@@ -331,6 +364,8 @@ namespace Game
             _IsAttacking = true;
 			Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.Attack3);
 			Animation.OneShot(CurrentWeapon.Name);
+
+			audio.Play(CurrentAttunement + CurrentWeapon.Name + Animations.Attack3);
 
 			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
             Stam.Regen = false;
@@ -379,6 +414,9 @@ namespace Game
         {
             return _IsAttacking;
         }
+		#endregion
+
+		#region Dodge
 
         public void Dodge()
         {
@@ -404,6 +442,10 @@ namespace Game
         {
             return _isDodging;
         }
-    }
+
+		#endregion
+    
+	}
+
 }
 

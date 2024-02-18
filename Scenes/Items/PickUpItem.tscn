@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://ua4r31bi0f56"]
+
+[ext_resource type="Texture2D" uid="uid://cvvm3cv4bntbp" path="res://Assets/Icons/star_09.png" id="1_8b7le"]
+[ext_resource type="Script" path="res://Scenes/Items/PickUpItem.cs" id="1_8hid2"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_whtpj"]
+resource_local_to_scene = false
+resource_name = ""
+custom_solver_bias = 0.0
+margin = 0.04
+radius = 0.5
+
+[node name="PickUpItem" type="Node3D"]
+script = ExtResource("1_8hid2")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+billboard = 1
+texture = ExtResource("1_8b7le")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 128
+collision_mask = 128
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_whtpj")

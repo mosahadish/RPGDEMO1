@@ -17,8 +17,8 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-ConstNames="*res://ConstNames.gd"
-GameData="*res://GameData.cs"
+ConstNames="*res://Scripts/ConstNames.gd"
+GameData="res://Scripts/GameData.cs"
 
 [debug]
 
@@ -163,6 +163,11 @@ ChangeAttunement={
 LockOn={
 "deadzone": 0.5,
 "events": [Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":8,"pressure":0.0,"pressed":true,"script":null)
+]
+}
+PickUp={
+"deadzone": 0.5,
+"events": [Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":0,"pressure":0.0,"pressed":true,"script":null)
 ]
 }
 

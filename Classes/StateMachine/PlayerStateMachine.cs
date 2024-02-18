@@ -30,6 +30,8 @@ namespace Game
 			Stam.StaminaChanged += OnStaminaChanged;
 		}
 
+		#region Combat stuff
+
 		public override void HandleAttackInput(Dictionary<string, bool> Msg)
 		{
 			if (player.IsDodging()) return;
@@ -137,6 +139,10 @@ namespace Game
 			player.BlockRelease();
 		}
 
+		#endregion
+
+		#region Movement stuff
+
 		public override void HandleMovementInput(Dictionary<string, Vector2> Msg)
 		{
 			
@@ -206,6 +212,10 @@ namespace Game
 			}
 		}
 
+		#endregion
+
+		#region Camera stuff
+
 		public void HandleCameraInput(string action)
 		{
 			Aim(action);
@@ -253,6 +263,10 @@ namespace Game
 				CancelWalk();	
 			}
 		}
+
+		#endregion
+		
+		#region Signal/Event response
 		
 		public void OnAnimationFinished(string anim)
 		{
@@ -365,6 +379,8 @@ namespace Game
 			}
 		}
 
+		#endregion
+
 		public void ExecuteBufferInput(string anim)
 		{
 			if (anim.Contains(Animations.AttackGeneral))
@@ -384,7 +400,8 @@ namespace Game
 			}
 		}
 		
-		//These functions are to avoid repeating lines
+		#region Temporary functions
+
 		private void CancelSprint()
 		{
 			if (state.Anim.Contains(Animations.Sprint)) Actor.Movement.WantsReleaseSprint();
@@ -409,5 +426,7 @@ namespace Game
 			Animation.Transition("Bow"+CurrentAttunement, "Draw");
 			Animation.OneShot("Bow");
 		}
+
+		#endregion
 	}  
 }

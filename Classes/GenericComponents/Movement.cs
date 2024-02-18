@@ -96,10 +96,10 @@ namespace Game
             SprintSpeed = Speed * SprintSpeedMultiplier;
             WalkSpeed = Speed * WalkSpeedMultiplier;
             DodgeSpeed = Speed * DodgeSpeedMultiplier;
-            CurrentSpeed = Speed;
+            SetSpeed(Speed);
         }
 
-        public void SetSpeed(float speed)
+        public virtual void SetSpeed(float speed)
         {
             CurrentSpeed = speed;
         }

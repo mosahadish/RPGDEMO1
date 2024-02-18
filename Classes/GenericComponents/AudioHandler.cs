@@ -32,6 +32,11 @@ namespace Game
             audio.Play();
         }
 
+        public void OnPlayerPickedUpItem(Item item)
+        {
+            Play(SoundEffects.PickUpItem);
+        }
+
         private AudioStreamPlayer3D FindInactivePlayer()
         {
             foreach (AudioStreamPlayer3D stream in audioStreamArray)

@@ -37,7 +37,7 @@ anchors_preset = 0
 offset_right = 1152.0
 offset_bottom = 649.0
 
-[node name="DEBUG" parent="." node_paths=PackedStringArray("state", "attun", "aiming", "canShoot") instance=ExtResource("1_cawhn")]
+[node name="DEBUG" parent="." node_paths=PackedStringArray("state", "attun", "aiming", "canShoot", "speed") instance=ExtResource("1_cawhn")]
 offset_left = 13.0
 offset_top = 195.0
 offset_right = 264.0
@@ -46,6 +46,7 @@ state = NodePath("VBoxContainer/State")
 attun = NodePath("VBoxContainer/Attun")
 aiming = NodePath("VBoxContainer/Aiming")
 canShoot = NodePath("VBoxContainer/CanShoot")
+speed = NodePath("VBoxContainer/Speed")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="DEBUG"]
 layout_mode = 0
@@ -68,6 +69,9 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "Attun: "
+
+[node name="Speed" type="Label" parent="DEBUG/VBoxContainer"]
+layout_mode = 2
 
 [node name="Inventory" parent="." instance=ExtResource("2_hlurj")]
 layout_mode = 1
@@ -131,3 +135,17 @@ offset_bottom = 10.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("4_wul28")
+
+[node name="LabelInteract" type="Label" parent="OnScreen"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2

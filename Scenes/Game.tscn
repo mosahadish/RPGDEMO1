@@ -1,90 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://b03dm5foy3tid"]
+[gd_scene load_steps=4 format=3 uid="uid://b03dm5foy3tid"]
 
-[ext_resource type="Script" path="res://Scenes/Game.gd" id="1_01bgg"]
-[ext_resource type="PackedScene" uid="uid://degt6oc40mi1t" path="res://Scenes/Models/Player/Player.tscn" id="1_ctsb1"]
+[ext_resource type="Script" path="res://Scripts/GameWindow.cs" id="1_bhfox"]
 [ext_resource type="PackedScene" uid="uid://bwcnco5r8xygd" path="res://Scenes/Models/TestEnemy/TestEnemy.tscn" id="4_qau5q"]
 [ext_resource type="PackedScene" uid="uid://j53ipofpbddx" path="res://Scenes/Maps/Map1/Map1.tscn" id="6_tqqof"]
 
-[node name="Game" type="Node"]
-script = ExtResource("1_01bgg")
+[node name="Game" type="Node" node_paths=PackedStringArray("currentMapInstance")]
+script = ExtResource("1_bhfox")
+currentMapInstance = NodePath("Map1")
 
 [node name="Map1" parent="." instance=ExtResource("6_tqqof")]
 
 [node name="TestEnemy" parent="Map1" instance=ExtResource("4_qau5q")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 184.067, 150.724, 892.319)
 
-[node name="Player" parent="Map1" instance=ExtResource("1_ctsb1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 177.821, 150.585, 875.347)
-
-[node name="Skeleton3D" parent="Map1/Player/Visuals/Armature" index="0"]
-bones/0/position = Vector3(0.393541, -0.314257, -98.9533)
-bones/0/rotation = Quaternion(-0.727791, -0.0505381, 0.0115995, 0.683836)
-bones/1/rotation = Quaternion(-0.0306128, 0.011596, 0.0229014, 0.999202)
-bones/2/rotation = Quaternion(0.0107498, 0.000932691, 0.0132922, 0.999853)
-bones/3/rotation = Quaternion(0.0680151, 0.00189349, 0.0132854, 0.997594)
-bones/4/rotation = Quaternion(0.0502371, -0.000873684, 0.00415646, 0.998728)
-bones/5/rotation = Quaternion(-0.0651192, 0.0110522, -0.00178172, 0.997815)
-bones/6/rotation = Quaternion(-0.596331, -0.436463, 0.509285, -0.441042)
-bones/7/rotation = Quaternion(0.542229, 0.185973, 0.202612, 0.793946)
-bones/8/rotation = Quaternion(6.77289e-08, -6.89594e-08, 0.0159118, 0.999873)
-bones/9/rotation = Quaternion(0.0511622, -0.275003, 0.0275462, 0.959686)
-bones/11/rotation = Quaternion(-0.139472, 0.0853692, -0.235371, 0.95805)
-bones/12/rotation = Quaternion(-0.122148, -0.0689794, 0.0242674, 0.989815)
-bones/13/rotation = Quaternion(0.0689231, 0.000210941, 0.0095289, 0.997577)
-bones/14/rotation = Quaternion(0.150266, -9.65338e-07, -0.0154047, 0.988526)
-bones/15/rotation = Quaternion(0.0720987, -1.31413e-07, -0.00738845, 0.99737)
-bones/16/rotation = Quaternion(0.139567, -0.00390427, -0.0234179, 0.989928)
-bones/17/rotation = Quaternion(0.149764, -2.32726e-08, -0.0153473, 0.988603)
-bones/18/rotation = Quaternion(0.158557, -1.68269e-07, -0.0162483, 0.987216)
-bones/19/rotation = Quaternion(0.184815, -0.00436896, -0.0324161, 0.982229)
-bones/20/rotation = Quaternion(0.180977, -1.55942e-06, -0.0185544, 0.983312)
-bones/21/rotation = Quaternion(0.156173, -1.59724e-07, -0.0160041, 0.9876)
-bones/22/rotation = Quaternion(0.235713, -0.00320341, -0.0497998, 0.970541)
-bones/23/rotation = Quaternion(0.151421, -5.6177e-05, -0.0158824, 0.988342)
-bones/24/rotation = Quaternion(0.143794, 3.30771e-05, -0.0145078, 0.989501)
-bones/25/rotation = Quaternion(0.598441, -0.436115, 0.525412, 0.419063)
-bones/26/rotation = Quaternion(0.462142, -0.257092, -0.235507, 0.815392)
-bones/27/rotation = Quaternion(1.23543e-06, 1.23224e-07, -0.0656275, 0.997844)
-bones/28/rotation = Quaternion(0.0588212, 0.168971, -0.00468302, 0.983853)
-bones/30/rotation = Quaternion(-0.141868, -0.0739613, 0.272993, 0.948619)
-bones/31/rotation = Quaternion(-0.155135, 0.074593, -0.0265468, 0.984715)
-bones/32/rotation = Quaternion(0.0644215, -0.000300957, -0.0119439, 0.997851)
-bones/33/rotation = Quaternion(0.153207, 6.94545e-07, 0.0124847, 0.988115)
-bones/34/rotation = Quaternion(0.0710533, -5.69817e-08, 0.00578819, 0.997456)
-bones/35/rotation = Quaternion(0.133392, 0.00409582, 0.0183264, 0.990886)
-bones/36/rotation = Quaternion(0.156608, 2.73135e-07, 0.0127576, 0.987579)
-bones/37/rotation = Quaternion(0.160887, 2.1691e-08, 0.0131063, 0.986886)
-bones/38/rotation = Quaternion(0.179239, 0.00475469, 0.0261703, 0.983446)
-bones/39/rotation = Quaternion(0.189149, 1.70376e-06, 0.0154163, 0.981827)
-bones/40/rotation = Quaternion(0.157252, 8.44166e-08, 0.0128102, 0.987475)
-bones/41/rotation = Quaternion(0.22974, 0.00407659, 0.0421909, 0.972329)
-bones/42/rotation = Quaternion(0.154729, 1.39619e-06, 0.0126146, 0.987876)
-bones/43/rotation = Quaternion(0.143754, -1.14386e-06, 0.0117004, 0.989544)
-bones/44/rotation = Quaternion(0.132283, 0.0823476, 0.984905, -0.0753796)
-bones/45/rotation = Quaternion(-0.130763, -0.0163849, 0.0305924, 0.990806)
-bones/46/rotation = Quaternion(0.532568, -0.0209979, -0.0267671, 0.845704)
-bones/47/rotation = Quaternion(0.269565, -0.0323745, -0.0145874, 0.962327)
-bones/48/rotation = Quaternion(-0.0907743, -0.0149805, 0.995446, -0.0249578)
-bones/49/rotation = Quaternion(-0.0779437, 0.0793459, -0.0241496, 0.993502)
-bones/50/rotation = Quaternion(0.56792, 0.00975504, -0.00815444, 0.822986)
-bones/51/rotation = Quaternion(0.287875, 0.0318961, 0.0141037, 0.957033)
-
-[node name="RightHandAttachment" parent="Map1/Player/Visuals/Armature/Skeleton3D" index="2"]
-transform = Transform3D(0.402913, 0.0285357, 0.914793, 0.911249, 0.0807151, -0.40387, -0.0853625, 0.996329, 0.00651805, -24.2554, 0.436079, -84.2769)
-
-[node name="LeftHandAttachment" parent="Map1/Player/Visuals/Armature/Skeleton3D" index="3"]
-transform = Transform3D(0.158376, 0.00491029, -0.987367, -0.985282, 0.065924, -0.157714, 0.064317, 0.997813, 0.0152787, 26.5458, 0.57269, -86.1938)
-
-[node name="RightEquipAttachment" parent="Map1/Player/Visuals/Armature/Skeleton3D" index="4"]
-transform = Transform3D(-0.964095, -0.00329873, -0.265536, -0.265459, 0.0390673, 0.96333, 0.00719603, 0.999231, -0.0385403, -9.06169, -0.788466, -92.7938)
-
-[node name="LeftEquipAttachment" parent="Map1/Player/Visuals/Armature/Skeleton3D" index="5"]
-transform = Transform3D(-0.979298, 0.100859, 0.175506, 0.19368, 0.214811, 0.957259, 0.0588475, 0.971434, -0.229899, 9.08901, 0.843537, -91.8389)
-
-[node name="BackRightEquipAttachment" parent="Map1/Player/Visuals/Armature/Skeleton3D" index="6"]
-transform = Transform3D(0.99766, -0.0453788, -0.0511458, 0.0525415, 0.0301159, 0.998165, -0.0437552, -0.998516, 0.0324297, 1.11419, -4.98177, -133.788)
-
 [editable path="Map1"]
-[editable path="Map1/Player"]
-[editable path="Map1/Player/CameraComponent"]
-[editable path="Map1/Player/PlayerUI"]

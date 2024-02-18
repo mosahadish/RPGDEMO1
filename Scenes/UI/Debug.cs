@@ -12,6 +12,7 @@ namespace Game
         [Export] private Label attun;
         [Export] private Label aiming;
         [Export] private Label canShoot;
+        [Export] private Label speed;
 
         private StateMachine stateMachine;
 
@@ -30,6 +31,7 @@ namespace Game
             state.Text = stateMachine.state.Name;
             aiming.Text = "Aiming: "+ player.Camera._AimOn.ToString();
             canShoot.Text = "CanShoot: " + player.Attack.ReadyToShoot.ToString();
+            speed.Text = "Speed: " + player.Movement.CurrentSpeed.ToString();
         }
 
         private void OnAttunementChanged(string new_attun)

@@ -47,16 +47,18 @@ func _ready():
 	unequipped_item.connect(player.OnInventoryUnequippedItem);
 	
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
-	var data = GameData;
+	#var data = GameData;
 	#add_item(GameData.FetchItem("greatsword")
-	add_item(data.FetchItem("Shield"));
-	add_item(data.FetchItem("Sword"))
-	add_item(data.FetchItem("Bow"))
+	#add_item(data.FetchItem("Shield"));
+	#add_item(data.FetchItem("Sword"))
+	#add_item(data.FetchItem("Bow"))
 	#add_item(GameData.FetchItem("cookie"))
 	#add_item(GameData.FetchItem("helmet"))
 	close()
 	#open();
 
+func _exit_tree():
+	clear_inventory(); #clean up orphan nodes
 
 func _process(_delta):
 	handles_drag_and_drop()
