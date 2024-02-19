@@ -37,7 +37,7 @@ anchors_preset = 0
 offset_right = 1152.0
 offset_bottom = 649.0
 
-[node name="DEBUG" parent="." node_paths=PackedStringArray("state", "attun", "aiming", "canShoot", "speed") instance=ExtResource("1_cawhn")]
+[node name="DEBUG" parent="." node_paths=PackedStringArray("state", "attun", "aiming", "canShoot", "blocking", "speed") instance=ExtResource("1_cawhn")]
 offset_left = 13.0
 offset_top = 195.0
 offset_right = 264.0
@@ -46,6 +46,7 @@ state = NodePath("VBoxContainer/State")
 attun = NodePath("VBoxContainer/Attun")
 aiming = NodePath("VBoxContainer/Aiming")
 canShoot = NodePath("VBoxContainer/CanShoot")
+blocking = NodePath("VBoxContainer/Blocking")
 speed = NodePath("VBoxContainer/Speed")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="DEBUG"]
@@ -62,6 +63,9 @@ size_flags_vertical = 0
 layout_mode = 2
 
 [node name="CanShoot" type="Label" parent="DEBUG/VBoxContainer"]
+layout_mode = 2
+
+[node name="Blocking" type="Label" parent="DEBUG/VBoxContainer"]
 layout_mode = 2
 
 [node name="Attun" type="Label" parent="DEBUG/VBoxContainer"]

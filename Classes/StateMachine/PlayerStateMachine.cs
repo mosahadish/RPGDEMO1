@@ -35,6 +35,7 @@ namespace Game
 		public override void HandleAttackInput(Dictionary<string, bool> Msg)
 		{
 			if (player.IsDodging()) return;
+
 			if (Actor.HasBlockWeapon())
 			{
 				if (Msg.ContainsKey(Actions.Block)) HandleBlock(Msg[Actions.Block]);
@@ -127,8 +128,10 @@ namespace Game
 		{
 			//Animation.Transition("Shield", Animations.Block);
 			//Animation.Block();
-			Walk();
+			if (player.IsBlocking()) return;
+			if (player.IsAttacking()) return;
 			CancelSprint();
+			Walk();
 			player.Block();
 		}
 
@@ -279,10 +282,7 @@ namespace Game
 			if (anim == Animations.Block) player.BlockHold();
 			// else if (anim.Contains(Animations.CounterAttack)) 
 			// {
-			// 	(Actor as Player).BlockRelease();
-			// 	state.GetInput(Vector2.Zero);
-			// 	TransitionTo("PlayerRunState",  msg);
-			// 	Buffer.Chain = 1;
+				
 			// }
 			else if (anim.Contains(Animations.BlockedAttack) && player.IsBlocking()) 
 				player.BlockHold();

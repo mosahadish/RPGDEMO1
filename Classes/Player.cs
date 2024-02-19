@@ -305,6 +305,7 @@ namespace Game
         {
             Animation.Transition("Shield", Animations.BlockHold);
 			_isBlocking = true;
+			_attackBlocked = false;
         }
 
         public void BlockRelease()

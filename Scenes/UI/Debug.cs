@@ -12,6 +12,7 @@ namespace Game
         [Export] private Label attun;
         [Export] private Label aiming;
         [Export] private Label canShoot;
+        [Export] private Label blocking;
         [Export] private Label speed;
 
         private StateMachine stateMachine;
@@ -31,6 +32,7 @@ namespace Game
             state.Text = stateMachine.state.Name;
             aiming.Text = "Aiming: "+ player.Camera._AimOn.ToString();
             canShoot.Text = "CanShoot: " + player.Attack.ReadyToShoot.ToString();
+            blocking.Text = "Block: " + player.IsBlocking().ToString();
             speed.Text = "Speed: " + player.Movement.CurrentSpeed.ToString();
         }
 
