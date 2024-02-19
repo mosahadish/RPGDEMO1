@@ -1,6 +1,7 @@
 using Godot;
 using Globals;
 using System.Collections.Generic;
+using GameSettings;
 
 namespace Game
 {
@@ -23,11 +24,7 @@ namespace Game
 
         public override void _Ready()
         {
-            if (CurrentInputDevice.InputActions.ContainsKey(Actions.PickUp))
-            {
-                pickUpBtn = CurrentInputDevice.InputActions[Actions.PickUp];
-            }
-            else pickUpBtn = "No input detected";
+            pickUpBtn = Settings.GetBindForAction(Actions.PickUp);
 
             SetProcess(false);
         }

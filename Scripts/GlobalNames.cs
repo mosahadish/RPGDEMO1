@@ -3,15 +3,6 @@ using System.Data;
 
 namespace Globals
 {
-    public class CurrentInputDevice
-    {
-        public static string CurrentDevice = "";
-        public const string PS4InputMapName = "PS4 Controller"; //Godot's given name
-        public const string PS4Controller = "Sony"; //Godot's action input's name
-        
-        public static Dictionary<string,string> InputActions = new();
-    }
-
     public class SoundEffects
     {
         public const string ShieldBlock = "ShieldBlock";
