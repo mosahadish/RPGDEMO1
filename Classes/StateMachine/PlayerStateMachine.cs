@@ -385,10 +385,6 @@ namespace Game
 		{
 			if (anim.Contains(Animations.AttackGeneral))
 			{
-				// if (Buffer.IsEmpty())
-				// 	TransitionTo("PlayerRunState",  msg);
-				
-				// msg[Buffer.Pop()[Actions.AttackLight] = true;
 				if (Buffer.IsEmpty() == false)
 				{
 					Dictionary<string, bool> m = new()

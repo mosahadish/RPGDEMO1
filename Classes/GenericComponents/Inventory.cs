@@ -56,7 +56,8 @@ namespace Game
             }
 
             Input.MouseMode = Input.MouseModeEnum.Hidden;
-            Close();
+            SetProcess(false);
+            Hide();
         }
 
         public override void _Process(double delta)

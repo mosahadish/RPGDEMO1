@@ -407,7 +407,6 @@ namespace Game
 		{
 			_IsAttacking = false;
 			Stam.Regen = true;
-			Movement.SetSpeed(Movement.Speed);
 		}
 
         public bool IsAttacking()

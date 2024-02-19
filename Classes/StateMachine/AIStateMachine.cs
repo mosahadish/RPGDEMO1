@@ -35,7 +35,7 @@ namespace Game
                 if (distToTargetSqr > 125 && target != null) TargetGone();
                 if (target != null && distToTargetSqr > 4 && distToTargetSqr <= 16) TargetInCircleRange();
                 if (target != null && distToTargetSqr <= 4) TargetInAttackRange();
-                if (target != null && distToTargetSqr > 16) TargetInChaseRange();
+                if (target != null && distToTargetSqr > 25) TargetInChaseRange();
             }
         }
 
@@ -104,7 +104,8 @@ namespace Game
             }
             else if (anim.Contains(Animations.Attack3))
             {
-               TargetInChaseRange();
+                TransitionTo("AICircleState", Msg);
+               (state as AICircleState).SetTarget(target);
                return;
             }
             

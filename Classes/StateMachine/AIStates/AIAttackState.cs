@@ -23,6 +23,7 @@ namespace Game
         public override void PhysicsUpdate(double delta)
         {
             dirToTarget = Actor.GlobalPosition.DirectionTo(target.GlobalPosition);
+            Actor.LookInDirection(dirToTarget);
             Movement.HandleMovement(dirToTarget, delta);
         }
 

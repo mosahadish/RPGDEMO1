@@ -23,6 +23,7 @@ namespace Game
         public override void Enter(Dictionary<string, Vector2> msg)
         {
             Movement.SetSpeed(Movement.WalkSpeed);
+            GD.Print("Cirlce");
             //change later
             randIndex = (int)(rng.Randi() % circleSide.Length);
             (Animation as AnimateAI).Transition("Circle");

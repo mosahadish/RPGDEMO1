@@ -24,7 +24,7 @@ namespace Game
 
         public override void Enter(Dictionary<string, Vector2> Msg)
         {
-            if (player == null) player = (Actor as Player);
+            player ??= (Actor as Player);
             if (Msg.ContainsKey(Actions.AttackLight))
             {
                 if (Movement._Sprinting == true)

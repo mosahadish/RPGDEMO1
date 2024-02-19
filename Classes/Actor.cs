@@ -23,7 +23,8 @@ namespace Game
 		public bool _InAir = false;
 		public bool _IsAttacking = false;
 
-		public bool _CanRotate = true;
+		[Export] //for animations
+ 		public bool _CanRotate = true;
 		
 		[Export] public Weapon CurrentWeapon = null;
 		public Weapon CurrentOffhand = null;

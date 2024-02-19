@@ -21,10 +21,10 @@ namespace Game
 
         public override void _EnterTree()
         {
-            base._EnterTree();
-            //This should be handled when the game is launched, I think
-            Settings.SetCurrentDevice();
-            Settings.SetInputDeviceActions();
+           base._EnterTree();
+           //This should be handled when the game is launched, I think
+           Settings.SetCurrentDevice();
+           Settings.SetInputDeviceActions();
         }
 
         

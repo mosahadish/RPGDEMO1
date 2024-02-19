@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://j53ipofpbddx"]
+[gd_scene load_steps=19 format=3 uid="uid://j53ipofpbddx"]
 
 [ext_resource type="Script" path="res://Classes/Map.cs" id="1_5xqog"]
 [ext_resource type="Sky" uid="uid://dieri5a8r5agg" path="res://Scenes/Maps/Map1/Map1Sky.tres" id="1_8byvb"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://1maggt1idyiv" path="res://Scenes/Items/Weapons/Sword.tscn" id="11_rx7gh"]
 [ext_resource type="PackedScene" uid="uid://odsxeljnokdn" path="res://Scenes/Items/Weapons/Bow.tscn" id="12_ha2fn"]
 [ext_resource type="PackedScene" uid="uid://bnu5rvi2ojq62" path="res://Scenes/Items/Weapons/Shield.tscn" id="13_g2ao4"]
+[ext_resource type="PackedScene" uid="uid://bwcnco5r8xygd" path="res://Scenes/Models/TestEnemy.tscn" id="14_qhv36"]
 
 [sub_resource type="Environment" id="Environment_jyw0s"]
 background_mode = 2
@@ -64,3 +65,6 @@ ItemScene = ExtResource("12_ha2fn")
 [node name="PickUpItem3" parent="Items" instance=ExtResource("10_y7m7r")]
 transform = Transform3D(0.837957, 0, 0.545736, 0, 1, 0, -0.545736, 0, 0.837957, 168.681, 150.267, 871.982)
 ItemScene = ExtResource("13_g2ao4")
+
+[node name="TestEnemy" parent="." instance=ExtResource("14_qhv36")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 183.129, 151.011, 897.454)

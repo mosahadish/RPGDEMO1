@@ -9,33 +9,31 @@ namespace Game
 	[GlobalClass]
 	public partial class InputBuffer : Node
 	{
-        public bool BufferNextAttack = false;
-
         public int Chain = 1;
-
-
+        
+        private bool bufferNextAttack = false;
         private int maxChain = 3;
-        private float TimeNow = 0;
-        private float LastUpdateTime = 0;
-        private Stack<Dictionary<string,float>> buffer = new();
+        private float timeNow = 0;
+        private float lastUpdateTime = 0;
+        private Stack<Dictionary<string,float>> buffer;
 
 
         public override void _Ready()
         {
-            
-        }
+            buffer = new();
+        }   
 
         public override void _PhysicsProcess(double delta)
         {
-            TimeNow += 1.0f/60.0f; //Convert to seconds, PhysicsProcess runs 60 times per sec
-            if (Chain !=1 && (TimeNow-LastUpdateTime) > 2)
+            timeNow += 1.0f/60.0f; //Convert to seconds, PhysicsProcess runs 60 times per sec
+            if (Chain !=1 && (timeNow-lastUpdateTime) > 2)
             {
                 Chain = 1;
             }
 
             if (IsEmpty() == false)
             {
-                if (TimeNow - buffer.First()["Time"] > 2)
+                if (timeNow - buffer.First()["Time"] > 2)
                 {
                     buffer.Clear();
                 }
@@ -46,12 +44,12 @@ namespace Game
         {
             if (IsEmpty() && IsActivated())
             {
-                LastUpdateTime = TimeNow;
+                lastUpdateTime = timeNow;
                 Chain +=1;
                 Dictionary<string, float> msg = new()
 			    {
 				    { action, Chain },
-                    { "Time", LastUpdateTime}
+                    { "Time", lastUpdateTime}
 			    };
                 
                 if (Chain > maxChain) Chain = 1;
@@ -61,20 +59,19 @@ namespace Game
             }
         }
 
-
         public bool IsActivated()
         {
-            return BufferNextAttack;
+            return bufferNextAttack;
         }
 
         public void ActivateBuffer()
         {
-            BufferNextAttack = true;
+            bufferNextAttack = true;
         }
 
         public void DeactivateBuffer()
         {
-            BufferNextAttack = false;
+            bufferNextAttack = false;
         }
 
         public bool IsEmpty()
