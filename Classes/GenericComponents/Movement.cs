@@ -25,7 +25,6 @@ namespace Game
         [Export] public float JumpVelocity = 4.5f;
 
         [ExportCategory("Dependencies")]
-        [Export] private StateMachine StateMachine;
         [Export] private Actor actor;
 
         public override void _EnterTree()
@@ -35,51 +34,7 @@ namespace Game
         }
 
 
-        public void WantsMovement(Vector2 inputDir)
-        {
-            Dictionary<string, Vector2> msg = new()
-            {
-                { "Run", inputDir }
-            };
-            StateMachine.HandleMovementInput(msg);
-        }
-
-        public void WantsDodge(Vector2 inputDir)
-        {
-            Dictionary<string, Vector2> msg = new()
-            {
-                { Actions.Dodge, inputDir }
-            };
-            StateMachine.HandleMovementInput(msg);
-        }
-
-        public void WantsJump(Vector2 inputDir)
-        {
-            Dictionary<string, Vector2> msg = new()
-            {
-                { Actions.Jump, inputDir }
-            };
-             StateMachine.HandleMovementInput(msg);
-        }
-
-
-        public void WantsSprint()
-        {
-            Dictionary<string, Vector2> msg = new()
-            {
-                { Actions.Sprint, Vector2.Zero }
-            };
-            StateMachine.HandleMovementInput(msg);
-        }
-
-        public void WantsReleaseSprint()
-        {
-            Dictionary<string, Vector2> msg = new()
-            {
-                { Actions.SprintRelease, Vector2.Zero }
-            };
-            StateMachine.HandleMovementInput(msg);
-        }
+       
 
         public void HandleMovement(Vector3 direction, double delta)
         {

@@ -58,6 +58,7 @@ namespace Game
 
         public override void PhysicsUpdate(double delta)
         {
+            
             Actor.LookInDirection(Direction);
             Movement.HandleMovement(Direction, delta);
         }

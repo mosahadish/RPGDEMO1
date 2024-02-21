@@ -14,14 +14,38 @@ namespace Game
 		[Export] PlayerAnimation Animation;
 		[Export] Stamina Stam;
 		[Export] InputBuffer Buffer;
+		[Export] new PlayerMovement Movement;
 		private string CurrentAttunement;
 		private string CurrentWeaponName;
 		private Player player;
 
-		public override void _Ready()
+		public async override void _Ready()
 		{
-			base._Ready();
-			player = Actor as Player;
+			await ToSignal(GetParent(), "ready");
+            state = initialState;
+            player = Actor as Player;
+            Movement = player.Movement;
+            Attack = player.Attack;
+			CurrentAttunement = player.CurrentAttunement;
+
+            foreach (State c in GetChildren().Cast<State>())
+            {
+                c.Actor = Actor;
+                c.Movement = Movement;
+                c.Animation = Actor.Animation;
+                c.Attack = Attack;
+                c.Stam = Actor.Stam;
+
+                if (Actor is Player && (c is PlayerRunState))
+                    (c as PlayerRunState).SetCamera((Actor as Player).Camera);
+                if (Actor is Player && (c is PlayerDodgeState))
+                    (c as PlayerDodgeState).SetCamera((Actor as Player).Camera);
+                if (Actor is Player && (c is PlayerAttackState))
+                    (c as PlayerAttackState).SetCamera((Actor as Player).Camera);
+            }
+
+            state.Enter(Msg);
+			
 
 			player.AttunementChanged += OnAttunementChanged;
 			player.WeaponChanged += OnWeaponChanged;
@@ -184,8 +208,14 @@ namespace Game
 		{
 			if (player.Camera._AimOn) return;
 
+
 			if (Msg.ContainsKey(Actions.Sprint) && player.IsBlocking() == false) 
 			{
+				if (Msg.ContainsKey("Run"))
+				{
+					if (Msg["Run"] == Vector2.Zero) return;
+				}
+
 				//state.SetAnim(Animations.TransitionMovement, Animations.Sprint);
 				if (state.Anim == Animations.Sprint) return;
 				TransitionTo("PlayerRunState", Msg);
@@ -245,7 +275,6 @@ namespace Game
 			if (Actor.HasAimingWeapon() == false) return;
 			if (action == Actions.Aim)
 			{
-				
 				CancelSprint();
 
 				(Actor as Player).Camera._AimOn = true;
@@ -273,7 +302,7 @@ namespace Game
 		
 		public void OnAnimationFinished(string anim)
 		{
-			GD.Print(anim);
+			//GD.Print(anim);
 			Dictionary<string, Vector2> msg = new()
 			{
 				{ "input_dir", Vector2.Zero }
@@ -379,6 +408,7 @@ namespace Game
 			}
 		}
 
+
 		#endregion
 
 		public void ExecuteBufferInput(string anim)
@@ -400,7 +430,7 @@ namespace Game
 
 		private void CancelSprint()
 		{
-			if (state.Anim.Contains(Animations.Sprint)) Actor.Movement.WantsReleaseSprint();
+			if (state.Anim.Contains(Animations.Sprint)) player.Movement.WantsReleaseSprint();
 		}
 
 		private void Walk()

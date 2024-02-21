@@ -1,0 +1,36 @@
+using Godot;
+using System.Collections.Generic;
+using Globals;
+
+namespace Game
+{
+    [GlobalClass]
+    public partial class AIStaggerState : AIState
+    {
+        public override void Enter(Player target)
+        {   
+            Movement.SetSpeed(0);
+            AIActor._CanRotate = false;
+            Animation.Transition("Stagger");
+        }
+
+        public override void PhysicsUpdate(double delta)
+        {
+            // newVelo = AIActor.Velocity;
+            // newVelo.Y += -Movement.Gravity * (float)delta;
+
+            // AIActor.Velocity = newVelo;
+            AIActor.MoveAndSlide();
+        }
+
+        public override void Update(double delta)
+        {
+           
+        }
+
+        public override void Exit()
+        {
+            AIActor._CanRotate = true;
+        }
+    }
+}

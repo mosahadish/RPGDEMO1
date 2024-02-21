@@ -39,6 +39,11 @@ namespace Game
             MaxValue = newVal;
         }
 
+        public float GetValue()
+        {
+            return currentVal;
+        }
+
         public void Heal(float valueToHeal)
         {
             currentVal += valueToHeal;
@@ -61,6 +66,11 @@ namespace Game
 
             floaterInstance.Call("display_damage", damageToTake, parent.LockOn.GlobalPosition);
             EmitSignal(SignalName.ValueChangedWithArgument, currentVal);
+        }
+
+        public float AsPercent()
+        {
+            return currentVal / MaxValue;
         }
     }
 }

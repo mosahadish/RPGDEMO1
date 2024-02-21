@@ -9,7 +9,6 @@ namespace Game
 
         [Export] private Player player;
         [Export] private Label state;
-        [Export] private Label attun;
         [Export] private Label aiming;
         [Export] private Label canShoot;
         [Export] private Label blocking;
@@ -19,11 +18,9 @@ namespace Game
 
         public async override void _Ready()
         {
-            player.AttunementChanged += OnAttunementChanged;
             await ToSignal(Owner, "ready");
             base._Ready();
             stateMachine = player.SMachine;
-            attun.Text = "Attun: Fire";
         }
 
         public override void _Process(double delta)
@@ -34,11 +31,6 @@ namespace Game
             canShoot.Text = "CanShoot: " + player.Attack.ReadyToShoot.ToString();
             blocking.Text = "Block: " + player.IsBlocking().ToString();
             speed.Text = "Speed: " + player.Movement.CurrentSpeed.ToString();
-        }
-
-        private void OnAttunementChanged(string new_attun)
-        {
-            attun.Text = "Attun: " + new_attun;
         }
     }
 }

@@ -12,6 +12,7 @@ namespace Game
 		public delegate void ActorDeathWithArgumentEventHandler(Actor actor);
 
 		[Export] public StateMachine SMachine;
+		[Export] public Stagger staggerComp;
 		[Export] public Movement Movement;
 		[Export] public Attack Attack;
 		[Export] public Animate Animation;
@@ -51,7 +52,7 @@ namespace Game
 			}
 				
 			HP?.TakeDamage(damageToTake);
-			
+			staggerComp?.TakeDamage(damageToTake);
 			if (audio != null)
 			{
 				if (hittingObject == "Arrow")
@@ -115,5 +116,6 @@ namespace Game
 
             Rotation = newRotation;
         }
+
     }
 }

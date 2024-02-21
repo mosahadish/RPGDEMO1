@@ -43,7 +43,6 @@ namespace Game
                     (c as PlayerDodgeState).SetCamera((Actor as Player).Camera);
                 if (Actor is Player && (c is PlayerAttackState))
                     (c as PlayerAttackState).SetCamera((Actor as Player).Camera);
-                    
             }
 
             state.Enter(Msg);
@@ -73,5 +72,9 @@ namespace Game
         public abstract void HandleMovementInput(Dictionary<string, Vector2> Msg);
         public abstract void HandleAttackInput(Dictionary<string, bool> Msg);
 
+        internal void OnStagger()
+        {
+            GD.Print(Actor.Name);
+        }
     }
 }

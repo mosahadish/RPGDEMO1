@@ -1,126 +1,118 @@
 using Globals;
 using Godot;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime;
+using System.Net;
 
 namespace Game
 {
     [GlobalClass]
-    public partial class AIStateMachine : StateMachine
+    public partial class AIStateMachine : Node
     {
+        Signal transitionedTo;
 
         [Export] Label3D StateLabel;
-         private List<AI> bodiesToNotifyOfTarget = new();
-        private float distToTargetSqr; //Distance squared is faster to calculate
-        private Actor target = null;
+        [Export] Label3D DistLabel;
+        [Export] public AIState initialState;
 
-        bool chaseFlag = true;
+        [Export] public AI AIActor;
+        public AIState state;
+        
+        public Movement Movement;
+        public Attack Attack;
+
+        public Player target;
+
+        private List<AI> bodiesToNotifyOfTarget = new();
+        private float distToTarget; //Distance squared is faster to calculate, if necessary do it
+    
+        public async override void _Ready()
+        {
+            await ToSignal(GetParent(), "ready");
+            state = initialState;
+            
+            Movement = AIActor.Movement;
+            Attack = AIActor.Attack;
+
+            foreach (AIState c in GetChildren().Cast<AIState>())
+            {
+                c.AIActor = AIActor;
+                c.Movement = Movement;
+                c.Animation = (AnimateAI)AIActor.Animation;
+                c.Attack = Attack;
+                c.Stam = AIActor.Stam;                   
+            }
+
+            state.Enter(null);
+        }
+        
+        public override void _Process(double delta)
+        {
+            state.Update(delta);
+        }
 
         public override void _PhysicsProcess(double delta)
         {
-            base._PhysicsProcess(delta);
+            state.PhysicsUpdate(delta);
             StateLabel.Text = state.Name;
-            if (Actor.IsOnFloor() == false)
+            
+            if (AIActor.IsOnFloor() == false)
 			{
-				if ((state is AIAirState) == false) TransitionTo("AIAirState", Msg);
+				if ((state is AIAirState) == false) TransitionTo("AIAirState");
 			}
             else
             {
-                if(target == null && state is AIRoamState == false) TransitionTo("AIRoamState", Msg);
-                if (target != null) distToTargetSqr = Actor.GlobalPosition.DistanceSquaredTo(target.GlobalPosition);
-                else distToTargetSqr = 9999;
+                if (state is AIStaggerState) return;
 
-                if (distToTargetSqr > 125 && target != null) TargetGone();
-                if (target != null && distToTargetSqr > 4 && distToTargetSqr <= 16) TargetInCircleRange();
-                if (target != null && distToTargetSqr <= 4) TargetInAttackRange();
-                if (target != null && distToTargetSqr > 25) TargetInChaseRange();
+                if (target != null) distToTarget = AIActor.GlobalPosition.DistanceTo(target.GlobalPosition);
+                else distToTarget = 9999;
+                
+                DistLabel.Text = distToTarget.ToString();
+
+                if (distToTarget > 15 && target != null) target = null;
+
+                if(target == null && state is AIRoamState == false) TransitionTo("AIRoamState");
+
+
+                if (target != null && distToTarget <= AIActor.CircleRange) 
+                {
+                    if (state is AIEngageState == false && state is AIAttackState == false)
+                        TransitionTo("AIEngageState");
+                    else 
+                    {
+                        TransitionTo(AIActor.DecideOnNextAction(distToTarget));
+                    }
+                }
+                //if (target != null && distToTarget <= 4) TransitionTo("AIAttackState");
+                else if (target != null && distToTarget > AIActor.CircleRange +1) 
+                {
+                    if (state is AIChaseState == false && state is AIAttackState == false) TransitionTo("AIChaseState");
+                }
             }
         }
 
-        private void TargetInCircleRange()
+        public void TransitionTo(string TargetStateName)
         {
-            if (state is AIAttackState) return;
-
-            if (state is AICircleState == false)
+            if (HasNode(TargetStateName))
             {
-                TransitionTo("AICircleState", Msg);
-                (state as AICircleState).SetTarget(target);
+                state.Exit();
+                state = GetNode(TargetStateName) as AIState;
+                state.Enter(target);
+                //EmitSignal()
             }
-            Msg.Clear();
         }
 
-        public void TargetInChaseRange()
-        {
-            if (state is AIChaseState) return;
-            TransitionTo("AIChaseState", null);
-            (state as AIChaseState).SetTarget(target);
-            Msg.Clear();
-        }
-
-        public void TargetGone()
-        {
-            target = null;
-            if (state is AIChaseState)
-                (state as AIChaseState).SetTarget(null);
-            TransitionTo("AIRoamState", null);
-            distToTargetSqr = 9999;
-            Msg.Clear();
-        }
-
-        public void TargetInAttackRange()
-        {
-            Msg[Animations.Attack1] = Vector2.Zero;
-            if (state is AIAttackState == false)
-            {
-                TransitionTo("AIAttackState", Msg);
-                (state as AIAttackState).SetTarget(target);
-            }
-            Msg.Clear();
-        }
 
         private void OnAnimationFinished(string anim)
         {
-            Msg.Clear();
-            if (target == null) 
-            {
-                TransitionTo("AIRoamState", Msg);
-                return;
-            }
-            else if (anim.Contains(Animations.Attack1) && distToTargetSqr < 4)
-            {
-                Msg[Animations.Attack2] = Vector2.Zero;
-                TransitionTo("AIAttackState", Msg);
-                (state as AIAttackState).SetTarget(target);
-                return;
-            }
-            else if (anim.Contains(Animations.Attack2) && distToTargetSqr < 4)
-            {
-                Msg[Animations.Attack3] = Vector2.Zero;
-                TransitionTo("AIAttackState", Msg);
-                (state as AIAttackState).SetTarget(target);
-                return;
-            }
-            else if (anim.Contains(Animations.Attack3))
-            {
-                TransitionTo("AICircleState", Msg);
-               (state as AICircleState).SetTarget(target);
-               return;
-            }
-            
-            TransitionTo("AIChaseState", Msg);
-            (state as AIChaseState).SetTarget(target);
-        }
+            // if (anim.Contains(Animations.Attack1))
+            // {
+            //     TransitionTo("AIAttackState");
+            // }
 
-        public override void HandleAttackInput(Dictionary<string, bool> Msg)
-        {
+            // else 
+            TransitionTo("AIEngageState");
         }
-
-        public override void HandleMovementInput(Dictionary<string, Vector2> Msg)
-        {
-        }
-
 
          private void OnArea3DEntered(Node3D body)
 		{
@@ -153,5 +145,9 @@ namespace Game
 			}
 		}
 
-    }
+        public void OnStagger()
+        {
+            TransitionTo("AIStaggerState");
+        }
+    }   
 }

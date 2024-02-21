@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Globals;
 using Godot;
 
@@ -9,6 +10,7 @@ namespace Game
 	{
 
 		private Vector2 inputDir;
+		[Export] PlayerStateMachine SMachine;
 		[Export] private float controllerDeadzone = 0.15f;
 		[Export] Player player;
 		[Export] float LightningMultiplier = 1.1f;
@@ -90,5 +92,52 @@ namespace Game
 			player.LookInDirection(direction);
 			HandleMovement(direction, delta);
 		}
+
+
+		public void WantsMovement(Vector2 inputDir)
+        {
+            Dictionary<string, Vector2> msg = new()
+            {
+                { "Run", inputDir }
+            };
+            SMachine.HandleMovementInput(msg);
+        }
+
+        public void WantsDodge(Vector2 inputDir)
+        {
+            Dictionary<string, Vector2> msg = new()
+            {
+                { Actions.Dodge, inputDir }
+            };
+            SMachine.HandleMovementInput(msg);
+        }
+
+        public void WantsJump(Vector2 inputDir)
+        {
+            Dictionary<string, Vector2> msg = new()
+            {
+                { Actions.Jump, inputDir }
+            };
+             SMachine.HandleMovementInput(msg);
+        }
+
+
+        public void WantsSprint()
+        {
+            Dictionary<string, Vector2> msg = new()
+            {
+                { Actions.Sprint, Vector2.Zero }
+            };
+            SMachine.HandleMovementInput(msg);
+        }
+
+        public void WantsReleaseSprint()
+        {
+            Dictionary<string, Vector2> msg = new()
+            {
+                { Actions.SprintRelease, Vector2.Zero }
+            };
+            SMachine.HandleMovementInput(msg);
+        }
 	}
 }

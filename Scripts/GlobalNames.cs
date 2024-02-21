@@ -10,6 +10,9 @@ namespace Globals
         public const string SwordFleshHit = "SwordFleshHit";
         public const string PickUpItem = "PickUpItem";
         public const string EquipItem = "EquipItem";
+        public const string SwordAttack1 = "SwordAttack1";
+        public const string SwordAttack2 = "SwordAttack2";
+        public const string SwordAttack3 = "SwordAttack3";
     }
     public class Animations
     {
@@ -26,6 +29,7 @@ namespace Globals
         public const string Attack1 = "Attack1";
         public const string Attack2 = "Attack2";
         public const string Attack3 = "Attack3";
+        public const string ComboAttack = "ComboAttack";
         public const string SprintLightAttack = "SprintLightAttack";
         public const string SprintHeavyAttack = "SprintHeavyAttack";
         public const string DodgeAttack = "DodgeAttack";

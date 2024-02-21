@@ -34,6 +34,8 @@ namespace Game
 
 		[ExportCategory("Dependencies")]
 		[Export] public CameraComponent Camera;
+		[Export] public new PlayerMovement Movement;
+		[Export] public AreaInteract Interact;
 
 		[ExportCategory("Help")]
 		[Export] public Marker3D PositiveZ;
@@ -72,8 +74,8 @@ namespace Game
     
         public override void _Ready()
 		{
-			AttunementChanged.Invoke(CurrentAttunement);
 			_isBlocking = false;
+			AttunementChanged.Invoke(CurrentAttunement);
 		}
 
 		public override void _Process(double delta)
@@ -152,7 +154,6 @@ namespace Game
 			if (EquippedItems.ContainsKey(weap))
 			{
 				Node3D CurrentAttach = EquippedItems[weap];
-				GD.Print(CurrentAttach);
 				CurrentAttach.RemoveChild(weap);
 
 				weap.Wielder = null;
@@ -177,7 +178,6 @@ namespace Game
 		{
 			if (EquippedItems.ContainsKey(weap))
 			{
-				// GD.Print(weap.Name);
 				//Remove from the Equip place
 				Node3D CurrentAttach = EquippedItems[weap];
 				CurrentAttach.RemoveChild(weap);
@@ -242,7 +242,6 @@ namespace Game
 		{
 			if (EquippedItems.ContainsKey(weap))
 			{
-				GD.Print(weap);
 				//Remove from the Equip place
 				Node3D CurrentAttach = EquippedItems[weap];
 				CurrentAttach.RemoveChild(weap);
@@ -372,6 +371,11 @@ namespace Game
             Stam.Regen = false;
 		}
 
+		public void ComboAttack()
+		{
+			
+		}
+
 		public void SprintLightAttack()
         {
             _IsAttacking = true;
@@ -446,6 +450,5 @@ namespace Game
 		#endregion
     
 	}
-
 }
 

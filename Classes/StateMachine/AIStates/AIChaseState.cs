@@ -5,15 +5,15 @@ using Globals;
 namespace Game
 {
     [GlobalClass]
-    public partial class AIChaseState : State
+    public partial class AIChaseState : AIState
     {
 
         private Vector3 direction = Vector3.Zero;
-        private Actor target = null;
 
-        public override void Enter(Dictionary<string, Vector2> msg)
+        public override void Enter(Player target)
         {
-            (Animation as AnimateAI).Transition("Chase");
+            this.target = target;
+            Animation.Transition("Chase");
             Movement.SetSpeed(Movement.Speed);
         }
 
@@ -35,17 +35,12 @@ namespace Game
         public void ChaseTarget(double delta)
         {
             if (target == null) return;
-            direction = Actor.GlobalPosition.DirectionTo(target.GlobalPosition);
+            direction = AIActor.GlobalPosition.DirectionTo(target.GlobalPosition);
             
             Animation.BlendPosition("Chase", Vector2.Down); 
-            Actor.LookInDirection(direction);
+            AIActor.LookInDirection(direction);
 
             Movement.HandleMovement(direction, delta);
         }
-
-        public void SetTarget(Actor target)
-        {
-            this.target = target;
-        }
-    }
+   }
 }

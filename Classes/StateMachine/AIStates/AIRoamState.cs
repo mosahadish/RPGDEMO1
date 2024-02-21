@@ -6,7 +6,7 @@ using System;
 namespace Game
 {
     [GlobalClass]
-    public partial class AIRoamState : State
+    public partial class AIRoamState : AIState
     {
 
         private Vector3 newVelo;
@@ -15,9 +15,9 @@ namespace Game
         private Vector3 wanderDirection = Vector3.Zero;
 
         private RandomNumberGenerator rng = new();
-        public override void Enter(Dictionary<string, Vector2> msg)
+        public override void Enter(Player target)
         {
-            (Animation as AnimateAI).Transition("Roam");
+            Animation.Transition("Roam");
             SetWanderTime();
             Movement.SetSpeed(Movement.WalkSpeed);
         }
@@ -39,7 +39,7 @@ namespace Game
         {
             if (wanderTime > 0)
             {   
-                if ((Actor as AI).Raycasts.IsOnFloor())
+                if (AIActor.Raycasts.IsOnFloor())
                     WanderInDirection(wanderDirection, delta);
                 else
                 {
@@ -57,7 +57,7 @@ namespace Game
             {
                 SetWaitTime();
                 SetWanderTime();
-                Actor.LookInDirection(wanderDirection);
+                AIActor.LookInDirection(wanderDirection);
             }
         }
 
@@ -65,7 +65,7 @@ namespace Game
         {
             Animation.BlendPosition("Roam", Vector2.Down);
             Movement.HandleMovement(direction, delta);
-            Actor.LookInDirection(direction);
+            AIActor.LookInDirection(direction);
             wanderTime -= delta;
         }
 
@@ -78,10 +78,10 @@ namespace Game
 
         private void Wait(double delta)
         {
-            Actor.Velocity = Vector3.Zero;
+            AIActor.Velocity = Vector3.Zero;
             Animation.BlendPosition("Roam", Vector2.Zero);
             waitTime -= delta;
-            Actor.MoveAndSlide();
+            AIActor.MoveAndSlide();
         }
 
         private void SetWaitTime()

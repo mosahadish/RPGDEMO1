@@ -5,25 +5,26 @@ using Globals;
 namespace Game
 {
     [GlobalClass]
-    public partial class AIAttackState : State
+    public partial class AIAttackState : AIState
     {
-        private Actor target = null;
         private Vector3 dirToTarget;
+        private RandomNumberGenerator rng = new();
+        private float randI = 0;
 
-        public override void Enter(Dictionary<string, Vector2> msg)
+        public override void Enter(Player target)
         {
-            if (msg != null)
-            {
-                if (msg.ContainsKey(Animations.Attack1)) (Actor as AI).Attack1();
-                if (msg.ContainsKey(Animations.Attack2)) (Actor as AI).Attack2();
-                if (msg.ContainsKey(Animations.Attack3)) (Actor as AI).Attack3();
-            }
+            this.target = target;
+            randI = rng.RandiRange(0,10);
+
+            if (randI <= 5) AIActor.Attack1();
+            else if (randI >= 9) AIActor.ComboAttack();
+            else AIActor.Attack2();
         }
       
         public override void PhysicsUpdate(double delta)
         {
-            dirToTarget = Actor.GlobalPosition.DirectionTo(target.GlobalPosition);
-            Actor.LookInDirection(dirToTarget);
+            dirToTarget = AIActor.GlobalPosition.DirectionTo(target.GlobalPosition);
+            AIActor.LookInDirection(dirToTarget);
             Movement.HandleMovement(dirToTarget, delta);
         }
 
@@ -33,13 +34,8 @@ namespace Game
         
           public override void Exit()
         {
-            (Actor as AI).FinishAttacking();
+            AIActor.FinishAttacking();
             target = null;
-        }
-
-        public void SetTarget(Actor target)
-        {
-            this.target = target;
         }
     }
 }

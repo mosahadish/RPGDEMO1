@@ -37,13 +37,12 @@ anchors_preset = 0
 offset_right = 1152.0
 offset_bottom = 649.0
 
-[node name="DEBUG" parent="." node_paths=PackedStringArray("state", "attun", "aiming", "canShoot", "blocking", "speed") instance=ExtResource("1_cawhn")]
+[node name="DEBUG" parent="." node_paths=PackedStringArray("state", "aiming", "canShoot", "blocking", "speed") instance=ExtResource("1_cawhn")]
 offset_left = 13.0
 offset_top = 195.0
 offset_right = 264.0
 offset_bottom = 539.0
 state = NodePath("VBoxContainer/State")
-attun = NodePath("VBoxContainer/Attun")
 aiming = NodePath("VBoxContainer/Aiming")
 canShoot = NodePath("VBoxContainer/CanShoot")
 blocking = NodePath("VBoxContainer/Blocking")
@@ -68,34 +67,18 @@ layout_mode = 2
 [node name="Blocking" type="Label" parent="DEBUG/VBoxContainer"]
 layout_mode = 2
 
-[node name="Attun" type="Label" parent="DEBUG/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-text = "Attun: "
-
 [node name="Speed" type="Label" parent="DEBUG/VBoxContainer"]
 layout_mode = 2
 
-[node name="Inventory" parent="." instance=ExtResource("2_hlurj")]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 0.0
-offset_bottom = 0.0
-
-[node name="OnScreen" type="Control" parent="." node_paths=PackedStringArray("stamBar", "healthBar")]
+[node name="OnScreen" type="Control" parent="." node_paths=PackedStringArray("stamBar", "healthBar", "attun", "aim")]
 anchors_preset = 0
 offset_right = 1155.0
 offset_bottom = 651.0
 script = ExtResource("3_ew6pn")
 stamBar = NodePath("StaminaBar")
 healthBar = NodePath("HealthBar")
+attun = NodePath("Attun")
+aim = NodePath("Aim")
 
 [node name="StaminaBar" type="ProgressBar" parent="OnScreen"]
 layout_mode = 1
@@ -104,10 +87,10 @@ anchor_left = 0.012
 anchor_top = 0.055
 anchor_right = 0.213
 anchor_bottom = 0.097
-offset_left = 0.14
-offset_top = 0.194996
-offset_right = -0.0150146
-offset_bottom = -0.147003
+offset_left = 67.14
+offset_top = 7.195
+offset_right = 66.985
+offset_bottom = 6.853
 theme_override_styles/background = SubResource("StyleBoxFlat_bb8dq")
 theme_override_styles/fill = SubResource("StyleBoxFlat_64myj")
 max_value = 10.0
@@ -116,16 +99,16 @@ show_percentage = false
 
 [node name="HealthBar" type="ProgressBar" parent="OnScreen"]
 layout_mode = 0
-offset_left = 14.0
-offset_top = 9.0
-offset_right = 246.0
-offset_bottom = 36.0
+offset_left = 81.0
+offset_top = 16.0
+offset_right = 313.0
+offset_bottom = 43.0
 theme_override_styles/background = SubResource("StyleBoxFlat_nei27")
 theme_override_styles/fill = SubResource("StyleBoxFlat_yom12")
 value = 5.0
 show_percentage = false
 
-[node name="TextureRect" type="TextureRect" parent="OnScreen"]
+[node name="Aim" type="TextureRect" parent="OnScreen"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -153,3 +136,24 @@ offset_right = 20.0
 offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Attun" type="Label" parent="OnScreen"]
+layout_mode = 2
+offset_left = 16.0
+offset_top = 29.0
+offset_right = 69.0
+offset_bottom = 52.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="Inventory" parent="OnScreen" instance=ExtResource("2_hlurj")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1.5
+offset_top = -1.0
+offset_right = -1.5
+offset_bottom = -1.0
