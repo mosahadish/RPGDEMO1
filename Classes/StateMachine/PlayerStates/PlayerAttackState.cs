@@ -46,19 +46,18 @@ namespace Game
             }
 
             if (camera.Target != null) Direction = Actor.GlobalPosition.DirectionTo(camera.Target.GlobalPosition);
-            // global_transform.basis.z instaed of PositiveZ marker? NOT WORKING
+                // global_transform.basis.z instaed of PositiveZ marker? NOT WORKING
             else if (InputDir == Vector2.Zero) Direction = (player.PositiveZ.GlobalPosition - Actor.GlobalPosition).Normalized();
             else 
             {
                 Direction = new Vector3(InputDir.X, 0, InputDir.Y).Rotated(Vector3.Up, camera.Rotation.Y).Normalized();
                 InputDir = Vector2.Zero;
-            }
+            } 
         }
 
 
         public override void PhysicsUpdate(double delta)
         {
-            
             Actor.LookInDirection(Direction);
             Movement.HandleMovement(Direction, delta);
         }

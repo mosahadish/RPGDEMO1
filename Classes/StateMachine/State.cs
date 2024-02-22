@@ -18,7 +18,6 @@ namespace Game
 
         public string WeaponName = "";
 
-       
         public override async void _Ready()
         {
             //await Task.Run(WaitForParent);

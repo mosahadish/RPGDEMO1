@@ -412,6 +412,7 @@ namespace Game
 		public void FinishAttacking()
 		{
 			_IsAttacking = false;
+			_CanRotate = true;
 			Stam.Regen = true;
 		}
 
