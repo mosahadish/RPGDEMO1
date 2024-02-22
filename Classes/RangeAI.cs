@@ -21,7 +21,7 @@ namespace Game
         public void RangeAttack1()
         {
 			if ((CurrentWeapon is Bow) == false) return;
-			Proj = GameData.Instance.FetchProjectile("Arrow"); 
+			Proj = GameData.Instance.FetchProjectile("FireArrow"); 
 			(Animation as AnimateAI).Transition(Animations.Attack1);
 			Proj.SpawnProjectile(this, CurrentWeapon.GlobalPosition, SMachine.target.LockOn.GlobalPosition);
             _IsAttacking = true;
