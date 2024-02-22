@@ -10,6 +10,7 @@ namespace Game
         [Export] public new AIStateMachine SMachine;
         [Export] public float AttackRange;
         [Export] public float CircleRange;
+        [Export] public float DodgeRange;
 		[Export] public Raycasts Raycasts;
 		private Vector3 desiredVelo;
         
@@ -65,18 +66,18 @@ namespace Game
             if (canDecide == false) return null;
 
             action = nameof(AIEngageState);
-
-            if (distToTarget <= AttackRange) 
+            
+            if (distToTarget <= DodgeRange)
             {
                 rngResult = rng.RandiRange(0,9);
                 if (SMachine.target.IsAttacking() && rngResult <= 3)
                 {
-                    action = nameof(AIDodgeState);
+                    return nameof(AIDodgeState);
                 }
-                else
-                {
-                    action =  nameof(AIAttackState);
-                }
+            }
+            if (distToTarget <= AttackRange) 
+            {
+                action =  nameof(AIAttackState);
             }
            
             canDecide = false;

@@ -79,6 +79,7 @@ namespace Game
                 if (state is AIStaggerState) return;
                 if (state is AIDodgeState) return;
 
+
                 if (target != null) distToTarget = AIActor.GlobalPosition.DistanceTo(target.GlobalPosition);
                 else distToTarget = 9999;
                 

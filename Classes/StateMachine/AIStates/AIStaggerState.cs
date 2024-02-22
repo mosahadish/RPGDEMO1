@@ -11,6 +11,7 @@ namespace Game
         {   
             Movement.SetSpeed(0);
             AIActor._CanRotate = false;
+            AIActor.Velocity = Vector3.Zero;
             Animation.Transition("Stagger");
         }
 
