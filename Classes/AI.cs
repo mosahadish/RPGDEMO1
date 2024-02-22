@@ -5,12 +5,11 @@ using Godot;
 namespace Game
 {
 	[GlobalClass]
-	public partial class AI : Actor, IMeleeAttacker, IDodger
+	public partial class AI : Actor, IDodger
 	{
         [Export] public new AIStateMachine SMachine;
         [Export] public float AttackRange;
         [Export] public float CircleRange;
-        //[Export] public new AIStateMachine SMachine;
 		[Export] public Raycasts Raycasts;
 		private Vector3 desiredVelo;
         
@@ -29,7 +28,6 @@ namespace Game
         get { return dodging; }
         set { dodging = value; }
     	}
-
 
         public override void _Ready()
         {
@@ -83,69 +81,6 @@ namespace Game
            
             canDecide = false;
             return action;
-        }
-
-        public void Attack1()
-        {
-            (Animation as AnimateAI).Transition(Animations.Attack1);
-			_IsAttacking = true;
-            audio.Play(SoundEffects.SwordAttack1);
-        }
-
-        public void Attack2()
-        {
-            (Animation as AnimateAI).Transition(Animations.Attack2);
-			_IsAttacking = true;
-            audio.Play(SoundEffects.SwordAttack2);
-        }
-
-        public void Attack3()
-        {
-            (Animation as AnimateAI).Transition(Animations.Attack3);
-			_IsAttacking = true;
-            audio.Play(SoundEffects.SwordAttack3);
-        }
-
-        public void ComboAttack()
-        {
-            (Animation as AnimateAI).Transition(Animations.ComboAttack);
-			_IsAttacking = true;
-        }
-
-        public void FinishAttacking()
-        {
-            _IsAttacking = false;
-            WeaponDamageOff(); //anti bug measure when animation stops midway (stagger etc)
-			Movement.SetSpeed(Movement.CurrentSpeed);
-        }
-
-        public bool IsAttacking()
-        {
-            return _IsAttacking;
-        }
-
-        public void DodgeAttack()
-        {
-            
-        }
-
-        public void JumpAttack()
-        {
-            
-        }
-
-        public void HeavyAttack()
-        {
-            
-        }
-
-        public void SprintLightAttack()
-        {
-            
-        }
-
-        public void SprintHeavyAttack()
-        {
         }
 
         public void Dodge()

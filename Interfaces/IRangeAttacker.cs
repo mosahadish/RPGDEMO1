@@ -1,15 +1,11 @@
 namespace Game
 {
-    public interface IRangeAttacker
+    public interface IRangeAttacker : IAttacker
     {
         void RangeAttack1();
 
         void RangeAttack2();
 
         void RangeAttack3();
-
-        bool IsAttacking();
-
-        void FinishAttacking();
     }
 }

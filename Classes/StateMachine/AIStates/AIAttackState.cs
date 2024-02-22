@@ -16,9 +16,22 @@ namespace Game
             this.target = target;
             randI = rng.RandiRange(0,10);
 
-            if (randI <= 5) AIActor.Attack1();
-            else if (randI >= 9) AIActor.ComboAttack();
-            else AIActor.Attack2();
+            if (AIActor.HasAimingWeapon())
+            {
+                if (AIActor is IRangeAttacker range)
+                {
+                    
+                }
+            }
+
+            else 
+            {
+                if (AIActor is IMeleeAttacker melee)
+                if (randI <= 5) melee.Attack1();
+                else if (randI >= 9) melee.ComboAttack();
+                else melee.Attack2();
+            }
+            
         }
       
         public override void PhysicsUpdate(double delta)
@@ -34,7 +47,7 @@ namespace Game
         
           public override void Exit()
         {
-            AIActor.FinishAttacking();
+            (AIActor as IAttacker).FinishAttacking();
             target = null;
         }
     }

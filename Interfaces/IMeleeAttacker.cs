@@ -2,7 +2,7 @@ using Godot;
 
 namespace Game
 {
-    public interface IMeleeAttacker
+    public interface IMeleeAttacker : IAttacker
     {
         void Attack1();
 
@@ -21,9 +21,5 @@ namespace Game
         void JumpAttack();
 
         void HeavyAttack();
-
-        bool IsAttacking();
-
-        void FinishAttacking();
     }
 }
