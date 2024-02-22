@@ -71,10 +71,5 @@ namespace Game
 
         public abstract void HandleMovementInput(Dictionary<string, Vector2> Msg);
         public abstract void HandleAttackInput(Dictionary<string, bool> Msg);
-
-        internal void OnStagger()
-        {
-            GD.Print(Actor.Name);
-        }
     }
 }

@@ -59,6 +59,7 @@ namespace Game
 		public override void HandleAttackInput(Dictionary<string, bool> Msg)
 		{
 			if (player.IsDodging()) return;
+			if (state is PlayerStaggerState) return;
 
 			if (Actor.HasBlockWeapon())
 			{
@@ -172,7 +173,7 @@ namespace Game
 
 		public override void HandleMovementInput(Dictionary<string, Vector2> Msg)
 		{
-			
+			if (state is PlayerStaggerState) return;
 			if (state is PlayerDodgeState) return;
 
 			if (Actor.IsOnFloor() == false)
@@ -300,6 +301,11 @@ namespace Game
 		
 		#region Signal/Event response
 		
+		public void OnStagger()
+        {
+            TransitionTo(nameof(PlayerStaggerState), null);
+        }
+
 		public void OnAnimationFinished(string anim)
 		{
 			//GD.Print(anim);
@@ -309,10 +315,10 @@ namespace Game
 			};
 
 			if (anim == Animations.Block) player.BlockHold();
-			// else if (anim.Contains(Animations.CounterAttack)) 
-			// {
-				
-			// }
+			else if (anim.Contains(Animations.Stagger)) 
+			{
+				TransitionTo(nameof(PlayerRunState), Msg);
+			}
 			else if (anim.Contains(Animations.BlockedAttack) && player.IsBlocking()) 
 				player.BlockHold();
 

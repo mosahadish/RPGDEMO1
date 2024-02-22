@@ -17,7 +17,7 @@ namespace Game
         [Export] private float staggerRegen;
         [Export] private float staggerResetTimer;
 
-        private float currentValue;
+        public float CurrentValue;
         private bool regen = true;
 
         private double timer;
@@ -26,7 +26,7 @@ namespace Game
         public async override void _Ready()
         {
             timer = staggerResetTimer;
-            currentValue = maxValue;
+            CurrentValue = maxValue;
             
             await ToSignal(Owner, "ready");
 
@@ -34,7 +34,7 @@ namespace Game
             {
                 if (player.SMachine != null)
                 {
-                    Staggered += player.SMachine.OnStagger;
+                    Staggered += (player.SMachine as PlayerStateMachine).OnStagger;
                 }
             }
             else if (Owner is AI ai)
@@ -49,9 +49,9 @@ namespace Game
 
         public override void _PhysicsProcess(double delta)
         {
-            if (regen && currentValue < maxValue)
+            if (regen && CurrentValue < maxValue)
             {
-                currentValue += staggerRegen;
+                CurrentValue += staggerRegen;
             }
             if (regen == false)
             {
@@ -67,11 +67,11 @@ namespace Game
         public void TakeDamage(float damageToTake)
         {
             regen = false;
-            currentValue -= damageToTake;
+            CurrentValue -= damageToTake;
 
-            if (currentValue <= 0)
+            if (CurrentValue <= 0)
             {
-                currentValue = maxValue;
+                CurrentValue = maxValue;
                 Staggered?.Invoke();
             }
         }

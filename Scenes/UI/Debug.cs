@@ -13,6 +13,7 @@ namespace Game
         [Export] private Label canShoot;
         [Export] private Label blocking;
         [Export] private Label speed;
+        [Export] private Label staggerHP;
 
         private StateMachine stateMachine;
 
@@ -31,6 +32,7 @@ namespace Game
             canShoot.Text = "CanShoot: " + player.Attack.ReadyToShoot.ToString();
             blocking.Text = "Block: " + player.IsBlocking().ToString();
             speed.Text = "Speed: " + player.Movement.CurrentSpeed.ToString();
+            staggerHP.Text = "StaggerHP: " +player.staggerComp.CurrentValue.ToString();
         }
     }
 }

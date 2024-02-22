@@ -44,6 +44,8 @@ namespace Globals
         public const string DrawBow = "Draw";
         
         public const string Release = "Release";
+
+        public const string Stagger = "Stagger";
     }
 
     public class Attunements
