@@ -46,12 +46,11 @@ namespace Game
 
         private void OnBodyEnteredHitArea(Node3D body)
         {
-            GD.Print(body);
             if (body is Actor actor)
             {
                 if (actor.HasMethod("OnHit"))
                 {
-                    actor.OnHit(Damage, Spawner.GlobalPosition, "Projectile");
+                    actor.OnHit(Damage, Spawner.GlobalPosition, "Arrow");
                     QueueFree();
                 }
             }

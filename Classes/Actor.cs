@@ -44,7 +44,6 @@ namespace Game
 			
 			if (this is IBlocker blocker)
 			{
-				GD.Print(ToLocal(hitterGlobalPos).Z);
 				if (blocker.IsBlocking() && ToLocal(hitterGlobalPos).Z > 0)
 			 	{
 					blocker.BlockedAttack(damageToTake);
@@ -61,7 +60,6 @@ namespace Game
 				if (hittingObject == "Sword")
 					audio.Play(SoundEffects.SwordFleshHit);
 			}
-			
 		}
 
 		public virtual void OnDeath()
