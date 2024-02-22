@@ -1,3 +1,4 @@
+using System;
 using Globals;
 using Godot;
 
@@ -19,13 +20,19 @@ namespace Game
         private bool canDecide = true;
         private string action;
         private double timer = 0;
+        private RandomNumberGenerator rng;
+        private int rngResult;
         
 
         public override void _Ready()
         {
             base._Ready();
-			CurrentWeapon.Wielder = this;
- 
+            if (CurrentWeapon != null)
+			    CurrentWeapon.Wielder = this;
+            if (CurrentOffhand != null)
+                CurrentOffhand.Wielder = this;
+
+            rng = new();
 
 			if (GetParent() is Map map)
 			    ActorDeathWithArgument += map.OnAIDeath;
@@ -52,18 +59,25 @@ namespace Game
         {
             if (canDecide == false) return null;
 
-            if (distToTarget <= AttackRange) action =  "AIAttackState";
-            //else if (HP.GetValue() / HP.MaxValue < 0.3) action = "Retreat";
-            else action = "AIEngageState";
-            
+            action = nameof(AIEngageState);
+
+            if (distToTarget <= AttackRange) 
+            {
+                if (SMachine.target.IsAttacking())
+                {
+                    rngResult = rng.RandiRange(0,9);
+                    if (rngResult <= 3) action = nameof(AIDodgeState);
+                }
+                else
+                {
+                    action =  nameof(AIAttackState);
+                }
+            }
+           
+
             canDecide = false;
             return action;
         }
-
-        // public bool ShouldAttack()
-        // {
-            
-        // }
 
         public void Attack1()
         {

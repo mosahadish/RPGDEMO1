@@ -178,7 +178,7 @@ namespace Game
 
 			if (Actor.IsOnFloor() == false)
 			{
-				if ((state is PlayerAirState) == false) TransitionTo("PlayerAirState", Msg);
+				if ((state is PlayerAirState) == false) TransitionTo(nameof(PlayerAirState), Msg);
 				return;
 			}
 
@@ -202,7 +202,7 @@ namespace Game
 					return;
 				}
 				if (state is PlayerRunState) state.GetInput(Msg["Run"]);
-				else TransitionTo("PlayerRunState", Msg);
+				else TransitionTo(nameof(PlayerRunState), Msg);
 			}
 		}
 		private void Sprint(Dictionary<string, Vector2> Msg)
@@ -219,13 +219,13 @@ namespace Game
 
 				//state.SetAnim(Animations.TransitionMovement, Animations.Sprint);
 				if (state.Anim == Animations.Sprint) return;
-				TransitionTo("PlayerRunState", Msg);
+				TransitionTo(nameof(PlayerRunState), Msg);
 			}
 
 			if (Msg.ContainsKey(Actions.SprintRelease) && player.IsBlocking() == false)
 			{
 				//state.SetAnim(Animations.TransitionMovement, Animations.SprintRelease);
-				TransitionTo("PlayerRunState", Msg);
+				TransitionTo(nameof(PlayerRunState), Msg);
 			}
 		}
 		private void Jump(Dictionary<string, Vector2> Msg)
@@ -233,7 +233,7 @@ namespace Game
 			if (Msg.ContainsKey(Actions.Jump)) 
 			{
 				CancelSprint();
-				TransitionTo("PlayerAirState", Msg);
+				TransitionTo(nameof(PlayerAirState), Msg);
 			}
 		}
 		private void Dodge(Dictionary<string, Vector2> Msg)
@@ -242,7 +242,7 @@ namespace Game
 			{
 				BlockRelease();
 				HandleCameraInput(Actions.AimCancel);
-				TransitionTo("PlayerDodgeState", Msg);
+				TransitionTo(nameof(PlayerDodgeState), Msg);
 			}
 		}
 
@@ -336,11 +336,11 @@ namespace Game
 					DrawBow();
 				}
 			}
-			else if (anim.Contains(Animations.Dodge)) TransitionTo("PlayerRunState",  msg);
+			else if (anim.Contains(Animations.Dodge)) TransitionTo(nameof(PlayerRunState),  msg);
 			else if (anim.Contains(Animations.AttackGeneral) && Buffer.IsEmpty()) 
 			{
 				state.GetInput(Vector2.Zero);
-				TransitionTo("PlayerRunState",  msg);
+				TransitionTo(nameof(PlayerRunState),  msg);
 				Buffer.Chain = 1;
 			}
 			

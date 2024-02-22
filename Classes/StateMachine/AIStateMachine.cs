@@ -58,12 +58,13 @@ namespace Game
             
             if (AIActor.IsOnFloor() == false)
 			{
-				if ((state is AIAirState) == false) TransitionTo("AIAirState");
+				if ((state is AIAirState) == false) TransitionTo(nameof(AIAirState));
 			}
             else
             {
                 if (state is AIStaggerState) return;
-
+                if (state is AIDodgeState) return;
+                
                 if (target != null) distToTarget = AIActor.GlobalPosition.DistanceTo(target.GlobalPosition);
                 else distToTarget = 9999;
                 
@@ -71,13 +72,13 @@ namespace Game
 
                 if (distToTarget > 15 && target != null) target = null;
 
-                if(target == null && state is AIRoamState == false) TransitionTo("AIRoamState");
+                if(target == null && state is AIRoamState == false) TransitionTo(nameof(AIRoamState));
 
 
                 if (target != null && distToTarget <= AIActor.CircleRange) 
                 {
                     if (state is AIEngageState == false && state is AIAttackState == false)
-                        TransitionTo("AIEngageState");
+                        TransitionTo(nameof(AIEngageState));
                     else 
                     {
                         TransitionTo(AIActor.DecideOnNextAction(distToTarget));
@@ -86,7 +87,7 @@ namespace Game
                 //if (target != null && distToTarget <= 4) TransitionTo("AIAttackState");
                 else if (target != null && distToTarget > AIActor.CircleRange +1) 
                 {
-                    if (state is AIChaseState == false && state is AIAttackState == false) TransitionTo("AIChaseState");
+                    if (state is AIChaseState == false && state is AIAttackState == false) TransitionTo(nameof(AIChaseState));
                 }
             }
         }
@@ -105,13 +106,7 @@ namespace Game
 
         private void OnAnimationFinished(string anim)
         {
-            // if (anim.Contains(Animations.Attack1))
-            // {
-            //     TransitionTo("AIAttackState");
-            // }
-
-            // else 
-            TransitionTo("AIEngageState");
+            TransitionTo(nameof(AIEngageState));
         }
 
          private void OnArea3DEntered(Node3D body)
@@ -119,7 +114,6 @@ namespace Game
 			if (body is Player player)
 			{
 				target = player;
-				GD.Print("Player detected");
 			}
 			if (body is AI aI)
 			{
@@ -147,7 +141,7 @@ namespace Game
 
         public void OnStagger()
         {
-            TransitionTo("AIStaggerState");
+            TransitionTo(nameof(AIStaggerState));
         }
     }   
 }
