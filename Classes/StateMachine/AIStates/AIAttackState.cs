@@ -20,7 +20,7 @@ namespace Game
             {
                 if (AIActor is IRangeAttacker range)
                 {
-                    
+                    range.RangeAttack1();
                 }
             }
 

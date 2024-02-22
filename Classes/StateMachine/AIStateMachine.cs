@@ -84,7 +84,7 @@ namespace Game
                 
                 
 
-                if (distToTarget > 15 && target != null) target = null;
+                if (distToTarget > 30 && target != null) target = null;
 
                 if(target == null && state is AIRoamState == false) TransitionTo(nameof(AIRoamState));
 

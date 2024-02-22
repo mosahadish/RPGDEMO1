@@ -44,6 +44,7 @@ namespace Game
 			
 			if (this is IBlocker blocker)
 			{
+				GD.Print(ToLocal(hitterGlobalPos).Z);
 				if (blocker.IsBlocking() && ToLocal(hitterGlobalPos).Z > 0)
 			 	{
 					blocker.BlockedAttack(damageToTake);

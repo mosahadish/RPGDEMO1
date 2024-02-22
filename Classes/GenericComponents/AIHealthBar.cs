@@ -2,8 +2,10 @@ using Game;
 using Godot;
 using System;
 
-public partial class AIHealthBar : Sprite3D
+namespace Game
 {
+	public partial class AIHealthBar : Sprite3D
+	{
 
 	[Export] private TextureProgressBar bar;
 	[Export] private double hideTimer = 2;
@@ -16,9 +18,11 @@ public partial class AIHealthBar : Sprite3D
 		
 		if (parent is AI ai)
 		{
-			ai.HP.ValueChangedWithArgument += OnHpChanged;
 			bar.MaxValue = ai.HP.MaxValue;
 			bar.Value = bar.MaxValue;
+			
+			ai.HP.ValueChangedWithArgument += OnHpChanged;
+
 			if (ai.LockOn != null)
 			{
 				ai.LockOn.VisibilityChanged += OnLockOn;
@@ -33,8 +37,6 @@ public partial class AIHealthBar : Sprite3D
     {
         if ((parent as AI).LockOn.Visible == true) Show();
 		else Hide();
-		// SetPhysicsProcess(false);
-		// timer = hideTimer;
     }
 
 
@@ -71,4 +73,5 @@ public partial class AIHealthBar : Sprite3D
 			}
 		}
     }
+	}
 }

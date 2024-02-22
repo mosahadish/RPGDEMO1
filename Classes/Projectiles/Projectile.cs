@@ -51,7 +51,7 @@ namespace Game
             {
                 if (actor.HasMethod("OnHit"))
                 {
-                    actor.OnHit(Damage, GlobalPosition, "Projectile");
+                    actor.OnHit(Damage, Spawner.GlobalPosition, "Projectile");
                     QueueFree();
                 }
             }
