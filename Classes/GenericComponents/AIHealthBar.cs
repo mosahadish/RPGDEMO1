@@ -31,8 +31,10 @@ public partial class AIHealthBar : Sprite3D
 
     private void OnLockOn()
     {
-        if (Visible == false) Show();
+        if ((parent as AI).LockOn.Visible == true) Show();
 		else Hide();
+		// SetPhysicsProcess(false);
+		// timer = hideTimer;
     }
 
 

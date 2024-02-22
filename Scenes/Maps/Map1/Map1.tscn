@@ -13,7 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://1maggt1idyiv" path="res://Scenes/Items/Weapons/Sword.tscn" id="11_rx7gh"]
 [ext_resource type="PackedScene" uid="uid://odsxeljnokdn" path="res://Scenes/Items/Weapons/Bow.tscn" id="12_ha2fn"]
 [ext_resource type="PackedScene" uid="uid://bnu5rvi2ojq62" path="res://Scenes/Items/Weapons/Shield.tscn" id="13_g2ao4"]
-[ext_resource type="PackedScene" uid="uid://bwcnco5r8xygd" path="res://Scenes/Models/TestEnemy.tscn" id="14_qhv36"]
+[ext_resource type="PackedScene" uid="uid://bwcnco5r8xygd" path="res://Scenes/Models/MeleeAI.tscn" id="14_qhv36"]
 
 [sub_resource type="Environment" id="Environment_jyw0s"]
 background_mode = 2

@@ -55,7 +55,7 @@ namespace Game
         public void TakeDamage(float damageToTake)
         {
             currentVal -= damageToTake;
-            if (currentVal < 0) 
+            if (currentVal <= 0) 
             {
                 currentVal = 0;
                 EmitSignal(SignalName.ActorDied);
