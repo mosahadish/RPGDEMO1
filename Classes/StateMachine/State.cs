@@ -25,11 +25,6 @@ namespace Game
             await ToSignal(GetParent(), "ready");
         }
 
-        // private async void WaitForParent()
-        // {
-        //     await ToSignal(GetParent(), "ready");
-        // }
-
         public abstract void Update(double delta);
 
         public abstract void PhysicsUpdate(double delta);
