@@ -74,6 +74,7 @@ namespace Game
     
         public override void _Ready()
 		{
+			base._Ready();
 			_isBlocking = false;
 			AttunementChanged.Invoke(CurrentAttunement);
 		}

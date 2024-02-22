@@ -11,6 +11,7 @@ namespace Game
 	[Export] private double hideTimer = 2;
 	private Node parent;
 	private double timer;
+	private bool lockedOn;
 
 	public override void _Ready()
 	{
@@ -35,18 +36,30 @@ namespace Game
 
     private void OnLockOn()
     {
-        if ((parent as AI).LockOn.Visible == true) Show();
-		else Hide();
+        if ((parent as AI).LockOn.Visible == true) 
+		{
+			Show();
+			timer = hideTimer;
+			lockedOn = true;
+		}
+		else 
+		{
+			Hide();
+			lockedOn = false;
+		}
     }
 
 
     public override void _PhysicsProcess(double delta)
     {
-        timer -= delta;
-		if (timer <= 0)
+        if (lockedOn == false)
 		{
-			Hide();
-			SetPhysicsProcess(false);
+			timer -= delta;
+			if (timer <= 0)
+			{
+				Hide();
+				SetPhysicsProcess(false);
+			}
 		}
     }
 

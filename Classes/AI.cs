@@ -88,11 +88,13 @@ namespace Game
             (Animation as AnimateAI).Transition("Dodge");
             Movement.SetSpeed(Movement.DodgeSpeed);
             _CanRotate = false;
+            dodging = true;
         }
 
         public void FinishDodging()
         {
             _CanRotate = true;
+            dodging = false; 
         }
 
         public bool IsDodging()

@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Reflection.Metadata;
 using Globals;
+using System.Threading.Tasks;
 
 namespace Game
 {
@@ -34,7 +35,14 @@ namespace Game
 
 		private float defense = 0;
 
-		public void OnHit(float incDamage, Vector3 hitterGlobalPos, string hittingObject)
+		private Timer deathTimer = new();
+
+        public override void _Ready()
+        {
+            //deathTimer.Timeout += OnDeathTimer;
+        }
+
+        public void OnHit(float incDamage, Vector3 hitterGlobalPos, string hittingObject)
 		{
 			if (this is IDodger dodger)
 				if (dodger.IsDodging()) return;
@@ -62,13 +70,11 @@ namespace Game
 			}
 		}
 
-		public virtual void OnDeath()
+		public async virtual void OnDeath()
 		{
-			// SMachine.SetPhysicsProcess(false);
-			// SMachine.SetProcess(false);
 			SetPhysicsProcess(false);
 			SetProcess(false);
-
+			await ToSignal(GetTree().CreateTimer(1), SceneTreeTimer.SignalName.Timeout);
 			EmitSignal(SignalName.ActorDeathWithArgument, this);
 		}
 

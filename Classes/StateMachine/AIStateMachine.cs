@@ -84,7 +84,7 @@ namespace Game
                 
                 
 
-                if (distToTarget > 30 && target != null) target = null;
+                if (distToTarget > 35 && target != null) target = null;
 
                 if(target == null && state is AIRoamState == false) TransitionTo(nameof(AIRoamState));
 
@@ -152,6 +152,14 @@ namespace Game
 				if (bodiesToNotifyOfTarget.Contains(aI)) bodiesToNotifyOfTarget.Remove(aI);
 			}
 		}
+
+        private void OnArea3DAreaEntered(Node3D area)
+        {
+            if (area.GetParent() is Projectile proj) 
+            {
+                if (proj.Spawner is Player player) target = player;
+            }
+        }
 
         public void OnStagger()
         {

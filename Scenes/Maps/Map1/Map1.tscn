@@ -18,9 +18,22 @@
 
 [sub_resource type="Environment" id="Environment_jyw0s"]
 background_mode = 2
+background_energy_multiplier = 1.25
 sky = ExtResource("1_8byvb")
-tonemap_mode = 2
+sky_rotation = Vector3(0, 1.13446, 0)
+ambient_light_color = Color(0.352941, 0.215686, 0.529412, 1)
+ambient_light_sky_contribution = 0.2
+ambient_light_energy = 0.5
+tonemap_mode = 3
+tonemap_white = 1.2
 glow_enabled = true
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.03
+volumetric_fog_length = 15.0
+volumetric_fog_temporal_reprojection_enabled = false
+adjustment_enabled = true
+adjustment_contrast = 1.15
+adjustment_saturation = 1.1
 
 [sub_resource type="Terrain3DTexture" id="Terrain3DTexture_m1iaf"]
 albedo_texture = ExtResource("3_w8kyf")
@@ -49,6 +62,8 @@ collision_layer = 8
 collision_mask = 15
 
 [node name="DirectionalLight3D" parent="." instance=ExtResource("7_m0xd4")]
+directional_shadow_max_distance = 140.0
+directional_shadow_pancake_size = 10.0
 
 [node name="PlayerSpawnPos" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 167.198, 149.845, 869.705)
@@ -67,7 +82,7 @@ ItemScene = ExtResource("12_ha2fn")
 transform = Transform3D(0.837957, 0, 0.545736, 0, 1, 0, -0.545736, 0, 0.837957, 168.681, 150.267, 871.982)
 ItemScene = ExtResource("13_g2ao4")
 
-[node name="TestEnemy" parent="." instance=ExtResource("14_qhv36")]
+[node name="MeleeAI" parent="." instance=ExtResource("14_qhv36")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 183.129, 151.011, 897.454)
 
 [node name="RangeAI" parent="." instance=ExtResource("15_nelt1")]
