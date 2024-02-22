@@ -65,12 +65,12 @@ namespace Game
 
 		public virtual void OnDeath()
 		{
-			EmitSignal(SignalName.ActorDeathWithArgument, this);
-
+			// SMachine.SetPhysicsProcess(false);
+			// SMachine.SetProcess(false);
 			SetPhysicsProcess(false);
 			SetProcess(false);
-			SMachine.SetPhysicsProcess(false);
-			SMachine.SetProcess(false);
+
+			EmitSignal(SignalName.ActorDeathWithArgument, this);
 		}
 
 

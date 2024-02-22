@@ -4,8 +4,11 @@ using System.Collections.Generic;
 
 namespace GameSettings
 {
+ 
     public static class Settings
     {
+
+        public static bool Debug = true;
         private static string CurrentDevice = "";
         public const string PS4InputMapName = "PS4 Controller"; //Godot's given name
         public const string PS4Controller = "Sony"; //Godot's action input's name

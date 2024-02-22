@@ -1,4 +1,5 @@
 using Game;
+using GameSettings;
 using Godot;
 using System;
 
@@ -8,6 +9,7 @@ namespace Game
     {
 
         [Export] private Player player;
+        [Export] private Label debugMode;
         [Export] private Label state;
         [Export] private Label aiming;
         [Export] private Label canShoot;
@@ -26,7 +28,15 @@ namespace Game
 
         public override void _Process(double delta)
         {
-            base._Process(delta);
+            if (Settings.Debug == true)
+            {
+                Show();
+            }
+            else
+            {   
+                Hide();
+            }
+        
             state.Text = stateMachine.state.Name;
             aiming.Text = "Aiming: "+ player.Camera._AimOn.ToString();
             canShoot.Text = "CanShoot: " + player.Attack.ReadyToShoot.ToString();

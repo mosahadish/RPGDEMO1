@@ -3,9 +3,11 @@ using Globals;
 using GameSettings;
 namespace Game
 {
+            
     [GlobalClass]
     public partial class GameWindow : Node
     {
+
         [Export] Map currentMapInstance;
         
         private PackedScene playerScene = (PackedScene)ResourceLoader.Load("res://Scenes/Models/Player/Player.tscn");
@@ -27,7 +29,22 @@ namespace Game
            Settings.SetInputDeviceActions();
         }
 
-        
+        public override void _UnhandledInput(InputEvent @event)
+        {
+            if (@event is InputEventKey)
+            {
+                
+                if (InputMap.EventIsAction(@event, "DebugMode"))
+                {
+                    
+                    if (@event.IsPressed()) 
+                    {
+                        Settings.Debug = !Settings.Debug;
+                    }
+                }
+            }
+        }
+
         public override void _Notification(int what)
         {
             base._Notification(what);

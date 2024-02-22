@@ -10,9 +10,7 @@ namespace Game
         public override void Enter(Player target)
         {   
             dirToDodge = target.GlobalPosition.DirectionTo(AIActor.GlobalPosition);
-            Animation.Transition("Dodge");
-            Movement.SetSpeed(Movement.DodgeSpeed);
-            AIActor._CanRotate = false;
+            AIActor.Dodge();
         }
 
 
@@ -28,7 +26,7 @@ namespace Game
 
         public override void Exit()
         {
-            AIActor._CanRotate = true;
+            AIActor.FinishDodging();
             target = null;
         }
     }

@@ -33,68 +33,102 @@ border_color = Color(0.00392157, 0.00392157, 0.00392157, 1)
 
 [node name="PlayerUI" type="Control"]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 1152.0
-offset_bottom = 649.0
+anchor_right = 1.0
+anchor_bottom = 1.002
+offset_bottom = -0.296082
 
-[node name="DEBUG" parent="." node_paths=PackedStringArray("state", "aiming", "canShoot", "blocking", "speed", "staggerHP") instance=ExtResource("1_cawhn")]
+[node name="DEBUG" parent="." node_paths=PackedStringArray("debugMode", "state", "aiming", "canShoot", "blocking", "speed", "staggerHP") instance=ExtResource("1_cawhn")]
 offset_left = 13.0
 offset_top = 195.0
-offset_right = 264.0
-offset_bottom = 539.0
-state = NodePath("VBoxContainer/State")
-aiming = NodePath("VBoxContainer/Aiming")
-canShoot = NodePath("VBoxContainer/CanShoot")
-blocking = NodePath("VBoxContainer/Blocking")
-speed = NodePath("VBoxContainer/Speed")
-staggerHP = NodePath("VBoxContainer/StaggerHP")
+offset_right = 216.0
+offset_bottom = 523.0
+debugMode = NodePath("PanelContainer/VBoxContainer/DebugMode")
+state = NodePath("PanelContainer/VBoxContainer/State")
+aiming = NodePath("PanelContainer/VBoxContainer/Aiming")
+canShoot = NodePath("PanelContainer/VBoxContainer/CanShoot")
+blocking = NodePath("PanelContainer/VBoxContainer/Blocking")
+speed = NodePath("PanelContainer/VBoxContainer/Speed")
+staggerHP = NodePath("PanelContainer/VBoxContainer/StaggerHP")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="DEBUG"]
-layout_mode = 0
-offset_right = 192.0
-offset_bottom = 290.0
+[node name="PanelContainer" type="PanelContainer" parent="DEBUG"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.985
+anchor_bottom = 0.994
+offset_right = 0.0449829
+offset_bottom = -0.0320129
 
-[node name="State" type="Label" parent="DEBUG/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="DEBUG/PanelContainer"]
+layout_mode = 2
+
+[node name="DebugMode" type="Label" parent="DEBUG/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "DEBUG MODE"
+
+[node name="State" type="Label" parent="DEBUG/PanelContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 
-[node name="Aiming" type="Label" parent="DEBUG/VBoxContainer"]
+[node name="Aiming" type="Label" parent="DEBUG/PanelContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="CanShoot" type="Label" parent="DEBUG/VBoxContainer"]
+[node name="CanShoot" type="Label" parent="DEBUG/PanelContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Blocking" type="Label" parent="DEBUG/VBoxContainer"]
+[node name="Blocking" type="Label" parent="DEBUG/PanelContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Speed" type="Label" parent="DEBUG/VBoxContainer"]
+[node name="Speed" type="Label" parent="DEBUG/PanelContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="StaggerHP" type="Label" parent="DEBUG/VBoxContainer"]
+[node name="StaggerHP" type="Label" parent="DEBUG/PanelContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="OnScreen" type="Control" parent="." node_paths=PackedStringArray("stamBar", "healthBar", "attun", "aim")]
-anchors_preset = 0
-offset_right = 1155.0
-offset_bottom = 651.0
+[node name="Label" type="Label" parent="DEBUG/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="DEBUG/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="DEBUG/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label4" type="Label" parent="DEBUG/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Note" type="Label" parent="DEBUG/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Press ` to hide"
+
+[node name="OnScreen" type="Control" parent="." node_paths=PackedStringArray("stamBar", "healthBar", "attun", "interact", "aim", "inventory")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 3.0
+offset_bottom = 2.0
 script = ExtResource("3_ew6pn")
 stamBar = NodePath("StaminaBar")
 healthBar = NodePath("HealthBar")
 attun = NodePath("Attun")
+interact = NodePath("LabelInteract")
 aim = NodePath("Aim")
+inventory = NodePath("Inventory")
 
 [node name="StaminaBar" type="ProgressBar" parent="OnScreen"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.012
-anchor_top = 0.055
-anchor_right = 0.213
-anchor_bottom = 0.097
-offset_left = 67.14
-offset_top = 7.195
-offset_right = 66.985
-offset_bottom = 6.853
+anchor_left = 0.07
+anchor_top = 0.066
+anchor_right = 0.271
+anchor_bottom = 0.108
+offset_left = 0.150002
+offset_top = 0.0340004
+offset_right = -0.0050354
+offset_bottom = -0.307999
 theme_override_styles/background = SubResource("StyleBoxFlat_bb8dq")
 theme_override_styles/fill = SubResource("StyleBoxFlat_64myj")
 max_value = 10.0
@@ -102,11 +136,16 @@ value = 3.0
 show_percentage = false
 
 [node name="HealthBar" type="ProgressBar" parent="OnScreen"]
-layout_mode = 0
-offset_left = 81.0
-offset_top = 16.0
-offset_right = 313.0
-offset_bottom = 43.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.07
+anchor_top = 0.025
+anchor_right = 0.271
+anchor_bottom = 0.066
+offset_left = 0.150002
+offset_top = -0.275
+offset_right = -0.0050354
+offset_bottom = 0.0340004
 theme_override_styles/background = SubResource("StyleBoxFlat_nei27")
 theme_override_styles/fill = SubResource("StyleBoxFlat_yom12")
 value = 5.0

@@ -11,8 +11,10 @@ namespace Game
 		[Export] private ProgressBar stamBar;
 		[Export] private ProgressBar healthBar;
 		[Export] private Label attun;
+		[Export] private Label interact;
 		[Export] private TextureRect aim;
-		private Vector2 aimPos;
+		[Export] private Inventory inventory;
+		private Vector2 screenCenter;
 	// Called when the node enters the scene tree for the first time.
 		public override void _Ready()
 		{
@@ -32,10 +34,12 @@ namespace Game
 
         private void OnWindowSizeChanged()
         {
-            aimPos.X = GetViewportRect().Size.X/2;
-			aimPos.Y = GetViewportRect().Size.Y/2;
+            screenCenter.X = GetViewportRect().Size.X/2;
+			screenCenter.Y = GetViewportRect().Size.Y/2;
 
-			aim.GlobalPosition = aimPos;
+			aim.GlobalPosition = screenCenter;
+			inventory.GlobalPosition = screenCenter;
+			interact.GlobalPosition = screenCenter;
         }
 
 

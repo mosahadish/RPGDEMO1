@@ -5,7 +5,7 @@ using Godot;
 namespace Game
 {
 	[GlobalClass]
-	public partial class AI : Actor, IMeleeAttacker
+	public partial class AI : Actor, IMeleeAttacker, IDodger
 	{
         [Export] public new AIStateMachine SMachine;
         [Export] public float AttackRange;
@@ -22,7 +22,14 @@ namespace Game
         private double timer = 0;
         private RandomNumberGenerator rng;
         private int rngResult;
-        
+
+        private bool dodging = false;
+        bool IDodger.Dodging
+    	{
+        get { return dodging; }
+        set { dodging = value; }
+    	}
+
 
         public override void _Ready()
         {
@@ -35,14 +42,14 @@ namespace Game
             rng = new();
 
 			if (GetParent() is Map map)
-			    ActorDeathWithArgument += map.OnAIDeath;
+			    ActorDeathWithArgument += Map.OnAIDeath;
 		}
 
         public override void _PhysicsProcess(double delta)
         {
             timer += delta;
 
-            if (timer > 2.5) 
+            if (timer > rng.RandfRange(2, 2.5f)) 
             {
                 canDecide = true;
                 timer = 0;
@@ -63,10 +70,10 @@ namespace Game
 
             if (distToTarget <= AttackRange) 
             {
-                if (SMachine.target.IsAttacking())
+                rngResult = rng.RandiRange(0,9);
+                if (SMachine.target.IsAttacking() && rngResult <= 3)
                 {
-                    rngResult = rng.RandiRange(0,9);
-                    if (rngResult <= 3) action = nameof(AIDodgeState);
+                    action = nameof(AIDodgeState);
                 }
                 else
                 {
@@ -74,7 +81,6 @@ namespace Game
                 }
             }
            
-
             canDecide = false;
             return action;
         }
@@ -140,6 +146,23 @@ namespace Game
 
         public void SprintHeavyAttack()
         {
+        }
+
+        public void Dodge()
+        {
+            (Animation as AnimateAI).Transition("Dodge");
+            Movement.SetSpeed(Movement.DodgeSpeed);
+            _CanRotate = false;
+        }
+
+        public void FinishDodging()
+        {
+            _CanRotate = true;
+        }
+
+        public bool IsDodging()
+        {
+            return dodging;
         }
     }
 }

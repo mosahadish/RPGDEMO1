@@ -1,3 +1,4 @@
+using GameSettings;
 using Globals;
 using Godot;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace Game
         public Player target;
 
         private List<AI> bodiesToNotifyOfTarget = new();
-        private float distToTarget; //Distance squared is faster to calculate, if necessary do it
+        private float distToTarget = 9999; //Distance squared is faster to calculate, if necessary do it
     
         public async override void _Ready()
         {
@@ -54,8 +55,21 @@ namespace Game
         public override void _PhysicsProcess(double delta)
         {
             state.PhysicsUpdate(delta);
-            StateLabel.Text = state.Name;
             
+            if (Settings.Debug == true)
+            {
+                StateLabel.Show();
+                DistLabel.Show();
+            }
+            else
+            {
+                StateLabel.Hide();
+                DistLabel.Hide();
+            }
+            
+            StateLabel.Text = state.Name;
+            DistLabel.Text = distToTarget.ToString();
+
             if (AIActor.IsOnFloor() == false)
 			{
 				if ((state is AIAirState) == false) TransitionTo(nameof(AIAirState));
@@ -64,11 +78,11 @@ namespace Game
             {
                 if (state is AIStaggerState) return;
                 if (state is AIDodgeState) return;
-                
+
                 if (target != null) distToTarget = AIActor.GlobalPosition.DistanceTo(target.GlobalPosition);
                 else distToTarget = 9999;
                 
-                DistLabel.Text = distToTarget.ToString();
+                
 
                 if (distToTarget > 15 && target != null) target = null;
 
