@@ -9,6 +9,7 @@ namespace Game
     {
 
         [Export] private Player player;
+        [Export] private InputBuffer inputBuffer;
         [Export] private Label debugMode;
         [Export] private Label state;
         [Export] private Label aiming;
@@ -16,6 +17,7 @@ namespace Game
         [Export] private Label blocking;
         [Export] private Label speed;
         [Export] private Label staggerHP;
+        [Export] private Label bufferLabel;
 
         private StateMachine stateMachine;
 
@@ -43,6 +45,7 @@ namespace Game
             blocking.Text = "Block: " + player.IsBlocking().ToString();
             speed.Text = "Speed: " + player.Movement.CurrentSpeed.ToString();
             staggerHP.Text = "StaggerHP: " +player.staggerComp.CurrentValue.ToString();
+            bufferLabel.Text = inputBuffer.IsEmpty().ToString();
         }
     }
 }

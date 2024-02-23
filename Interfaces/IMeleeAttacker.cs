@@ -16,7 +16,7 @@ namespace Game
 
         void ComboAttack();
 
-        void DodgeAttack();
+        void DodgeLightAttack();
 
         void JumpAttack();
 

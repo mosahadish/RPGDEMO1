@@ -111,9 +111,10 @@ namespace Game
 			return CurrentWeapon._CanAim;
 		}
 
-		public void LookInDirection(Vector3 Dir)
+		public void LookInDirection(Vector3 Dir, bool ignoreRotate = false)
         {
-			if (_CanRotate == false) return;
+			if (ignoreRotate == false)
+				if (_CanRotate == false) return;
 			
             float TargetAngle = Mathf.Atan2(Dir.X, Dir.Z);
             Vector3 newRotation = Rotation;

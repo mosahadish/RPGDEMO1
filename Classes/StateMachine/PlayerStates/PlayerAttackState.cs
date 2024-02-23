@@ -25,6 +25,14 @@ namespace Game
         public override void Enter(Dictionary<string, Vector2> Msg)
         {
             player ??= (Actor as Player);
+           
+            CalculateDirToFace();
+
+            if (Msg.ContainsKey(Actions.DodgeAttackLight))
+            {
+                player.DodgeLightAttack();
+            }
+
             if (Msg.ContainsKey(Actions.AttackLight))
             {
                 if (Movement._Sprinting == true)
@@ -44,21 +52,14 @@ namespace Game
                     if (chain ==3) player.Attack3();
                 }
             }
-
-            if (camera.Target != null) Direction = Actor.GlobalPosition.DirectionTo(camera.Target.GlobalPosition);
-                // global_transform.basis.z instaed of PositiveZ marker? NOT WORKING
-            else if (InputDir == Vector2.Zero) Direction = (player.PositiveZ.GlobalPosition - Actor.GlobalPosition).Normalized();
-            else 
-            {
-                Direction = new Vector3(InputDir.X, 0, InputDir.Y).Rotated(Vector3.Up, camera.Rotation.Y).Normalized();
-                InputDir = Vector2.Zero;
-            } 
         }
 
 
         public override void PhysicsUpdate(double delta)
         {
-            Actor.LookInDirection(Direction);
+            if (player._CanRotate) CalculateDirToFace();
+
+            Actor.LookInDirection(Direction, true);
             Movement.HandleMovement(Direction, delta);
         }
 
@@ -76,6 +77,18 @@ namespace Game
         public override void Exit()
         {
             player.FinishAttacking();
+        }
+
+        private void CalculateDirToFace()
+        {
+            if (camera.Target != null) Direction = Actor.GlobalPosition.DirectionTo(camera.Target.GlobalPosition);
+                // global_transform.basis.z instaed of PositiveZ marker? NOT WORKING
+            else if (InputDir == Vector2.Zero) Direction = (player.PositiveZ.GlobalPosition - Actor.GlobalPosition).Normalized();
+            else 
+            {
+                Direction = new Vector3(InputDir.X, 0, InputDir.Y).Rotated(Vector3.Up, camera.Rotation.Y).Normalized();
+                InputDir = Vector2.Zero;
+            } 
         }
     }
 }

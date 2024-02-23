@@ -47,7 +47,7 @@ namespace Game
             return _IsAttacking;
         }
 
-        public void DodgeAttack()
+        public void DodgeLightAttack()
         {
             
         }

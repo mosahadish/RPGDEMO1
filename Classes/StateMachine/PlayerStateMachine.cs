@@ -18,6 +18,7 @@ namespace Game
 		private string CurrentAttunement;
 		private string CurrentWeaponName;
 		private Player player;
+		private string bufferNextAction;
 
 		public async override void _Ready()
 		{
@@ -58,7 +59,7 @@ namespace Game
 
 		public override void HandleAttackInput(Dictionary<string, bool> Msg)
 		{
-			if (player.IsDodging()) return;
+			
 			if (state is PlayerStaggerState) return;
 
 			if (Actor.HasBlockWeapon())
@@ -70,7 +71,8 @@ namespace Game
 			{	
 				if (player.IsBlocking() && player.CanCounter() == false) return;
 				if (Msg.ContainsKey(Actions.AttackLight)) LightAttack(Msg[Actions.AttackLight]);
-				if (Msg.ContainsKey(Actions.AttackHeavy)) HeavyAttack(Msg[Actions.AttackHeavy]);
+				else if (Msg.ContainsKey(Actions.DodgeAttackLight)) DodgeLightAttack(Msg[Actions.DodgeAttackLight]);
+				else if (Msg.ContainsKey(Actions.AttackHeavy)) HeavyAttack(Msg[Actions.AttackHeavy]);
 			}
 		}
 
@@ -90,7 +92,7 @@ namespace Game
 					return;
 				}
 
-				if (Buffer.IsEmpty() && state is PlayerAttackState)
+				if (Buffer.IsEmpty() && (state is PlayerAttackState || player.IsDodging()))
 				{
 					Buffer.AddToBuffer(Actions.AttackLight);
 				}
@@ -108,6 +110,31 @@ namespace Game
 			else
 			{
 
+			}
+		}
+
+		private void DodgeLightAttack(bool pressed)
+		{
+			
+			Dictionary<string, Vector2> msg = new()
+			{
+				{ Actions.DodgeAttackLight, Vector2.Zero }
+			};
+
+			if (pressed == true && Stam.HasEnough(Actor.CurrentWeapon.LightAttackStamConsumption))
+			{
+				// if (Actor.HasAimingWeapon())
+				// {
+				// 	BowAttack(Actions.DodgeAttackLight);
+				// 	return;
+				// }
+
+				if (Buffer.IsEmpty() == false)
+					{
+						Buffer.Pop();
+					}
+				TransitionTo("PlayerAttackState", msg);
+				
 			}
 		}
 
@@ -145,6 +172,7 @@ namespace Game
 
 		private void HandleBlock(bool pressed)
 		{
+			if (player.IsDodging()) return;
 			if (pressed) Block();
 			else BlockRelease();
 		}
@@ -336,7 +364,11 @@ namespace Game
 					DrawBow();
 				}
 			}
-			else if (anim.Contains(Animations.Dodge)) TransitionTo(nameof(PlayerRunState),  msg);
+			else if (anim.Contains(Animations.Dodge)) 
+			{
+				if (Buffer.IsEmpty()) TransitionTo(nameof(PlayerRunState),  msg);
+				else ExecuteBufferInput(anim);
+			}
 			else if (anim.Contains(Animations.AttackGeneral) && Buffer.IsEmpty()) 
 			{
 				state.GetInput(Vector2.Zero);
@@ -419,6 +451,7 @@ namespace Game
 
 		public void ExecuteBufferInput(string anim)
 		{
+			//if (Buffer.IsEmpty()) return;
 			if (anim.Contains(Animations.AttackGeneral))
 			{
 				if (Buffer.IsEmpty() == false)
@@ -429,6 +462,19 @@ namespace Game
 					};
 					HandleAttackInput(m);
 				}
+			}
+
+			if (anim.Contains(Animations.Dodge))
+			{
+				bufferNextAction = Buffer.Pop().Keys.ToArray()[0];
+				if (bufferNextAction.Contains(Actions.AttackLight))
+					bufferNextAction = Actions.DodgeAttackLight;
+
+				Dictionary<string, bool> m = new()
+				{
+					{bufferNextAction, true}
+				};
+				HandleAttackInput(m);
 			}
 		}
 		

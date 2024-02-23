@@ -290,6 +290,7 @@ namespace Game
 		public void BlockCounterAttack()
 		{
 			BlockRelease();
+			_CanRotate = false;
 			_IsAttacking = true;
 			Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.CounterAttack);
 			Animation.OneShot(CurrentWeapon.Name);
@@ -379,11 +380,12 @@ namespace Game
 
 		public void SprintLightAttack()
         {
+			_CanRotate = false;
             _IsAttacking = true;
 			Movement._Sprinting = false;
 
 			Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.SprintLightAttack);
-			Animation.Transition(CurrentWeapon.Name + Animations.Movement, CurrentWeapon.Name+Animations.SprintLightAttack);
+			//Animation.Transition(CurrentWeapon.Name + Animations.Movement, CurrentWeapon.Name+Animations.SprintLightAttack);
 			Animation.OneShot(CurrentWeapon.Name);
         }
 
@@ -394,9 +396,14 @@ namespace Game
 			// Animation.OneShot(CurrentWeapon.Name);
         }
 
-        public void DodgeAttack()
+        public void DodgeLightAttack()
         {
-            
+            _CanRotate = false;
+            _IsAttacking = true;
+			Movement._Sprinting = false;
+
+			Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.DodgeLightAttack);
+			Animation.OneShot(CurrentWeapon.Name);
         }
 
         public void JumpAttack()

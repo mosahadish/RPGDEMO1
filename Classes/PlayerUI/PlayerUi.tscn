@@ -37,7 +37,7 @@ anchor_right = 1.0
 anchor_bottom = 1.002
 offset_bottom = -0.296082
 
-[node name="DEBUG" parent="." node_paths=PackedStringArray("debugMode", "state", "aiming", "canShoot", "blocking", "speed", "staggerHP") instance=ExtResource("1_cawhn")]
+[node name="DEBUG" parent="." node_paths=PackedStringArray("debugMode", "state", "aiming", "canShoot", "blocking", "speed", "staggerHP", "bufferLabel") instance=ExtResource("1_cawhn")]
 offset_left = 13.0
 offset_top = 195.0
 offset_right = 216.0
@@ -49,6 +49,7 @@ canShoot = NodePath("PanelContainer/VBoxContainer/CanShoot")
 blocking = NodePath("PanelContainer/VBoxContainer/Blocking")
 speed = NodePath("PanelContainer/VBoxContainer/Speed")
 staggerHP = NodePath("PanelContainer/VBoxContainer/StaggerHP")
+bufferLabel = NodePath("PanelContainer/VBoxContainer/Buffer")
 
 [node name="PanelContainer" type="PanelContainer" parent="DEBUG"]
 layout_mode = 1
@@ -86,7 +87,7 @@ layout_mode = 2
 [node name="StaggerHP" type="Label" parent="DEBUG/PanelContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="DEBUG/PanelContainer/VBoxContainer"]
+[node name="Buffer" type="Label" parent="DEBUG/PanelContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="Label2" type="Label" parent="DEBUG/PanelContainer/VBoxContainer"]
@@ -110,6 +111,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = 3.0
 offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("3_ew6pn")
 stamBar = NodePath("StaminaBar")
 healthBar = NodePath("HealthBar")

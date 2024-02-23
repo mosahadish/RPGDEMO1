@@ -33,7 +33,7 @@ namespace Globals
         public const string ComboAttack = "ComboAttack";
         public const string SprintLightAttack = "SprintLightAttack";
         public const string SprintHeavyAttack = "SprintHeavyAttack";
-        public const string DodgeAttack = "DodgeAttack";
+        public const string DodgeLightAttack = "DodgeLightAttack";
         public const string CounterAttack = "CounterAttack";
         public const string JumpAttack = "JumpAttack";
         public const string AttackGeneral = "Attack";
@@ -61,8 +61,9 @@ namespace Globals
         public const string LockOff = "LockOff";
         public const string Jump = "Jump";
         public const string AttackLight = "AttackLight";
+        public const string DodgeAttackLight = "DodgeAttackLight";
         public const string AttackHeavy = "AttackHeavy";
-        public const string AttackSprint = "AttackSprint";
+        public const string SprintLightAttack = "SprintLightAttack";
         public const string Block = "Block";
         public const string Aim = "Aim";
         public const string AimCancel = "AimCancel";
