@@ -52,6 +52,7 @@ namespace GameSettings
             //This works only for controllers afaik
             foreach (StringName action in inputActions)
             {
+ 
                 eventsPerAction = InputMap.ActionGetEvents(action);
                 foreach (InputEvent ev in eventsPerAction)
                 {

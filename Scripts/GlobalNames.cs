@@ -73,6 +73,10 @@ namespace Globals
         public const string DrawRightWeapon = "DrawRightWeapon";
         public const string ChangeAttunement = "ChangeAttunement";
         public const string PickUp = "PickUp";
+        public const string MoveForward = "move_forward";
+        public const string MoveLeft = "move_left";
+        public const string MoveRight = "move_right";
+        public const string MoveBack = "move_backwards";
     }
 
     public class Slots

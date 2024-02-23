@@ -40,6 +40,8 @@ namespace Game
 
             rng = new();
 
+            DodgeChance *= 10;
+
 			if (GetParent() is Map map)
 			    ActorDeathWithArgument += Map.OnAIDeath;
 		}
@@ -69,8 +71,10 @@ namespace Game
             
             if (distToTarget <= DodgeRange)
             {
+                DodgeChance += (1-HP.AsPercent())/6;
+
                 rngResult = rng.RandiRange(0,9);
-                if (SMachine.target.IsAttacking() && rngResult <= (DodgeChance * 10) + ((1-HP.AsPercent())/10))
+                if (SMachine.target.IsAttacking() && rngResult <= DodgeChance)
                 {
                     return nameof(AIDodgeState);
                 }
