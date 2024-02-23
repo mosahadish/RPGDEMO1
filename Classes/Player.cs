@@ -9,6 +9,7 @@ namespace Game
 	public delegate void NotifyValueChange(float value);
 	public delegate void NotifyAttunement(string msg);
 	public delegate void NotifyWeapon(Weapon weapon);
+	
 	[GlobalClass]
 	public partial class Player : Actor, IBlocker, IMeleeAttacker, IDodger
 	{

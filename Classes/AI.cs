@@ -11,9 +11,9 @@ namespace Game
         [Export] public float AttackRange;
         [Export] public float CircleRange;
         [Export] public float DodgeRange;
+        [Export] private float DodgeChance;
 		[Export] public Raycasts Raycasts;
 		private Vector3 desiredVelo;
-        
         
         public Player target;
    
@@ -70,7 +70,7 @@ namespace Game
             if (distToTarget <= DodgeRange)
             {
                 rngResult = rng.RandiRange(0,9);
-                if (SMachine.target.IsAttacking() && rngResult <= 3)
+                if (SMachine.target.IsAttacking() && rngResult <= (DodgeChance * 10) + ((1-HP.AsPercent())/10))
                 {
                     return nameof(AIDodgeState);
                 }
