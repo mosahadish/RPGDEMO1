@@ -52,6 +52,7 @@ namespace Game
             if (regen && CurrentValue < maxValue)
             {
                 CurrentValue += staggerRegen;
+                if (CurrentValue > maxValue) CurrentValue = maxValue;
             }
             if (regen == false)
             {
