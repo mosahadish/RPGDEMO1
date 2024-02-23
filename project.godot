@@ -24,6 +24,11 @@ GameData="res://Scripts/GameData.cs"
 
 settings/stdout/verbose_stdout=true
 
+[display]
+
+window/size/viewport_width=1600
+window/size/viewport_height=800
+
 [dotnet]
 
 project/assembly_name="RPGDEMO1"
