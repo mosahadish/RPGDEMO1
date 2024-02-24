@@ -12,6 +12,7 @@ namespace Game
         [Export] public float CircleRange;
         [Export] public float DodgeRange;
         [Export] private float DodgeChance;
+        [Export] private float canDecideTimer;
 		[Export] public Raycasts Raycasts;
 		private Vector3 desiredVelo;
         
@@ -49,19 +50,14 @@ namespace Game
         public override void _PhysicsProcess(double delta)
         {
             timer += delta;
+            Velocity += DisplacementTest();
 
-            if (timer > rng.RandfRange(2, 2.5f)) 
+            if (timer > rng.RandfRange(canDecideTimer - 0.7f, canDecideTimer + 1.2f)) 
             {
                 canDecide = true;
                 timer = 0;
             }
         }
-
-        public void ApplySteeringForce(Vector3 globalTargetPos, double delta)
-		{
-			desiredVelo = globalTargetPos - GlobalPosition;
-			Velocity = desiredVelo + Velocity;
-		}
 
         public string DecideOnNextAction(float distToTarget)
         {
@@ -86,6 +82,30 @@ namespace Game
            
             canDecide = false;
             return action;
+        }
+
+        
+        //https://code.tutsplus.com/understanding-steering-behaviors-wander--gamedev-1624t
+        Vector3 circleCenter;
+        Vector3 displacement;
+        Vector3 wanderForce;
+        float circleDistance = 0.1f;
+        float wanderAngle = 45;
+        float ANGLE_CHANGE = 25;
+
+        public Vector3 DisplacementTest()
+        {
+            circleCenter = Velocity.Normalized();
+            circleCenter *= circleDistance;
+
+            displacement = new Vector3(0,0,-1f);
+            displacement *= circleDistance;
+            displacement = displacement.Rotated(Vector3.Up, Mathf.DegToRad(wanderAngle));
+
+            wanderAngle += (rng.Randf() *ANGLE_CHANGE) - (ANGLE_CHANGE *0.5f);
+
+            wanderForce = circleCenter + displacement;
+            return wanderForce;
         }
 
         public void Dodge()

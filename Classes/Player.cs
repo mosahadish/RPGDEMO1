@@ -384,6 +384,7 @@ namespace Game
 			_CanRotate = false;
             _IsAttacking = true;
 			Movement._Sprinting = false;
+			Stam.Degen = false;
 
 			Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.SprintLightAttack);
 			//Animation.Transition(CurrentWeapon.Name + Animations.Movement, CurrentWeapon.Name+Animations.SprintLightAttack);
@@ -402,6 +403,8 @@ namespace Game
             _CanRotate = false;
             _IsAttacking = true;
 			Movement._Sprinting = false;
+			Stam.Regen = false;
+			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
 
 			Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.DodgeLightAttack);
 			Animation.OneShot(CurrentWeapon.Name);

@@ -8,5 +8,3 @@ script = ExtResource("1_bhfox")
 currentMapInstance = NodePath("Map1")
 
 [node name="Map1" parent="." instance=ExtResource("6_tqqof")]
-
-[editable path="Map1"]

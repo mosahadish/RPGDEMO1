@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://j53ipofpbddx"]
+[gd_scene load_steps=19 format=3 uid="uid://j53ipofpbddx"]
 
 [ext_resource type="Script" path="res://Classes/Map.cs" id="1_5xqog"]
 [ext_resource type="Sky" uid="uid://dieri5a8r5agg" path="res://Scenes/Maps/Map1/Map1Sky.tres" id="1_8byvb"]
@@ -14,7 +14,6 @@
 [ext_resource type="PackedScene" uid="uid://odsxeljnokdn" path="res://Scenes/Items/Weapons/Bow.tscn" id="12_ha2fn"]
 [ext_resource type="PackedScene" uid="uid://bnu5rvi2ojq62" path="res://Scenes/Items/Weapons/Shield.tscn" id="13_g2ao4"]
 [ext_resource type="PackedScene" uid="uid://bwcnco5r8xygd" path="res://Scenes/Models/MeleeAI/MeleeAI.tscn" id="14_qhv36"]
-[ext_resource type="PackedScene" uid="uid://bolog4fa1paro" path="res://Scenes/Models/RangeAI/RangeAI.tscn" id="15_nelt1"]
 
 [sub_resource type="Environment" id="Environment_jyw0s"]
 background_mode = 2
@@ -83,7 +82,4 @@ transform = Transform3D(0.837957, 0, 0.545736, 0, 1, 0, -0.545736, 0, 0.837957, 
 ItemScene = ExtResource("13_g2ao4")
 
 [node name="MeleeAI" parent="." instance=ExtResource("14_qhv36")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 183.129, 151.011, 897.454)
-
-[node name="RangeAI" parent="." instance=ExtResource("15_nelt1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 182.013, 151.057, 900.624)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 177.803, 149.93, 887.582)

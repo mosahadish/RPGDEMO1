@@ -64,6 +64,8 @@ namespace Game
         private void WanderInDirection(Vector3 direction, double delta)
         {
             Animation.BlendPosition("Roam", Vector2.Down);
+            direction += AIActor.DisplacementTest();
+            direction = direction.Normalized();
             Movement.HandleMovement(direction, delta);
             AIActor.LookInDirection(direction);
             wanderTime -= delta;
@@ -86,12 +88,12 @@ namespace Game
 
         private void SetWaitTime()
         {
-            waitTime = rng.RandfRange(1,3);
+            waitTime = rng.RandfRange(2,4);
         }
 
         private void SetWanderTime()
         {
-            wanderTime = rng.RandfRange(1,3);
+            wanderTime = rng.RandfRange(3,5);
         }
     }
 }
