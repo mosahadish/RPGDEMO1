@@ -87,6 +87,7 @@ namespace Globals
         public const string Legs = "LEGS";
         public const string RightHand = "RIGHT_HAND";
         public const string LeftHand = "LEFT_HAND";
+        public const string Hotbar = "HOT_BAR";
     }
 
     public class WeaponTypes
@@ -98,5 +99,10 @@ namespace Globals
         public const string Magic1H = "Magic1H";
         public const string Magic2H = "Magic2H";
         public const string Offhand = "OFFHAND";
+    }
+
+    public class ConsumableTypes
+    {
+        public const string Heal = "HEAL";
     }
 }

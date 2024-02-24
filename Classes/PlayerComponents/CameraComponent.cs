@@ -57,7 +57,7 @@ namespace Game
 		}
 
 
-		public bool FindClosestTarget()
+        public bool FindClosestTarget()
 		{
 			if (possibleTargets.Count >=1) 
 			{

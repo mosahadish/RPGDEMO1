@@ -92,12 +92,15 @@ namespace Game
 					return;
 				}
 
-				if (Buffer.IsEmpty() && (state is PlayerAttackState || player.IsDodging()))
+				if (player.IsAttacking() || player.IsDodging())
 				{
-					Buffer.AddToBuffer(Actions.AttackLight);
+					if (Buffer.IsEmpty())
+						Buffer.AddToBuffer(Actions.AttackLight);
 				}
 				else
 				{
+					if (player.IsDodging()) return;
+					
 					if (Buffer.IsEmpty() == false)
 						{
 							Buffer.Pop();
@@ -376,7 +379,10 @@ namespace Game
 				Buffer.Chain = 1;
 			}
 			
-			else ExecuteBufferInput(anim);
+			else 
+			{
+				ExecuteBufferInput(anim);
+			}
 		}
 
 		public void OnAttunementChanged(string attun)
@@ -451,6 +457,14 @@ namespace Game
 
 		public void ExecuteBufferInput(string anim)
 		{
+			if (Buffer.IsEmpty()) return;
+			Dictionary<string, Vector2> msg = new()
+			{
+				{ "input_dir", Vector2.Zero }
+			};
+
+			state.GetInput(Vector2.Zero);
+			TransitionTo(nameof(PlayerRunState),  msg);
 			//if (Buffer.IsEmpty()) return;
 			if (anim.Contains(Animations.AttackGeneral))
 			{

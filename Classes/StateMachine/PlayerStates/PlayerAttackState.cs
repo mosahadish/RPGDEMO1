@@ -77,6 +77,7 @@ namespace Game
         public override void Exit()
         {
             player.FinishAttacking();
+            //InputDir = Vector2.Zero;
         }
 
         private void CalculateDirToFace()

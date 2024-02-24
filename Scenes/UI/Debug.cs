@@ -45,7 +45,7 @@ namespace Game
             blocking.Text = "Block: " + player.IsBlocking().ToString();
             speed.Text = "Speed: " + player.Movement.CurrentSpeed.ToString();
             staggerHP.Text = "StaggerHP: " +player.staggerComp.CurrentValue.ToString();
-            bufferLabel.Text = inputBuffer.IsEmpty().ToString();
+            bufferLabel.Text = "Buffer Empty:" + inputBuffer.IsEmpty().ToString();
         }
     }
 }
