@@ -52,10 +52,15 @@ namespace Game
 			{
 				Movement.HandleMovement(moveDir ,delta);
 			}
-			//if (Anim.Contains(Animations.Movement) || Anim.Contains(Animations.Walk)) //basically if not sprinting
+			
 			if (Movement._Sprinting == false)
 				{
 					InputDir.X = -1*InputDir.X;
+
+					if (InputDir.Y >= 0.35f && InputDir.Y <= 0.5)
+						InputDir.Y = 0.5f; 
+					else if (InputDir.Y >= 0.6f && InputDir.Y < 0.85)
+						InputDir.Y = 0.85f; 
 					Animation.BlendPosition(Anim, InputDir);
 				}
 		}

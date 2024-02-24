@@ -82,4 +82,4 @@ transform = Transform3D(0.837957, 0, 0.545736, 0, 1, 0, -0.545736, 0, 0.837957, 
 ItemScene = ExtResource("13_g2ao4")
 
 [node name="MeleeAI" parent="." instance=ExtResource("14_qhv36")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 177.803, 149.93, 887.582)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 174.355, 150.204, 879.414)

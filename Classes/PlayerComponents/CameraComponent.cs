@@ -29,6 +29,7 @@ namespace Game
 		private Vector3 newRotation;
 		private Vector3 newPlayerRotation;
 		private Vector3 newPos;
+		private Basis newBasis;
 		
 		private float distToTarget = 500;
 		private float tempDistance = 500;
@@ -115,21 +116,27 @@ namespace Game
 		
 			Rotation = newRotation;
 
-			//Try stuff out for vertical lock on.. is it working? IDK
-			distToTarget = camera.GlobalPosition.DistanceTo(Target.GlobalPosition);
+			//new test for locking on in the vertical axis , think it's working, 24/2/24
+			newBasis = Target.GlobalTransform.LookingAt(GlobalTransform.Origin, Vector3.Up).Basis;
+
+			Basis = GlobalTransform.Basis.Slerp(newBasis, 0.2f);;
+
+
+			// //Try stuff out for vertical lock on.. is it working? IDK, 24/2/24 nope not working.. delete soon
+			// distToTarget = camera.GlobalPosition.DistanceTo(Target.GlobalPosition);
 			
-			rotationDir.X = GetViewport().GetVisibleRect().Size.X/2;//target.GlobalPosition.X;
-			rotationDir.Y = GetViewport().GetVisibleRect().Size.Y/4;
+			// rotationDir.X = GetViewport().GetVisibleRect().Size.X/2;//target.GlobalPosition.X;
+			// rotationDir.Y = GetViewport().GetVisibleRect().Size.Y/4;
 			
-			newRotation = camera.ProjectPosition(rotationDir, distToTarget);
+			// newRotation = camera.ProjectPosition(rotationDir, distToTarget);
 
-			desiredRotationX = Rotation.X + Mathf.Atan2(Target.GlobalPosition.Y - newRotation.Y, distToTarget);
-			desiredRotationX = (float)Mathf.Clamp(desiredRotationX, -35.0, 60.0);
+			// desiredRotationX = Rotation.X + Mathf.Atan2(Target.GlobalPosition.Y - newRotation.Y, distToTarget);
+			// desiredRotationX = (float)Mathf.Clamp(desiredRotationX, -35.0, 60.0);
 
-			newRotation = RotationDegrees;
-			newRotation.X = (float)Mathf.Lerp(RotationDegrees.X, desiredRotationX, 0.1);
+			// newRotation = RotationDegrees;
+			// newRotation.X = (float)Mathf.Lerp(RotationDegrees.X, desiredRotationX, 0.1);
 
-			RotationDegrees = newRotation;
+			// RotationDegrees = newRotation;
 		}
 
 		private void AimedRotation(double delta)

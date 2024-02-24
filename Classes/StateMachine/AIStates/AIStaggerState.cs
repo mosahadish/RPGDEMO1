@@ -7,6 +7,8 @@ namespace Game
     [GlobalClass]
     public partial class AIStaggerState : AIState
     {
+        private Vector3 newVelo;
+
         public override void Enter(Player target)
         {   
             Movement.SetSpeed(0);
@@ -17,10 +19,10 @@ namespace Game
 
         public override void PhysicsUpdate(double delta)
         {
-            // newVelo = AIActor.Velocity;
-            // newVelo.Y += -Movement.Gravity * (float)delta;
+            newVelo = AIActor.Velocity;
+            newVelo.Y += -Movement.Gravity * (float)delta;
 
-            // AIActor.Velocity = newVelo;
+            AIActor.Velocity = newVelo;
             AIActor.MoveAndSlide();
         }
 

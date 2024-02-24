@@ -10,6 +10,8 @@ namespace Game
         private Player player;
         private string currentTransition;
 
+        private Vector3 newVelo;
+
         public override void Enter(Dictionary<string, Vector2> msg)
         {
             player??= Actor as Player;
@@ -22,6 +24,10 @@ namespace Game
 
         public override void PhysicsUpdate(double delta)
         {
+            newVelo = Actor.Velocity;
+            newVelo.Y += -Movement.Gravity * (float)delta;
+            
+            Actor.Velocity = newVelo;
             player.MoveAndSlide();
         }
 
