@@ -85,7 +85,7 @@ namespace Game
                 
                 
 
-                if (distToTarget > 35 && target != null) target = null;
+                if (distToTarget > AIActor.LoseAggroRange && target != null) target = null;
 
                 if(target == null && state is AIRoamState == false) TransitionTo(nameof(AIRoamState));
 

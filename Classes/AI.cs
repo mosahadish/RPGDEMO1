@@ -8,6 +8,7 @@ namespace Game
 	public partial class AI : Actor, IDodger
 	{
         [Export] public new AIStateMachine SMachine;
+        [Export] public float LoseAggroRange;
         [Export] public float AttackRange;
         [Export] public float CircleRange;
         [Export] public float DodgeRange;
@@ -70,7 +71,7 @@ namespace Game
                 DodgeChance += (1-HP.AsPercent())/6;
 
                 rngResult = rng.RandiRange(0,9);
-                if (SMachine.target.IsAttacking() && rngResult <= DodgeChance)
+                if (ShouldDodge())
                 {
                     return nameof(AIDodgeState);
                 }
@@ -82,6 +83,11 @@ namespace Game
            
             canDecide = false;
             return action;
+        }
+
+        private bool ShouldDodge()
+        {
+            return SMachine.target.IsAttacking() && rngResult <= DodgeChance;
         }
 
         
