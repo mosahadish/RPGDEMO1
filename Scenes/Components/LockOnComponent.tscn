@@ -1,0 +1,43 @@
+[gd_scene load_steps=4 format=3 uid="uid://ewm4fax3gfyw"]
+
+[ext_resource type="Script" path="res://Classes/GenericComponents/LockOnComponent.cs" id="1_2sa0x"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_e2v0e"]
+size = Vector3(6, 6, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_axihm"]
+size = Vector3(3, 6, 10)
+
+[node name="LockOnComponent" type="Node3D"]
+script = ExtResource("1_2sa0x")
+
+[node name="RightArea" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, 3)
+collision_layer = 16
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RightArea"]
+shape = SubResource("BoxShape3D_e2v0e")
+
+[node name="CenterArea" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+collision_layer = 16
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CenterArea"]
+shape = SubResource("BoxShape3D_axihm")
+
+[node name="LeftArea" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, 3)
+collision_layer = 16
+collision_mask = 2
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="LeftArea"]
+shape = SubResource("BoxShape3D_e2v0e")
+
+[connection signal="body_entered" from="RightArea" to="." method="OnRightAreaEntered"]
+[connection signal="body_exited" from="RightArea" to="." method="OnRightAreaLeft"]
+[connection signal="body_entered" from="CenterArea" to="." method="OnCenterAreaEntered"]
+[connection signal="body_exited" from="CenterArea" to="." method="OnCenterAreaLeft"]
+[connection signal="body_entered" from="LeftArea" to="." method="OnLeftAreaEntered"]
+[connection signal="body_exited" from="LeftArea" to="." method="OnLeftAreaLeft"]

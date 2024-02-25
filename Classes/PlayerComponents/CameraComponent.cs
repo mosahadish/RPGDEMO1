@@ -19,6 +19,7 @@ namespace Game
 		[Export] Player player;
 		[Export] private Camera3D camera;
 		[Export] PlayerStateMachine sMachine;
+		[Export] LockOnComponent lockOnComponent;
 		
 		public Actor Target;
 
@@ -39,8 +40,18 @@ namespace Game
 		private float desiredRotationY = 0;
 
 		private List<Actor> possibleTargets = new();
+		private float weight = 0;
 
-		public override void _Process(double delta)
+        public override void _Ready()
+        {
+            if (lockOnComponent != null)
+			{	
+				lockOnComponent.camera = this;
+				lockOnComponent.TargetChanged += TargetChanged;
+			}
+        }
+
+        public override void _Process(double delta)
 		{
 			//Since camera is Top Level, we need to manually follow
 			FollowPlayer();
@@ -54,26 +65,18 @@ namespace Game
 			if (Input.IsActionJustReleased(Actions.Aim)) sMachine.HandleCameraInput(Actions.AimCancel);
 			if (Input.IsActionJustPressed(Actions.LockOn) && _LockOn == true) sMachine.HandleCameraInput(Actions.LockOff);
 			else if (Input.IsActionJustPressed(Actions.LockOn)) sMachine.HandleCameraInput(Actions.LockOn);
+
+			if (_LockOn)
+			{
+				if (Input.IsActionJustPressed(Actions.NextRightTarget)) lockOnComponent.FetchRightTarget();
+				if (Input.IsActionJustPressed(Actions.NextLeftTarget)) lockOnComponent.FetchLeftTarget();
+			}
 		}
 
 
         public bool FindClosestTarget()
 		{
-			if (possibleTargets.Count >=1) 
-			{
-				Target = possibleTargets[0];
-				distToTarget = Position.DistanceSquaredTo(Target.Position);
-			}
-
-			foreach (Actor possibleTarget in possibleTargets)
-			{
-				tempDistance = Position.DistanceSquaredTo(possibleTarget.Position);
-				if (distToTarget > tempDistance)
-				{
-					distToTarget = tempDistance;
-					Target = possibleTarget;
-				}
-			}
+			Target = lockOnComponent.FetchClosestTarget();
 			
 			return Target != null;
 		}
@@ -82,7 +85,7 @@ namespace Game
 		{
 			if (Target != null)
 				{
-					LookAtTarget();
+					LookAtTarget(delta);
 				}
 			else _LockOn = false;
 		}
@@ -91,6 +94,22 @@ namespace Game
 		{
 			_LockOn = true;
 			Target.LockOn.Show();
+		}
+
+		private void TargetChanged(Actor newTarget)
+		{
+			weight = 0;
+			if (newTarget == null) 
+			{
+				Target.LockOn.Hide();
+				Target = null;
+			}
+			if (Target != newTarget)
+			{
+				Target.LockOn.Hide();
+				Target = newTarget;
+				Target.LockOn.Show();
+			}
 		}
 
 		public void ReleaseLockOn()
@@ -102,7 +121,7 @@ namespace Game
 			tempDistance = 500;
 		}
 
-		private void LookAtTarget()
+		private void LookAtTarget(double delta)
 		{
 			if (Target == null) return;
 
@@ -111,32 +130,13 @@ namespace Game
 			
 			if (player.Movement._Sprinting == false && player.IsAttacking() == false)
 				player.LookInDirection(newRotation);
-			newRotation = Rotation;
-			newRotation.Y = (float)Mathf.LerpAngle(newRotation.Y, targetAngle, 0.8);
-		
-			Rotation = newRotation;
 
-			//new test for locking on in the vertical axis , think it's working, 24/2/24
 			newBasis = Target.GlobalTransform.LookingAt(GlobalTransform.Origin, Vector3.Up).Basis;
 
-			Basis = GlobalTransform.Basis.Slerp(newBasis, 0.2f);;
-
-
-			// //Try stuff out for vertical lock on.. is it working? IDK, 24/2/24 nope not working.. delete soon
-			// distToTarget = camera.GlobalPosition.DistanceTo(Target.GlobalPosition);
+			weight += (float)delta;
 			
-			// rotationDir.X = GetViewport().GetVisibleRect().Size.X/2;//target.GlobalPosition.X;
-			// rotationDir.Y = GetViewport().GetVisibleRect().Size.Y/4;
-			
-			// newRotation = camera.ProjectPosition(rotationDir, distToTarget);
-
-			// desiredRotationX = Rotation.X + Mathf.Atan2(Target.GlobalPosition.Y - newRotation.Y, distToTarget);
-			// desiredRotationX = (float)Mathf.Clamp(desiredRotationX, -35.0, 60.0);
-
-			// newRotation = RotationDegrees;
-			// newRotation.X = (float)Mathf.Lerp(RotationDegrees.X, desiredRotationX, 0.1);
-
-			// RotationDegrees = newRotation;
+			if (weight >= 1) weight = 1f;
+			GlobalBasis = GlobalBasis.Slerp(newBasis, weight);
 		}
 
 		private void AimedRotation(double delta)

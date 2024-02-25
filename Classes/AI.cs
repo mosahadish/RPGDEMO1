@@ -57,10 +57,8 @@ namespace Game
             timer += delta;
             //Velocity += DisplacementTest();
             Velocity = myFuncs.LerpVector3(Velocity, Velocity + DisplacementTest(), 0.1f);
-
-            GD.Print(canDecide);
             if (timer > rng.RandfRange(canDecideTimer - 0.5f, canDecideTimer + 1.2f)) 
-            {
+            {   
                 canDecide = true;
                 timer = 0;
             }

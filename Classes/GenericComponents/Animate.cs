@@ -18,8 +18,8 @@ namespace Game
         public void BlendPosition(string blendType, Vector2 blendValue)
         {
             currentBlendPos = (Vector2)AnimTree.Get("parameters/" + blendType + "/blend_position");
-           
-            AnimTree.Set("parameters/" + blendType + "/blend_position", myFuncs.LerpVector2(currentBlendPos, blendValue, 0.05f));
+
+            AnimTree.Set("parameters/" + blendType + "/blend_position", currentBlendPos.Slerp(blendValue, 0.05f));
         }    
 
         public void OneShot(string name)

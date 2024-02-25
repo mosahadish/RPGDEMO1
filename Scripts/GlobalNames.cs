@@ -80,6 +80,8 @@ namespace Globals
     {
         public const string LockOn = "LockOn";
         public const string LockOff = "LockOff";
+        public const string NextRightTarget = "NextRightTarget";
+        public const string NextLeftTarget = "NextLeftTarget";
         public const string Jump = "Jump";
         public const string LightAttack = "LightAttack";
         public const string DodgeLightAttack = "DodgeLightAttack";

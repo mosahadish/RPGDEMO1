@@ -41,7 +41,7 @@ namespace Game
             newVelocity.X = direction.X * (CurrentSpeed * (float)delta);
             newVelocity.Z = direction.Z * (CurrentSpeed * (float)delta);
 
-            actor.Velocity = myFuncs.LerpVector3(actor.Velocity, newVelocity, 0.1f);
+            actor.Velocity = actor.Velocity.Slerp(newVelocity, 0.1f);
             actor.MoveAndSlide();
         }
 
