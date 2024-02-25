@@ -56,6 +56,17 @@ namespace Game
             }
         }
 
+
+        private Vector3 test;
+        // public override void _PhysicsProcess(double delta)
+        // {
+        //     base._PhysicsProcess(delta);
+        //     test.X = GlobalPosition.X;
+        //     test.Y = GlobalPosition.Y;
+        //     test.Z = (float)(Speed * delta);
+        //     GlobalPosition += GlobalPosition * test;
+        // }
+
         public void SpawnProjectile(Actor spawner, Vector3 spawnPos, Vector3 targetPos)
         {
             direction = targetPos - spawnPos;

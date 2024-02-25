@@ -12,7 +12,8 @@ namespace Game
         [Export] public float AttackRange;
         [Export] public float CircleRange;
         [Export] public float DodgeRange;
-        [Export] private float DodgeChance;
+        [Export(PropertyHint.Range, "0,100,")] private float DodgeChancePercent;
+        [Export(PropertyHint.Range, "0,100,")] private float AttackChancePercent;
         [Export] private float canDecideTimer;
 		[Export] public Raycasts Raycasts;
 		private Vector3 desiredVelo;
@@ -24,6 +25,8 @@ namespace Game
         private double timer = 0;
         private RandomNumberGenerator rng;
         private int rngResult;
+        private float dodgeChance;
+        private float attackChance;
 
         private bool dodging = false;
         bool IDodger.Dodging
@@ -40,9 +43,10 @@ namespace Game
             if (CurrentOffhand != null)
                 CurrentOffhand.Wielder = this;
 
-            rng = new();
+            dodgeChance = DodgeChancePercent;
+            attackChance = AttackChancePercent;
 
-            DodgeChance *= 10;
+            rng = new();
 
 			if (GetParent() is Map map)
 			    ActorDeathWithArgument += Map.OnAIDeath;
@@ -54,7 +58,8 @@ namespace Game
             //Velocity += DisplacementTest();
             Velocity = myFuncs.LerpVector3(Velocity, Velocity + DisplacementTest(), 0.1f);
 
-            if (timer > rng.RandfRange(canDecideTimer - 0.7f, canDecideTimer + 1.2f)) 
+            GD.Print(canDecide);
+            if (timer > rng.RandfRange(canDecideTimer - 0.5f, canDecideTimer + 1.2f)) 
             {
                 canDecide = true;
                 timer = 0;
@@ -65,30 +70,42 @@ namespace Game
         {
             if (canDecide == false) return null;
 
-            action = nameof(AIEngageState);
-            
+            //Reset to default
+            dodgeChance = DodgeChancePercent;
+            attackChance = AttackChancePercent;
+            canDecide = false;
+
+            rngResult = rng.RandiRange(0,99);
+
             if (distToTarget <= DodgeRange)
             {
-                DodgeChance += (1-HP.AsPercent())/6;
-
-                rngResult = rng.RandiRange(0,9);
+                dodgeChance += (100-HP.AsPercent())/6;
+                
                 if (ShouldDodge())
                 {
                     return nameof(AIDodgeState);
                 }
             }
+
             if (distToTarget <= AttackRange) 
             {
-                action =  nameof(AIAttackState);
+                if (ShouldAttack())
+                {
+                    return nameof(AIAttackState);
+                }
             }
-           
-            canDecide = false;
+
             return action;
         }
 
         private bool ShouldDodge()
         {
-            return SMachine.target.IsAttacking() && rngResult <= DodgeChance;
+            return SMachine.target.IsAttacking() && rngResult <= dodgeChance;
+        }
+
+        private bool ShouldAttack()
+        {
+            return rngResult <= attackChance;
         }
 
         

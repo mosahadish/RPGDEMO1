@@ -11,6 +11,10 @@ namespace Game
 		[Export] private Marker3D markerAim;
 
 		private Vector3 aimTarget;
+		[Export] private TextureRect aim;
+
+		Color red = new Color(Colors.Red);
+		Color white = new Color(Colors.White);
 
 		// Called when the node enters the scene tree for the first time.
 		public override void _Ready()
@@ -23,6 +27,9 @@ namespace Game
 			if (rayAim.IsColliding())
 			{
 				aimTarget = rayAim.GetCollisionPoint();
+				if (rayAim.GetCollider() is AI)
+					aim.Modulate = red;
+				else aim.Modulate = white;
 			}
 			else aimTarget = markerAim.GlobalPosition;
 		}

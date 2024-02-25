@@ -26,6 +26,7 @@ namespace Game
 
         private List<AI> bodiesToNotifyOfTarget = new();
         private float distToTarget = 9999; //Distance squared is faster to calculate, if necessary do it
+        private bool chaseOutOfRange = true; //This is for when other enemies alert this one, or detected projectile
     
         public async override void _Ready()
         {
@@ -84,14 +85,15 @@ namespace Game
                 else distToTarget = 9999;
                 
                 
-
-                if (distToTarget > AIActor.LoseAggroRange && target != null) target = null;
+                if (chaseOutOfRange == false)
+                    if (distToTarget > AIActor.LoseAggroRange && target != null) target = null;
 
                 if(target == null && state is AIRoamState == false) TransitionTo(nameof(AIRoamState));
 
 
                 if (target != null && distToTarget <= AIActor.CircleRange) 
                 {
+                    chaseOutOfRange = false;
                     if (state is AIEngageState == false && state is AIAttackState == false)
                         TransitionTo(nameof(AIEngageState));
                     else 

@@ -23,6 +23,7 @@ namespace Game
 			if ((CurrentWeapon is Bow) == false) return;
 			Proj = GameData.Instance.FetchProjectile(attunement+"Arrow"); 
 
+			//Proj.Basis = CurrentWeapon.GlobalTransform.Basis;
 			Proj.SpawnProjectile(Actor, CurrentWeapon.GlobalPosition, (Actor as Player).GetAimPoint());
 		}
 	}

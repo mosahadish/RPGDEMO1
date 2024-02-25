@@ -573,48 +573,28 @@ light_indirect_energy = 0.25
 light_size = 3.0
 
 [node name="Lightning" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15312e-08, -0.263803, 1.15312e-08)
 visible = false
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="Lightning"]
-transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 1.09342, 0)
-amount = 3
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 1.55058, -1.99832e-08)
+amount = 4
 lifetime = 0.5
+speed_scale = 1.25
 explosiveness = 0.08
+fixed_fps = 60
 process_material = ExtResource("5_jq1uw")
 draw_pass_1 = ExtResource("6_i3sfx")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Lightning/GPUParticles3D"]
-transform = Transform3D(3.33333, 0, 0, 0, 3.33333, 0, 0, 0, 3.33333, 0, 3.48651, 1.07767)
+transform = Transform3D(3.33333, 0, 0, 0, 3.33333, 1.42109e-14, 0, -1.42109e-14, 3.33333, 0, 6.02095, 1.07767)
 light_color = Color(0.46166, 0.674133, 0.999999, 1)
-light_energy = 1.5
+light_energy = 0.5
 shadow_enabled = true
+omni_range = 1.90536
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="Lightning/GPUParticles3D"]
-transform = Transform3D(3.33333, 0, 0, 0, 3.33333, 0, 0, 0, 3.33333, 0, 0.367054, -1.32524)
+transform = Transform3D(3.33333, 0, 0, 0, 3.33333, 1.42109e-14, 0, -1.42109e-14, 3.33333, 0, -1.75884, -1.32524)
 light_color = Color(0.46166, 0.674133, 0.999999, 1)
-light_energy = 1.5
+light_energy = 0.5
 shadow_enabled = true
-
-[node name="Lightning2" type="Node3D" parent="Lightning"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.48877e-08, -1.942, 8.48877e-08)
-
-[node name="GPUParticles3D" type="GPUParticles3D" parent="Lightning/Lightning2"]
-transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 1.09342, 0)
-amount = 3
-lifetime = 0.5
-explosiveness = 0.08
-process_material = ExtResource("5_jq1uw")
-draw_pass_1 = ExtResource("6_i3sfx")
-
-[node name="OmniLight3D" type="OmniLight3D" parent="Lightning/Lightning2/GPUParticles3D"]
-transform = Transform3D(3.33333, 0, 0, 0, 3.33333, 0, 0, 0, 3.33333, 0, 3.48651, 1.07767)
-light_color = Color(0.46166, 0.674133, 0.999999, 1)
-light_energy = 1.5
-shadow_enabled = true
-
-[node name="OmniLight3D2" type="OmniLight3D" parent="Lightning/Lightning2/GPUParticles3D"]
-transform = Transform3D(3.33333, 0, 0, 0, 3.33333, 0, 0, 0, 3.33333, 0, 0.367054, -1.32524)
-light_color = Color(0.46166, 0.674133, 0.999999, 1)
-light_energy = 1.5
-shadow_enabled = true
+omni_range = 0.992696

@@ -86,12 +86,12 @@ namespace Game
 
 		public void WeaponDamageOn()
 		{
-			if (HasWeapon()) CurrentWeapon._DamageOn = true;
+			if (HasWeapon()) CurrentWeapon.DamageOn = true;
 		}
 
 		public void WeaponDamageOff()
 		{
-			if (HasWeapon()) CurrentWeapon._DamageOn = false;
+			if (HasWeapon()) CurrentWeapon.DamageOn = false;
 		}
 
 		public bool HasOffhand()

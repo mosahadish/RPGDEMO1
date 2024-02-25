@@ -24,7 +24,7 @@ namespace Game
 		[Export] private Node3D Fire;
 		[Export] private Node3D Lightning;
 		
-		public bool _DamageOn = false; //Set this to true when swinging etc
+		public bool DamageOn = false; //Set this to true when swinging etc
 
 
 		private List<Actor> bodiesToDamage = new List<Actor>();
@@ -42,20 +42,20 @@ namespace Game
 		{
 			if (attun == Attunements.Fire)
 			{
-				Lightning.Hide();
-				Fire.Show();
+				Lightning?.Hide();
+				Fire?.Show();
 			}
 			if(attun == Attunements.Lightning)
 			{
-				Fire.Hide();
-				Lightning.Show();
+				Fire?.Hide();
+				Lightning?.Show();
 			}
 		}
 
 		public void NoAttunements()
 		{
-			Fire.Hide();
-			Lightning.Hide();
+			Fire?.Hide();
+			Lightning?.Hide();
 		}
 
         private void OnBodyEnteredHitArea(Node3D body)
@@ -65,14 +65,14 @@ namespace Game
 			if (body is Actor actor)
 			{
 				bodiesToDamage.Add(actor);
-				if (_DamageOn)
+				if (DamageOn)
 				{
 					foreach (Actor bodyToDamage in bodiesToDamage)
 					{
 						if (bodyToDamage.HasMethod("OnHit"))
 							bodyToDamage.OnHit(Damage, Wielder.GlobalPosition, Name);
 					}
-					_DamageOn = false;
+					DamageOn = false;
 				}
 			}
 		}

@@ -70,7 +70,7 @@ namespace Game
 
         public float AsPercent()
         {
-            return currentVal / MaxValue;
+            return currentVal / MaxValue * 100;
         }
     }
 }
