@@ -55,13 +55,13 @@ namespace Game
         public override void _PhysicsProcess(double delta)
         {
             timer += delta;
-            //Velocity += DisplacementTest();
-            Velocity = myFuncs.LerpVector3(Velocity, Velocity + DisplacementTest(), 0.1f);
             if (timer > rng.RandfRange(canDecideTimer - 0.5f, canDecideTimer + 1.2f)) 
             {   
                 canDecide = true;
                 timer = 0;
             }
+
+            Velocity = Velocity.Slerp(Velocity + DisplacementTest(), 0.1f);
         }
 
         public string DecideOnNextAction(float distToTarget)

@@ -4,26 +4,6 @@ using Godot;
 
 namespace Globals
 {
-
-    public class myFuncs
-    {
-
-        public static Vector2 LerpVector2(Vector2 from, Vector2 to, float weight)
-        {
-            from.X = Mathf.Lerp(from.X, to.X, weight);
-            from.Y = Mathf.Lerp(from.Y, to.Y, weight);
-
-            return from;
-        }
-        public static Vector3 LerpVector3(Vector3 from, Vector3 to, float weight)
-        {
-            from.X = Mathf.Lerp(from.X, to.X, weight);
-            from.Y = Mathf.Lerp(from.Y, to.Y, weight);
-            from.Z = Mathf.Lerp(from.Z, to.Z, weight);
-
-            return from;
-        }
-    }
     public class SoundEffects
     {
         public const string ShieldBlock = "ShieldBlock";

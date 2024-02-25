@@ -135,7 +135,7 @@ namespace Game
         {
             Dictionary<string, Vector2> msg = new()
             {
-                { Actions.SprintRelease, Vector2.Zero }
+                { Actions.SprintRelease, inputDir }
             };
             SMachine.HandleMovementInput(msg);
         }

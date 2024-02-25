@@ -37,6 +37,8 @@ namespace Game
 
         public void HandleMovement(Vector3 direction, double delta)
         {
+            direction = direction.Normalized();
+            
             newVelocity = actor.Velocity;
             newVelocity.X = direction.X * (CurrentSpeed * (float)delta);
             newVelocity.Z = direction.Z * (CurrentSpeed * (float)delta);

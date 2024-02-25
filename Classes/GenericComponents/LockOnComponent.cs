@@ -92,9 +92,7 @@ namespace Game
 			*/
 			else if (targetsInCenter.Contains(target))
 				{
-					GD.Print(target);
 					tempTarget = SearchInList(targetsInCenter);
-					GD.Print(tempTarget);
 					if (tempTarget == target)
 					{
 						tempTarget = SearchInList(targetsOnRight);
@@ -143,9 +141,7 @@ namespace Game
 			*/
 			else if (targetsInCenter.Contains(target))
 				{
-					GD.Print(target);
 					tempTarget = SearchInList(targetsInCenter);
-					GD.Print(tempTarget);
 					if (tempTarget == target)
 					{
 						tempTarget = SearchInList(targetsOnLeft);
@@ -167,28 +163,6 @@ namespace Game
 				TargetChanged?.Invoke(target);
 			}
 		}
-
-		// public bool FindClosestTarget()
-		// {
-		// 	if (possibleTargets.Count >=1) 
-		// 	{
-		// 		Target = possibleTargets[0];
-		// 		distToTarget = Position.DistanceSquaredTo(Target.Position);
-		// 	}
-
-		// 	foreach (Actor possibleTarget in possibleTargets)
-		// 	{
-		// 		tempDistance = Position.DistanceSquaredTo(possibleTarget.Position);
-		// 		if (distToTarget > tempDistance)
-		// 		{
-		// 			distToTarget = tempDistance;
-		// 			Target = possibleTarget;
-		// 		}
-		// 	}
-			
-		// 	return Target != null;
-		// }
-
 
 		private void OnRightAreaEntered(Actor body)
 		{
