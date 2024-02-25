@@ -11,11 +11,15 @@ namespace Game
         [Export] public AnimationTree AnimTree;
         [Export] public AnimationPlayer AnimPlayer;
 
+        private Vector2 currentBlendPos;
+
         public virtual void Transition(string transitionType, string transitionName) {}
 
         public void BlendPosition(string blendType, Vector2 blendValue)
         {
-            AnimTree.Set("parameters/" + blendType + "/blend_position", blendValue);
+            currentBlendPos = (Vector2)AnimTree.Get("parameters/" + blendType + "/blend_position");
+           
+            AnimTree.Set("parameters/" + blendType + "/blend_position", myFuncs.LerpVector2(currentBlendPos, blendValue, 0.05f));
         }    
 
         public void OneShot(string name)

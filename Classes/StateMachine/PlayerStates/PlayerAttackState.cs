@@ -28,29 +28,25 @@ namespace Game
            
             CalculateDirToFace();
 
-            if (Msg.ContainsKey(Actions.DodgeAttackLight))
+            if (Msg.ContainsKey(Actions.LightAttack))
+            {
+                chain = (int)Msg[Actions.LightAttack].Y;
+
+                if (chain == 1) player.Attack1();
+                if (chain == 2) player.Attack2();
+                if (chain ==3) player.Attack3();
+            }
+            else if (Msg.ContainsKey(Actions.DodgeLightAttack))
             {
                 player.DodgeLightAttack();
             }
-
-            if (Msg.ContainsKey(Actions.AttackLight))
+            else if (Msg.ContainsKey(Actions.SprintLightAttack))
             {
-                if (Movement._Sprinting == true)
-                {
-                    player.SprintLightAttack();
-                }
-                else if (player.CanCounter())
-                {
-                    player.BlockCounterAttack();
-                }
-                else
-                {
-                    chain = (int)Msg[Actions.AttackLight].Y;
-
-                    if (chain == 1) player.Attack1();
-                    if (chain == 2) player.Attack2();
-                    if (chain ==3) player.Attack3();
-                }
+                player.SprintLightAttack();
+            }
+            else if (Msg.ContainsKey(Actions.CounterLightAttack))
+            {
+                player.BlockCounterAttack();
             }
         }
 
@@ -77,7 +73,7 @@ namespace Game
         public override void Exit()
         {
             player.FinishAttacking();
-            //InputDir = Vector2.Zero;
+            InputDir = Vector2.Zero;
         }
 
         private void CalculateDirToFace()

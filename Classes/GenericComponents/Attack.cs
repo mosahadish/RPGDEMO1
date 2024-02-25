@@ -24,7 +24,7 @@ namespace Game
         {
             Dictionary<string, bool> msg = new()
             {
-                { Actions.AttackLight, pressed }
+                { Actions.LightAttack, pressed }
             };
             sMachine.HandleAttackInput(msg);
         }

@@ -30,7 +30,7 @@ namespace Game
 
 		public void SetBindings()
 		{
-			lightAttackBind = Settings.GetBindForAction(Actions.AttackLight);
+			lightAttackBind = Settings.GetBindForAction(Actions.LightAttack);
 			forwardBind = Settings.GetBindForAction(Actions.MoveForward);
 			leftBind = Settings.GetBindForAction(Actions.MoveLeft);
 			rightBind = Settings.GetBindForAction(Actions.MoveRight);

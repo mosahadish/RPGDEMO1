@@ -12,8 +12,8 @@ namespace Game
 		}
 		public override void _PhysicsProcess(double _delta)
 		{
-			if (Input.IsActionJustPressed(Actions.AttackLight)) WantsLightAttack(true);
-			if (Input.IsActionJustReleased(Actions.AttackLight)) WantsLightAttack(false);
+			if (Input.IsActionJustPressed(Actions.LightAttack)) WantsLightAttack(true);
+			if (Input.IsActionJustReleased(Actions.LightAttack)) WantsLightAttack(false);
 			if (Input.IsActionPressed(Actions.Block)) WantsBlock(true);
 			if (Input.IsActionJustReleased(Actions.Block)) WantsBlock(false);
 		}

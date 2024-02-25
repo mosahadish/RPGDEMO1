@@ -4,6 +4,26 @@ using Godot;
 
 namespace Globals
 {
+
+    public class myFuncs
+    {
+
+        public static Vector2 LerpVector2(Vector2 from, Vector2 to, float weight)
+        {
+            from.X = Mathf.Lerp(from.X, to.X, weight);
+            from.Y = Mathf.Lerp(from.Y, to.Y, weight);
+
+            return from;
+        }
+        public static Vector3 LerpVector3(Vector3 from, Vector3 to, float weight)
+        {
+            from.X = Mathf.Lerp(from.X, to.X, weight);
+            from.Y = Mathf.Lerp(from.Y, to.Y, weight);
+            from.Z = Mathf.Lerp(from.Z, to.Z, weight);
+
+            return from;
+        }
+    }
     public class SoundEffects
     {
         public const string ShieldBlock = "ShieldBlock";
@@ -14,6 +34,7 @@ namespace Globals
         public const string SwordAttack1 = "SwordAttack1";
         public const string SwordAttack2 = "SwordAttack2";
         public const string SwordAttack3 = "SwordAttack3";
+        public const string BowDraw = "BowDraw";
     }
     public class Animations
     {
@@ -43,7 +64,7 @@ namespace Globals
         public const string BlockHold = "BlockHold";
 
         public const string DrawBow = "Draw";
-        
+
         public const string Release = "Release";
 
         public const string Stagger = "Stagger";
@@ -60,10 +81,11 @@ namespace Globals
         public const string LockOn = "LockOn";
         public const string LockOff = "LockOff";
         public const string Jump = "Jump";
-        public const string AttackLight = "AttackLight";
-        public const string DodgeAttackLight = "DodgeAttackLight";
-        public const string AttackHeavy = "AttackHeavy";
+        public const string LightAttack = "LightAttack";
+        public const string DodgeLightAttack = "DodgeLightAttack";
+        public const string HeavyAttack = "HeavyAttack";
         public const string SprintLightAttack = "SprintLightAttack";
+        public const string CounterLightAttack = "CounterLightAttack";
         public const string Block = "Block";
         public const string Aim = "Aim";
         public const string AimCancel = "AimCancel";

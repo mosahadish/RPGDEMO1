@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Globals;
 using Godot;
@@ -26,6 +27,7 @@ namespace Game
 
         [ExportCategory("Dependencies")]
         [Export] private Actor actor;
+        private Vector3 newVelocity;
 
         public override void _EnterTree()
         {
@@ -38,11 +40,11 @@ namespace Game
 
         public void HandleMovement(Vector3 direction, double delta)
         {
-            Vector3 newVelocity = actor.Velocity;
+            newVelocity = actor.Velocity;
             newVelocity.X = direction.X * (CurrentSpeed * (float)delta);
             newVelocity.Z = direction.Z * (CurrentSpeed * (float)delta);
-    
-            actor.Velocity = newVelocity;
+
+            actor.Velocity = myFuncs.LerpVector3(actor.Velocity, newVelocity, 0.1f);
             actor.MoveAndSlide();
         }
 

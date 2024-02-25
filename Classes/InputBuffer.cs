@@ -44,6 +44,7 @@ namespace Game
         {
             if (IsEmpty() && IsActivated())
             {
+                DeactivateBuffer();
                 lastUpdateTime = timeNow;
                 Chain +=1;
                 Dictionary<string, float> msg = new()
@@ -55,7 +56,6 @@ namespace Game
                 if (Chain > maxChain) Chain = 1;
 
                 buffer.Push(msg);
-                DeactivateBuffer();
             }
         }
 
@@ -82,6 +82,11 @@ namespace Game
         public Dictionary<string, float> Pop()
         {
             return buffer.Pop();
+        }
+
+        public string Pop1()
+        {
+            return buffer.Pop().Keys.ToArray()[0];
         }
 
     }

@@ -19,7 +19,17 @@ namespace Game
 		private string CurrentWeaponName;
 		private Player player;
 		private string bufferNextAction;
-
+		private Vector2 vectorForState = Vector2.Zero;
+		private string nextAction;
+		
+		private Dictionary<string, bool> msgHandleAttack = new()
+		{
+			{ "", true }
+		};
+		private Dictionary<string, Vector2> msgForState = new()
+			{
+				{ "", Vector2.Zero }
+			};
 		public async override void _Ready()
 		{
 			await ToSignal(GetParent(), "ready");
@@ -28,7 +38,7 @@ namespace Game
             Movement = player.Movement;
             Attack = player.Attack;
 			CurrentAttunement = player.CurrentAttunement;
-
+			
             foreach (State c in GetChildren().Cast<State>())
             {
                 c.Actor = Actor;
@@ -56,88 +66,67 @@ namespace Game
 		}
 
 		#region Combat stuff
-
 		public override void HandleAttackInput(Dictionary<string, bool> Msg)
 		{
-			
 			if (state is PlayerStaggerState) return;
 
 			if (Actor.HasBlockWeapon())
 			{
 				if (Msg.ContainsKey(Actions.Block)) HandleBlock(Msg[Actions.Block]);
 			}
-
-			if (Actor.HasWeapon())
-			{	
+			if (player.HasWeapon())
+			{
 				if (player.IsBlocking() && player.CanCounter() == false) return;
-				if (Msg.ContainsKey(Actions.AttackLight)) LightAttack(Msg[Actions.AttackLight]);
-				else if (Msg.ContainsKey(Actions.DodgeAttackLight)) DodgeLightAttack(Msg[Actions.DodgeAttackLight]);
-				else if (Msg.ContainsKey(Actions.AttackHeavy)) HeavyAttack(Msg[Actions.AttackHeavy]);
+				HandleLightAttack(Msg);
 			}
+		
 		}
 
-		private void LightAttack(bool pressed)
+		private bool bufferAttackInc = false;
+
+		private void HandleLightAttack(Dictionary<string, bool> Msg)
 		{
+			if (Msg.Keys.ToArray()[0].Contains(Actions.LightAttack) == false) return;
+			if (Stam.HasEnough(Actor.CurrentWeapon.LightAttackStamConsumption) == false) return;
+			nextAction = Msg.Keys.ToArray()[0];
 			
-			Dictionary<string, Vector2> msg = new()
+			//True means action pressed
+			if (Msg.ContainsValue(true))
 			{
-				{ Actions.AttackLight, Vector2.Zero }
-			};
-
-			if (pressed == true && Stam.HasEnough(Actor.CurrentWeapon.LightAttackStamConsumption))
-			{
-				if (Actor.HasAimingWeapon())
+				if (player.HasAimingWeapon())
 				{
-					BowAttack(Actions.AttackLight);
-					return;
+					BowAttack(nextAction);
 				}
-
-				if (player.IsAttacking() || player.IsDodging())
-				{
-					if (Buffer.IsEmpty())
-						Buffer.AddToBuffer(Actions.AttackLight);
-				}
-				else
-				{
-					if (player.IsDodging()) return;
+				else if (Buffer.IsEmpty())
+				{	
+					if (player.IsDodging() && Buffer.IsActivated())
+					{
+						Buffer.AddToBuffer(Actions.DodgeLightAttack);
+					}
+					else if (player.IsAttacking() && Buffer.IsActivated())
+					{
+						Buffer.AddToBuffer(Actions.LightAttack);
+					}
+					else if (bufferAttackInc || player.IsAttacking() == false) //if starting to attack, or ExecuteInputBuffer called
+					{
+						bufferAttackInc = false;
+						
+						msgForState.Clear();
+						vectorForState.Y = Buffer.Chain;
 					
-					if (Buffer.IsEmpty() == false)
-						{
-							Buffer.Pop();
-						}
-					msg[Actions.AttackLight] = new Vector2(0, Buffer.Chain);
-					TransitionTo("PlayerAttackState", msg);
+						if (Movement._Sprinting) nextAction = Actions.SprintLightAttack;
+						else if(player.IsBlocking()) nextAction = Actions.CounterLightAttack;
+
+						msgForState[nextAction] = vectorForState;
+						TransitionTo(nameof(PlayerAttackState), msgForState);
+					}
 				}
-			}
+			} 
+			
 
 			else
 			{
 
-			}
-		}
-
-		private void DodgeLightAttack(bool pressed)
-		{
-			
-			Dictionary<string, Vector2> msg = new()
-			{
-				{ Actions.DodgeAttackLight, Vector2.Zero }
-			};
-
-			if (pressed == true && Stam.HasEnough(Actor.CurrentWeapon.LightAttackStamConsumption))
-			{
-				// if (Actor.HasAimingWeapon())
-				// {
-				// 	BowAttack(Actions.DodgeAttackLight);
-				// 	return;
-				// }
-
-				if (Buffer.IsEmpty() == false)
-					{
-						Buffer.Pop();
-					}
-				TransitionTo("PlayerAttackState", msg);
-				
 			}
 		}
 
@@ -146,10 +135,11 @@ namespace Game
 			if ((Actor.CurrentWeapon is Bow) == false) return;
 			if (Attack.ReadyToShoot == false) return;
 
-			if (action == Actions.AttackLight)
+			if (action == Actions.LightAttack)
 			{
 				Animation.Transition("Bow" + CurrentAttunement, Animations.Release);
 				Animation.OneShot("Bow");
+				(Actor.CurrentWeapon as Bow).Release();
 				(Attack as PlayerAttack).ReleaseArrow(CurrentAttunement);
 				Attack.ReadyToShoot = false;
 			}
@@ -243,12 +233,8 @@ namespace Game
 
 			if (Msg.ContainsKey(Actions.Sprint) && player.IsBlocking() == false) 
 			{
-				if (Msg.ContainsKey("Run"))
-				{
-					if (Msg["Run"] == Vector2.Zero) return;
-				}
+				if (Msg[Actions.Sprint] == Vector2.Zero) return;
 
-				//state.SetAnim(Animations.TransitionMovement, Animations.Sprint);
 				if (state.Anim == Animations.Sprint) return;
 				TransitionTo(nameof(PlayerRunState), Msg);
 			}
@@ -325,6 +311,11 @@ namespace Game
 				player.Camera._AimOn = false;
 				Attack.ReadyToShoot = false;
 				CancelWalk();	
+
+				if (Actor.CurrentWeapon is Bow bow)
+				{
+					bow.Release();
+				}
 			}
 		}
 
@@ -339,49 +330,39 @@ namespace Game
 
 		public void OnAnimationFinished(string anim)
 		{
-			//GD.Print(anim);
-			Dictionary<string, Vector2> msg = new()
-			{
-				{ "input_dir", Vector2.Zero }
-			};
+			GD.Print(anim);
 
 			if (anim == Animations.Block) player.BlockHold();
-			else if (anim.Contains(Animations.Stagger)) 
+			else if (anim.Contains(Animations.BlockedAttack) && player.IsBlocking()) player.BlockHold();
+			else if (anim.Contains(Animations.Stagger)) TransitionTo(nameof(PlayerRunState), Msg);
+
+			else if (anim.Contains(Animations.AttackGeneral) )
 			{
-				TransitionTo(nameof(PlayerRunState), Msg);
+				Buffer.Chain = 1;
+				TransitionTo(nameof(PlayerRunState), msgForState);
 			}
-			else if (anim.Contains(Animations.BlockedAttack) && player.IsBlocking()) 
-				player.BlockHold();
+			else if (anim.Contains(Animations.Dodge))
+			{
+				if (Buffer.IsEmpty())
+				{
+					TransitionTo(nameof(PlayerRunState), msgForState);
+				}
+				else
+				{
+					ExecuteBufferInput(anim);
+				}
+			}
 
 			else if (anim.Contains(Animations.DrawBow))
 			{
 				if (player.Camera._AimOn)
-				{
 					Attack.ReadyToShoot = true;
-				}
 			}
+
 			else if (anim.Contains(Animations.Release))
 			{
 				if (player.Camera._AimOn)
-				{
 					DrawBow();
-				}
-			}
-			else if (anim.Contains(Animations.Dodge)) 
-			{
-				if (Buffer.IsEmpty()) TransitionTo(nameof(PlayerRunState),  msg);
-				else ExecuteBufferInput(anim);
-			}
-			else if (anim.Contains(Animations.AttackGeneral) && Buffer.IsEmpty()) 
-			{
-				state.GetInput(Vector2.Zero);
-				TransitionTo(nameof(PlayerRunState),  msg);
-				Buffer.Chain = 1;
-			}
-			
-			else 
-			{
-				ExecuteBufferInput(anim);
 			}
 		}
 
@@ -457,39 +438,17 @@ namespace Game
 
 		public void ExecuteBufferInput(string anim)
 		{
+			Buffer.DeactivateBuffer();
 			if (Buffer.IsEmpty()) return;
-			Dictionary<string, Vector2> msg = new()
-			{
-				{ "input_dir", Vector2.Zero }
-			};
 
 			state.GetInput(Vector2.Zero);
-			TransitionTo(nameof(PlayerRunState),  msg);
-			//if (Buffer.IsEmpty()) return;
-			if (anim.Contains(Animations.AttackGeneral))
-			{
-				if (Buffer.IsEmpty() == false)
-				{
-					Dictionary<string, bool> m = new()
-					{
-						{Actions.AttackLight, true}
-					};
-					HandleAttackInput(m);
-				}
-			}
+			msgHandleAttack.Clear();
+			
 
-			if (anim.Contains(Animations.Dodge))
-			{
-				bufferNextAction = Buffer.Pop().Keys.ToArray()[0];
-				if (bufferNextAction.Contains(Actions.AttackLight))
-					bufferNextAction = Actions.DodgeAttackLight;
-
-				Dictionary<string, bool> m = new()
-				{
-					{bufferNextAction, true}
-				};
-				HandleAttackInput(m);
-			}
+			msgHandleAttack.Add(Buffer.Pop1(), true);
+			//Buffer.DeactivateBuffer();
+			bufferAttackInc = true;
+			HandleAttackInput(msgHandleAttack);
 		}
 		
 		#region Temporary functions
@@ -513,10 +472,12 @@ namespace Game
 			Movement.SetSpeed(Movement.Speed);
 		}
 
-		private void DrawBow()
+		private async void DrawBow()
 		{
 			Animation.Transition("Bow"+CurrentAttunement, "Draw");
 			Animation.OneShot("Bow");
+			await ToSignal(GetTree().CreateTimer(0.6), SceneTreeTimer.SignalName.Timeout);
+			(player.CurrentWeapon as Bow).Draw();
 		}
 
 		#endregion
