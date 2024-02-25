@@ -35,9 +35,6 @@ namespace Game
             SetSpeedValues();
         }
 
-
-       
-
         public void HandleMovement(Vector3 direction, double delta)
         {
             newVelocity = actor.Velocity;
