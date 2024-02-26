@@ -9,7 +9,6 @@ namespace Game
 	[GlobalClass]
 	public partial class PlayerEquipmentHandler : Node3D
 	{
-
 		/*
 		This works directly with the player character and the Inventory system
 		The player should inject itself and the Inventory to this in order for this to work

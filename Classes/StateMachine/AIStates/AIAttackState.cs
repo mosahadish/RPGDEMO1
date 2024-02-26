@@ -8,6 +8,7 @@ namespace Game
     public partial class AIAttackState : AIState
     {
         private Vector3 dirToTarget;
+        private float distToTarget;
         private RandomNumberGenerator rng = new();
         private float randI = 0;
 
@@ -37,8 +38,12 @@ namespace Game
         public override void PhysicsUpdate(double delta)
         {
             dirToTarget = AIActor.GlobalPosition.DirectionTo(target.GlobalPosition);
+            distToTarget = AIActor.GlobalPosition.DistanceTo(target.GlobalPosition);
+            GD.Print(distToTarget);
             AIActor.LookInDirection(dirToTarget);
-            Movement.HandleMovement(dirToTarget, delta);
+
+            if (distToTarget >= AIActor.AttackRange/2)
+                Movement.HandleMovement(dirToTarget, delta);
         }
 
         public override void Update(double delta)

@@ -173,29 +173,6 @@ namespace Game
 			Position = newPos;
 		}
 
-		public void OnArea3DEntered(Node3D body)
-		{
-			if (body is AI)
-			{
-				possibleTargets.Add((Actor)body);
-			}
-		}
-
-		public void OnArea3DExited(Node3D body)
-		{
-			if (body is AI)
-			{
-				if (possibleTargets.Contains((Actor)body))
-				{
-					possibleTargets.Remove((Actor)body);
-				}
-
-				if (body == Target)
-				{
-					ReleaseLockOn();
-				}
-			}
-		}
 	}
 
 }
