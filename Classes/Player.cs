@@ -17,7 +17,6 @@ namespace Game
 
 		public event NotifyAttunement AttunementChanged;
 
-		
 		#endregion
 
 		#region Exported members
@@ -31,9 +30,6 @@ namespace Game
 		[Export] public AreaInteract Interact;
 		[Export] private PlayerEquipmentHandler equip;
 		[Export] Inventory Inventory;
-
-		[ExportCategory("Help")]
-		//[Export] public Marker3D PositiveZ;
 		[Export] private Aim aim;
 
 		#endregion

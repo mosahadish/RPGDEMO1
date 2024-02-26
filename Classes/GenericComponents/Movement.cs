@@ -53,7 +53,7 @@ namespace Game
             // lerpWeight += (float)delta;
             // if (lerpWeight >= 0.25f) lerpWeight = 0.25f;
 
-            Actor.Velocity = Actor.Velocity.Slerp(newVelocity, 0.15f); // For some reason 0.2f and above causes exceptions
+            Actor.Velocity = Actor.Velocity.Slerp(newVelocity, 0.15f); // For some reason 0.2f and above causes problems
             
             Actor.MoveAndSlide();
         }
