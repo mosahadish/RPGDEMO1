@@ -13,6 +13,18 @@ namespace Game
 	[GlobalClass]
 	public partial class Player : Actor, IBlocker, IMeleeAttacker, IDodger
 	{
+		/*
+		The player class is heavily dependent upon the classes in the category Dependencies
+		Each of the classes represent a mechanic;
+
+		CameraComponent - Rotation, Aiming, Lock On
+		PlayerMovement - Moving, Dodging, Jumping (inherits from Movement, has additional methods)
+		Interact - Picking up items (In the future interact with objects?)
+		Inventory - Inventory UI, move items around, use items etc
+		EquipmentHandler - Works alongside Inventory, this represents the items currently equipped and are displayed on the player character
+		Aim - Handles the aim point when Aiming so we can shoot projectiles
+		*/
+
 		#region Events
 
 		public event NotifyAttunement AttunementChanged;

@@ -18,6 +18,7 @@ namespace Game
         [Export] private Label speed;
         [Export] private Label staggerHP;
         [Export] private Label bufferLabel;
+        [Export] private Label FPS;
 
         private StateMachine stateMachine;
 
@@ -38,7 +39,8 @@ namespace Game
             {   
                 Hide();
             }
-        
+
+            FPS.Text = "FPS: " + Engine.GetFramesPerSecond().ToString();
             state.Text = stateMachine.state.Name;
             aiming.Text = "Aiming: "+ player.Camera._AimOn.ToString();
             canShoot.Text = "CanShoot: " + player.Attack.ReadyToShoot.ToString();

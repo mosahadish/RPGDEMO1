@@ -43,6 +43,7 @@ namespace Game
 			}
 		}
 
+
         public override void _ExitTree()
         {
             base._ExitTree();
@@ -53,7 +54,6 @@ namespace Game
 				Inventory.ChangedWeaponWithArgument -= OnInventoryChangedWeapon;
 			}
         }
-
 
         public void OnInventoryChangedWeapon(Weapon weap)
 		{

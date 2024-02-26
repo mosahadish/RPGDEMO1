@@ -37,7 +37,7 @@ anchor_right = 1.0
 anchor_bottom = 1.002
 offset_bottom = -0.296082
 
-[node name="DEBUG" parent="." node_paths=PackedStringArray("debugMode", "state", "aiming", "canShoot", "blocking", "speed", "staggerHP", "bufferLabel") instance=ExtResource("1_cawhn")]
+[node name="DEBUG" parent="." node_paths=PackedStringArray("debugMode", "state", "aiming", "canShoot", "blocking", "speed", "staggerHP", "bufferLabel", "FPS") instance=ExtResource("1_cawhn")]
 offset_left = 13.0
 offset_top = 195.0
 offset_right = 216.0
@@ -50,6 +50,7 @@ blocking = NodePath("PanelContainer/VBoxContainer/Blocking")
 speed = NodePath("PanelContainer/VBoxContainer/Speed")
 staggerHP = NodePath("PanelContainer/VBoxContainer/StaggerHP")
 bufferLabel = NodePath("PanelContainer/VBoxContainer/Buffer")
+FPS = NodePath("PanelContainer/VBoxContainer/FPS")
 
 [node name="PanelContainer" type="PanelContainer" parent="DEBUG"]
 layout_mode = 1
@@ -66,6 +67,9 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 4
 text = "DEBUG MODE"
+
+[node name="FPS" type="Label" parent="DEBUG/PanelContainer/VBoxContainer"]
+layout_mode = 2
 
 [node name="State" type="Label" parent="DEBUG/PanelContainer/VBoxContainer"]
 layout_mode = 2
@@ -88,9 +92,6 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="Buffer" type="Label" parent="DEBUG/PanelContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label2" type="Label" parent="DEBUG/PanelContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="Label3" type="Label" parent="DEBUG/PanelContainer/VBoxContainer"]
