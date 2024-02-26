@@ -61,7 +61,7 @@ namespace Game
                 timer = 0;
             }
 
-            Velocity = Velocity.Slerp(Velocity + DisplacementTest(), 0.1f);
+            //Velocity = Velocity.Slerp(Velocity + DisplacementTest(), 0.1f);
         }
 
         public string DecideOnNextAction(float distToTarget)

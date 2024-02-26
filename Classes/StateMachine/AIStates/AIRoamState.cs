@@ -76,6 +76,8 @@ namespace Game
             wanderDirection.X = rng.RandfRange(-1, 1);
             wanderDirection.Z = rng.RandfRange(-1, 1);
             wanderDirection.Y = 0;
+
+            wanderDirection += AIActor.DisplacementTest();
         }
 
         private void Wait(double delta)

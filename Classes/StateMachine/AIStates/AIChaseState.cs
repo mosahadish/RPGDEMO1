@@ -33,9 +33,10 @@ namespace Game
         }
 
         public void ChaseTarget(double delta)
-        {
+        {   
             if (target == null) return;
             direction = AIActor.GlobalPosition.DirectionTo(target.GlobalPosition);
+            direction += AIActor.DisplacementTest();
             
             Animation.BlendPosition("Chase", Vector2.Down); 
             AIActor.LookInDirection(direction);
