@@ -13,12 +13,13 @@ namespace Game
         private PackedScene playerScene = (PackedScene)ResourceLoader.Load("res://Scenes/Models/Player/Player.tscn");
         private Player player;
 
-        public override void _Ready()
+        public async override void _Ready()
         {
             player = (Player)playerScene.Instantiate();
             
             currentMapInstance.AddChild(player);
             player.GlobalPosition = currentMapInstance.PlayerSpawnPos.GlobalPosition;
+            await ToSignal(GetTree().CreateTimer(0.5), SceneTreeTimer.SignalName.Timeout);
         }
 
         public override void _EnterTree()

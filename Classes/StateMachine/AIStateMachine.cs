@@ -173,9 +173,7 @@ namespace Game
 
         public void OnParry()
         {
-            GD.Print(AIActor.Name +"got parried");
             TransitionTo(nameof(AIParriedState));
-            
         }
     }   
 }

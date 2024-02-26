@@ -90,7 +90,12 @@ namespace Game
 		{
 			SetPhysicsProcess(false);
 			SetProcess(false);
-			await ToSignal(GetTree().CreateTimer(1), SceneTreeTimer.SignalName.Timeout);
+			if (this is AI ai)
+			{
+				ai.SMachine.SetPhysicsProcess(false);
+				ai.SMachine.TransitionTo(nameof(AIDeathState));
+			}
+			await ToSignal(GetTree().CreateTimer(7), SceneTreeTimer.SignalName.Timeout);
 			EmitSignal(SignalName.ActorDeathWithArgument, this);
 		}
 

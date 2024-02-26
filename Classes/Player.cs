@@ -74,7 +74,7 @@ namespace Game
     	}
 
 		#endregion
-    
+
         public override void _Ready()
 		{
 			base._Ready();

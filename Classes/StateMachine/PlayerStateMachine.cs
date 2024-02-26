@@ -339,6 +339,11 @@ namespace Game
             TransitionTo(nameof(PlayerStaggerState), null);
         }
 
+		/*
+		This heavily relies on animations finishing
+		Probably better to use timers inside the states and send a signal when state is done
+		We'll deal with it when we start having problems, so far so good 
+		*/
 		public void OnAnimationFinished(string anim)
 		{
 			GD.Print(anim);
