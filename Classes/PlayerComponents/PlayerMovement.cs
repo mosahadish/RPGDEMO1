@@ -87,7 +87,7 @@ namespace Game
 		{	
 			if (direction == Vector3.Zero) return;
 	
-			Actor.LookInDirection(direction);
+			Actor.LookInDirection(direction.Normalized());
 			HandleMovement(direction, delta);
 		}
 

@@ -57,13 +57,6 @@ namespace Game
             }
 
             state.Enter(Msg);
-			
-
-			player.AttunementChanged += OnAttunementChanged;
-			player.WeaponChanged += OnWeaponChanged;
-			player.OffhandChanged += OnOffhandChanged;
-
-			Stam.StaminaChanged += OnStaminaChanged;
 		}
 
 		#region Combat stuff

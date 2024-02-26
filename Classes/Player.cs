@@ -8,7 +8,7 @@ namespace Game
 {
 	public delegate void NotifyValueChange(float value);
 	public delegate void NotifyAttunement(string msg);
-	public delegate void NotifyWeapon(Weapon weapon);
+	
 	
 	[GlobalClass]
 	public partial class Player : Actor, IBlocker, IMeleeAttacker, IDodger
@@ -16,8 +16,7 @@ namespace Game
 		#region Events
 
 		public event NotifyAttunement AttunementChanged;
-		public event NotifyWeapon WeaponChanged;
-		public event NotifyWeapon OffhandChanged;
+
 		
 		#endregion
 
@@ -26,17 +25,12 @@ namespace Game
 		 "," + Attunements.Fire)]
 		public string CurrentAttunement {get; set;} = Attunements.Fire;
 
-        [ExportCategory("Equipment Attachments")]
-		[Export] private BoneAttachment3D RightHand;
-		[Export] private BoneAttachment3D LeftHand;
-		[Export] private BoneAttachment3D RightEquip;
-		[Export] private BoneAttachment3D LeftEquip;
-		[Export] private BoneAttachment3D BackEquip;
-
 		[ExportCategory("Dependencies")]
 		[Export] public CameraComponent Camera;
 		[Export] public new PlayerMovement Movement;
 		[Export] public AreaInteract Interact;
+		[Export] private PlayerEquipmentHandler equip;
+		[Export] Inventory Inventory;
 
 		[ExportCategory("Help")]
 		//[Export] public Marker3D PositiveZ;
@@ -46,7 +40,6 @@ namespace Game
 
 		#region Private members
 
-		private Dictionary<Item, Node3D> EquippedItems = new();
 		private int AttunementIterator = 0;
 		private string[] arrAttunement = {Attunements.Fire, Attunements.Lightning};
 		private Vector3 frontDirection;
@@ -77,9 +70,11 @@ namespace Game
         public override void _Ready()
 		{
 			base._Ready();
+
+			HandleChildrenDependencies();
+
 			_isBlocking = false;
 			AttunementChanged?.Invoke(CurrentAttunement);
-
 
 			// Set front direction, makes it easier to face ahead when required
 			frontDirection.X = Position.X;
@@ -87,7 +82,58 @@ namespace Game
 			frontDirection.Z = Position.Z + 1;
 		}
 
-		public override void _Process(double delta)
+		private void HandleChildrenDependencies()
+		{
+			if (SMachine is PlayerStateMachine machine)
+			{
+				if (Inventory != null && Interact != null)
+				{
+					Interact.PickedUpItemWithArgument += Inventory.AddItem;
+				}
+				if (equip != null)
+				{
+					equip.WeaponChanged += machine.OnWeaponChanged;
+					equip.OffhandChanged += machine.OnOffhandChanged;
+					equip.Inventory = Inventory;
+					equip.Player = this;
+				}
+				AttunementChanged += machine.OnAttunementChanged;
+
+				if (Stam != null)
+					Stam.StaminaChanged += machine.OnStaminaChanged;
+
+				if (audio !=null)
+					equip.Audio = audio;
+			}
+		}
+
+		private void DisconnectEvents()
+		{
+			if (SMachine is PlayerStateMachine machine)
+			{
+				if (Inventory != null)
+				{
+					Interact.PickedUpItemWithArgument -= Inventory.AddItem;
+				}
+				if (equip != null)
+				{
+					equip.WeaponChanged -= machine.OnWeaponChanged;
+					equip.OffhandChanged -= machine.OnOffhandChanged;
+				}
+				AttunementChanged -= machine.OnAttunementChanged;
+
+				if (Stam != null)
+					Stam.StaminaChanged -= machine.OnStaminaChanged;
+			}
+		}
+
+        public override void _ExitTree()
+        {
+            base._ExitTree();
+			DisconnectEvents();
+        }
+
+        public override void _Process(double delta)
 		{
 			if (Input.IsActionJustPressed(Actions.ChangeAttunement) && _IsAttacking == false && Attack.ReadyToShoot == false)
 			{
@@ -114,170 +160,6 @@ namespace Game
 		{
 			return aim.GetAimPoint();
 		}
-
-		#region Equip/Unequip/Sheathe
-
-		public void OnInventoryChangedWeapon(Weapon weap)
-		{
-			if (_isDodging || _isBlocking || _IsAttacking) return;
-			if (HasWeapon())
-			{
-				if (CurrentWeapon == weap)
-				{
-					SheatheWeapon(CurrentWeapon);
-					return;	
-				}
-
-				if (CurrentWeapon.SubType.Contains("2H"))
-				{
-					SheatheWeapon(CurrentWeapon);
-				}
-			}
-
-			if (HasOffhand())
-			{
-				if (CurrentOffhand == weap)
-				{
-					SheatheWeapon(CurrentOffhand);
-					return;
-				}
-			}
-
-			if (weap.SubType.Contains("2H"))
-			{
-				SheatheWeapon(CurrentOffhand);
-				SheatheWeapon(CurrentWeapon);
-			}
-
-			else if (weap.SubType == WeaponTypes.Melee1H)
-			{
-				SheatheWeapon(CurrentWeapon);
-			}
-
-			else if (weap.SubType == WeaponTypes.Offhand)
-			{
-				SheatheWeapon(CurrentOffhand);
-			}
-
-			DrawWeapon(weap);
-		}
-
-		private void SheatheWeapon(Weapon weap)
-		{
-			if (weap == null) return;
-			if (EquippedItems.ContainsKey(weap))
-			{
-				Node3D CurrentAttach = EquippedItems[weap];
-				CurrentAttach.RemoveChild(weap);
-
-				weap.Wielder = null;
-				
-				if (weap == CurrentWeapon)
-				{
-					CurrentWeapon.NoAttunements();
-					CurrentWeapon = null;
-					WeaponChanged?.Invoke(CurrentWeapon);
-				}
-				else
-				{
-					CurrentOffhand = null;
-					OffhandChanged?.Invoke(CurrentOffhand);
-				}
-
-				EquipWeapon(weap);
-			}
-		}
-
-		private void DrawWeapon(Weapon weap)
-		{
-			if (EquippedItems.ContainsKey(weap))
-			{
-				//Remove from the Equip place
-				Node3D CurrentAttach = EquippedItems[weap];
-				CurrentAttach.RemoveChild(weap);
-
-				//Equip according to Slot types
-				if (weap.Type == Slots.RightHand)
-				{
-					EquippedItems[weap] = (Node3D)RightHand.GetNode(weap.Name);
-					EquippedItems[weap].AddChild(weap);
-				}
-
-				if (weap.Type == Slots.LeftHand)
-				{
-					EquippedItems[weap] = (Node3D)LeftHand.GetNode(weap.Name);
-					EquippedItems[weap].AddChild(weap);
-				}
-
-				weap.Wielder = this;
-				
-				if (weap.SubType == WeaponTypes.Offhand)
-				{
-					CurrentOffhand = weap;
-					OffhandChanged?.Invoke(CurrentOffhand);
-				}
-				else
-				{
-					CurrentWeapon = weap;
-					CurrentWeapon.SetAttunement(CurrentAttunement);
-					WeaponChanged?.Invoke(CurrentWeapon);
-				}
-			}
-		}
-
-		public void OnInventoryEquippedItem(Item item)
-		{
-			if (_isDodging || _isBlocking || _IsAttacking) return;
-			if (item is Weapon) EquipWeapon(item as Weapon);
-		}
-
-		private void EquipWeapon(Weapon weap)
-		{
-			if (weap.Type == Slots.RightHand)
-			{
-				EquippedItems[weap] = (Node3D)RightEquip.GetNode(weap.Name);
-				EquippedItems[weap].AddChild(weap);
-			}
-
-			if (weap.Type == Slots.LeftHand)
-			{
-				EquippedItems[weap] = (Node3D)BackEquip.GetNode(weap.Name);
-				EquippedItems[weap].AddChild(weap);
-			}
-			audio.Play(SoundEffects.EquipItem);
-		}
-
-		public void OnInventoryUnequippedItem(Item item)
-		{
-			if (item is Weapon) UnequipWeapon(item as Weapon);
-		}
-
-		private void UnequipWeapon(Weapon weap)
-		{
-			if (EquippedItems.ContainsKey(weap))
-			{
-				//Remove from the Equip place
-				Node3D CurrentAttach = EquippedItems[weap];
-				CurrentAttach.RemoveChild(weap);
-
-				if (weap == CurrentWeapon)
-				{
-					CurrentWeapon = null;
-
-					WeaponChanged?.Invoke(CurrentWeapon);
-				}
-
-				if (weap == CurrentOffhand)
-				{
-					CurrentOffhand = null;
-
-					OffhandChanged?.Invoke(CurrentOffhand);
-				}
-			}
-			
-		}
-
-		#endregion
 
 		#region Block
 

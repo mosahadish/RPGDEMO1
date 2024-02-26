@@ -48,15 +48,6 @@ namespace Game
 
             await ToSignal(Owner, "ready");
 
-            if (player != null)
-            {
-                EquippedItemWithArgument += player.OnInventoryEquippedItem;
-                UnequippedItemWithArgument += player.OnInventoryUnequippedItem;
-                ChangedWeaponWithArgument += player.OnInventoryChangedWeapon;
-                if (player.Interact != null)
-                    player.Interact.PickedUpItemWithArgument += AddItem;
-            }
-
             Input.MouseMode = Input.MouseModeEnum.Hidden;
             SetProcess(false);
             Hide();
@@ -208,14 +199,6 @@ namespace Game
         {
             base._ExitTree();
             ClearInventory();
-            if (player != null)
-            {
-                EquippedItemWithArgument -= player.OnInventoryEquippedItem;
-                UnequippedItemWithArgument -= player.OnInventoryUnequippedItem;
-                ChangedWeaponWithArgument -= player.OnInventoryChangedWeapon;
-                if (player.Interact != null)
-                    player.Interact.PickedUpItemWithArgument -= AddItem;
-            }
         }
 
         private void ClearInventory()
