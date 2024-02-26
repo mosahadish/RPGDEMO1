@@ -50,7 +50,14 @@ namespace Game
             rng = new();
 
 			if (GetParent() is Map map)
-			    ActorDeathWithArgument += Map.OnAIDeath;
+			{
+                ActorDeathWithArgument += Map.OnAIDeath;
+            }
+
+            if (SMachine != null)
+            {
+                ActorGotParried += SMachine.OnParry;
+            }
 		}
 
         public override void _PhysicsProcess(double delta)
@@ -112,7 +119,7 @@ namespace Game
         Vector3 circleCenter;
         Vector3 displacement;
         Vector3 wanderForce;
-        float circleDistance = 0.1f;
+        float circleDistance = 0.5f;
         float wanderAngle = 45;
         float ANGLE_CHANGE = 25;
 

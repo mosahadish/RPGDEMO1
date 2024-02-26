@@ -37,5 +37,14 @@ namespace Game
             };
             sMachine.HandleAttackInput(msg);
         }
+
+        public void WantsParry(bool pressed)
+        {
+            Dictionary<string, bool> msg = new()
+            {
+                { Actions.Parry, pressed }
+            };
+            sMachine.HandleAttackInput(msg);
+        }
     }
 }

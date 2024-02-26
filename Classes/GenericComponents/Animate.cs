@@ -11,6 +11,8 @@ namespace Game
         [Export] public AnimationTree AnimTree;
         [Export] public AnimationPlayer AnimPlayer;
 
+        public string CurrentOneShot;
+
         private Vector2 currentBlendPos;
 
         public virtual void Transition(string transitionType, string transitionName) {}
@@ -23,7 +25,8 @@ namespace Game
 
         public void OneShot(string name)
         {
-            AbortOneShot(name);
+            AbortOneShot(CurrentOneShot);
+            CurrentOneShot = name;
             AnimTree.Set("parameters/"+name+"/request", (int)AnimationNodeOneShot.OneShotRequest.Fire);
         }
 

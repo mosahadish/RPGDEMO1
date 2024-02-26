@@ -94,6 +94,7 @@ namespace Game
 		{
 			_LockOn = true;
 			Target.LockOn.Show();
+			lockOnComponent.Targetted(Target);
 		}
 
 		private void TargetChanged(Actor newTarget)
@@ -115,10 +116,11 @@ namespace Game
 		public void ReleaseLockOn()
 		{
 			_LockOn = false;
-			Target.LockOn.Hide();
-			Target = null;
-			distToTarget = 500;
-			tempDistance = 500;
+			// Target.LockOn.Hide();
+			// Target = null;
+			// distToTarget = 500;
+			// tempDistance = 500;
+			lockOnComponent.Targetted(null);
 		}
 
 		private void LookAtTarget(double delta)

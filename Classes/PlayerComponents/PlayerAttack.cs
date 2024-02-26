@@ -16,6 +16,7 @@ namespace Game
 			if (Input.IsActionJustReleased(Actions.LightAttack)) WantsLightAttack(false);
 			if (Input.IsActionPressed(Actions.Block)) WantsBlock(true);
 			if (Input.IsActionJustReleased(Actions.Block)) WantsBlock(false);
+			if (Input.IsActionJustPressed(Actions.Parry)) WantsParry(true);
 		}
 
 		public void ReleaseArrow(string attunement)

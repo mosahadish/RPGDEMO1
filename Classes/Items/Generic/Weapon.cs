@@ -35,6 +35,8 @@ namespace Game
 			{
 				hitArea.BodyEntered += OnBodyEnteredHitArea;
 				hitArea.BodyExited += OnBodyExitedHitArea;
+				if (Wielder is AI)
+					hitArea.SetCollisionMaskValue(2, false);
 			}
         }
 
@@ -70,7 +72,7 @@ namespace Game
 					foreach (Actor bodyToDamage in bodiesToDamage)
 					{
 						if (bodyToDamage.HasMethod("OnHit"))
-							bodyToDamage.OnHit(Damage, Wielder.GlobalPosition, Name);
+							bodyToDamage.OnHit(Damage, Wielder, Name);
 					}
 					DamageOn = false;
 				}

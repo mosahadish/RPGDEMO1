@@ -39,7 +39,7 @@ namespace Game
         {
             dirToTarget = AIActor.GlobalPosition.DirectionTo(target.GlobalPosition);
             distToTarget = AIActor.GlobalPosition.DistanceTo(target.GlobalPosition);
-            GD.Print(distToTarget);
+            
             AIActor.LookInDirection(dirToTarget);
 
             if (distToTarget >= AIActor.AttackRange/2)

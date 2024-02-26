@@ -29,6 +29,8 @@ namespace Game
             Movement = Actor.Movement;
             Attack = Actor.Attack;
 
+
+
             foreach (State c in GetChildren().Cast<State>())
             {
                 c.Actor = Actor;
@@ -60,6 +62,7 @@ namespace Game
 
         public void TransitionTo(string TargetStateName, Dictionary<string, Vector2> Msg)
         {
+            lock(this)
             if (HasNode(TargetStateName))
             {
                 state.Exit();
@@ -71,5 +74,7 @@ namespace Game
 
         public abstract void HandleMovementInput(Dictionary<string, Vector2> Msg);
         public abstract void HandleAttackInput(Dictionary<string, bool> Msg);
+
+        
     }
 }

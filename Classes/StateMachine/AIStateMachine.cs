@@ -77,6 +77,7 @@ namespace Game
 			}
             else
             {
+                if (state is AIParriedState) return;
                 if (state is AIStaggerState) return;
                 if (state is AIDodgeState) return;
 
@@ -111,6 +112,7 @@ namespace Game
 
         public void TransitionTo(string TargetStateName)
         {
+            lock(this)
             if (HasNode(TargetStateName))
             {
                 state.Exit();
@@ -167,6 +169,13 @@ namespace Game
         public void OnStagger()
         {
             TransitionTo(nameof(AIStaggerState));
+        }
+
+        public void OnParry()
+        {
+            GD.Print(AIActor.Name +"got parried");
+            TransitionTo(nameof(AIParriedState));
+            
         }
     }   
 }

@@ -37,6 +37,11 @@ namespace Game
             Play(SoundEffects.PickUpItem);
         }
 
+        public void OnParry()
+        {
+            Play(SoundEffects.ParrySuccess);
+        }
+
         private AudioStreamPlayer3D FindInactivePlayer()
         {
             foreach (AudioStreamPlayer3D stream in audioStreamArray)

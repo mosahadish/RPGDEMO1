@@ -14,10 +14,13 @@ namespace Globals
         public const string SwordAttack1 = "SwordAttack1";
         public const string SwordAttack2 = "SwordAttack2";
         public const string SwordAttack3 = "SwordAttack3";
+
         public const string BowDraw = "BowDraw";
+        public const string ParrySuccess = "ParrySuccess";
     }
     public class Animations
     {
+        public const string Parry = "Parry";
         public const string JumpRunning = "RunningJump";
         public const string JumpStand = "StandingJump";
         public const string TransitionMovement = "MovementTransition";
@@ -58,6 +61,7 @@ namespace Globals
 
     public class Actions
     {
+        public const string Parry = "Parry";
         public const string LockOn = "LockOn";
         public const string LockOff = "LockOff";
         public const string NextRightTarget = "NextRightTarget";

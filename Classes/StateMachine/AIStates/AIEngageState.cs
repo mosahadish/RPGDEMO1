@@ -18,6 +18,8 @@ namespace Game
         private RandomNumberGenerator rng = new();
 
         private int[] circleSide = {-1,1};
+        private double circleTimer;
+        private float waitTimer;
         private int randIndex = 1;
 
         public override void Enter(Player target)
@@ -25,10 +27,20 @@ namespace Game
             this.target = target;
             Animation.Transition("Engage");
             Movement.SetSpeed(Movement.WalkSpeed);
+
+            circleTimer = rng.RandfRange(1,3);
+            randIndex = rng.RandiRange(0,1);
         }
 
         public override void PhysicsUpdate(double delta)
         {
+            circleTimer -= delta;
+            if (circleTimer <= 0)
+            {
+                randIndex = rng.RandiRange(0,1);
+                circleTimer = rng.RandfRange(1,3);
+            }
+
             distToTarget = AIActor.GlobalPosition.DistanceTo(target.GlobalPosition);
             dirToTarget = AIActor.GlobalPosition.DirectionTo(target.GlobalPosition);
             AIActor.LookInDirection(dirToTarget);

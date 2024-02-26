@@ -235,5 +235,10 @@ namespace Game
 				targetsInCenter.Remove(body);
 			}
 		}
-	}
+
+        internal void Targetted(Actor t)
+        {
+            TargetChanged?.Invoke(t);
+        }
+    }
 }

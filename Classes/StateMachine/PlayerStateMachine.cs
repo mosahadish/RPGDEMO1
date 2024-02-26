@@ -63,7 +63,13 @@ namespace Game
 		public override void HandleAttackInput(Dictionary<string, bool> Msg)
 		{
 			if (state is PlayerStaggerState) return;
+			if (state is PlayerParryingState) return;
 
+			if (Actor.HasParryingWeapon())
+			{
+				//if (CurrentOffhand is ParryingObject parry) parry.ActivateParryWindow(); 
+				if (Msg.ContainsKey(Actions.Parry)) HandleParry();
+			}
 			if (Actor.HasBlockWeapon())
 			{
 				if (Msg.ContainsKey(Actions.Block)) HandleBlock(Msg[Actions.Block]);
@@ -74,6 +80,16 @@ namespace Game
 				HandleLightAttack(Msg);
 			}
 		
+		}
+
+		public void HandleParry()
+		{
+			if (state is PlayerParryingState) return;
+			if (state is PlayerAttackState) return;
+			if (state is PlayerDodgeState) return;
+			if (state is PlayerAirState) return;	
+
+			TransitionTo(nameof(PlayerParryingState), Msg);
 		}
 
 		private bool bufferAttackInc = false;
@@ -190,6 +206,7 @@ namespace Game
 		{
 			if (state is PlayerStaggerState) return;
 			if (state is PlayerDodgeState) return;
+			if (state is PlayerParryingState) return;
 
 			if (Actor.IsOnFloor() == false)
 			{
@@ -326,7 +343,12 @@ namespace Game
 		{
 			GD.Print(anim);
 
-			if (anim == Animations.Block) player.BlockHold();
+			if (anim.Contains(Animations.Parry))
+			{
+				TransitionTo(nameof(PlayerRunState), Msg);
+			}
+
+			else if (anim == Animations.Block) player.BlockHold();
 			else if (anim.Contains(Animations.BlockedAttack) && player.IsBlocking()) player.BlockHold();
 			else if (anim.Contains(Animations.Stagger)) TransitionTo(nameof(PlayerRunState), Msg);
 

@@ -12,6 +12,9 @@ namespace Game
 		[Signal]
 		public delegate void ActorDeathWithArgumentEventHandler(Actor actor);
 
+		[Signal]
+		public delegate void ActorGotParriedEventHandler();
+
 		[Export] public StateMachine SMachine;
 		[Export] public Stagger staggerComp;
 		[Export] public Movement Movement;
@@ -39,10 +42,14 @@ namespace Game
 
         public override void _Ready()
         {
-            //deathTimer.Timeout += OnDeathTimer;
+            //deathTimer.Timeout += OnDeathTimer
+			if (audio != null)
+			{
+				ActorGotParried += audio.OnParry;
+			}
         }
 
-        public void OnHit(float incDamage, Vector3 hitterGlobalPos, string hittingObject)
+        public void OnHit(float incDamage, Actor hitter, string hittingObject)
 		{
 			if (this is IDodger dodger)
 				if (dodger.IsDodging()) return;
@@ -50,9 +57,18 @@ namespace Game
 			damageToTake = incDamage - defense;
 			if (damageToTake < 0) damageToTake = 0;
 			
+			if (HasOffhand() && CurrentOffhand is ParryingObject parry)
+			{
+				if (parry.IsActive())
+				{
+					hitter.GotParried();
+					return;
+				}
+			}
+
 			if (this is IBlocker blocker)
 			{
-				if (blocker.IsBlocking() && ToLocal(hitterGlobalPos).Z > 0)
+				if (blocker.IsBlocking() && ToLocal(hitter.GlobalPosition).Z > 0)
 			 	{
 					blocker.BlockedAttack(damageToTake);
 					return;
@@ -111,6 +127,12 @@ namespace Game
 			return CurrentWeapon._CanAim;
 		}
 
+		public bool HasParryingWeapon()
+		{
+			if (HasOffhand() == false) return false;
+			return CurrentOffhand is ParryingObject;
+		}
+
 		public void LookInDirection(Vector3 Dir, bool ignoreRotate = false)
         {
 			if (ignoreRotate == false)
@@ -123,5 +145,9 @@ namespace Game
             Rotation = newRotation;
         }
 
+		public void GotParried()
+		{
+			EmitSignal(SignalName.ActorGotParried);
+		}
     }
 }
