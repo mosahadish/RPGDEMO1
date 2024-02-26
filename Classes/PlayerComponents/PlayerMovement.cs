@@ -10,14 +10,12 @@ namespace Game
 	{
 
 		private Vector2 inputDir;
-		[Export] private Player player;
-		[Export] PlayerStateMachine SMachine;
+		[Export] private PlayerStateMachine sMachine;
 		[Export] private float controllerDeadzone = 0.15f;
-		[Export] float LightningMultiplier = 1.1f;
-		[Export] float FireMultiplier = 1.0f;
+		[Export] private float lightningMultiplier = 1.1f;
+		[Export] private float fireMultiplier = 1.0f;
 
 		private bool sprintTimerToggle = false;
-
 		private float sprintTimer = 0.0f;
 		private float attunementMultiplier;
 		private float usedSpeedValue;
@@ -25,13 +23,13 @@ namespace Game
         public override void _Ready()
         {
             base._Ready();
-			player.AttunementChanged += OnAttunementChanged;
+			(Actor as Player).AttunementChanged += OnAttunementChanged;
         }
 
         private void OnAttunementChanged(string msg)
         {
-            if (msg == Attunements.Fire) attunementMultiplier = FireMultiplier;
-			if (msg == Attunements.Lightning) attunementMultiplier = LightningMultiplier;
+            if (msg == Attunements.Fire) attunementMultiplier = fireMultiplier;
+			if (msg == Attunements.Lightning) attunementMultiplier = lightningMultiplier;
 			
 			SetSpeed(usedSpeedValue);
         }
@@ -89,7 +87,7 @@ namespace Game
 		{	
 			if (direction == Vector3.Zero) return;
 	
-			player.LookInDirection(direction);
+			Actor.LookInDirection(direction);
 			HandleMovement(direction, delta);
 		}
 
@@ -100,7 +98,7 @@ namespace Game
             {
                 { "Run", inputDir }
             };
-            SMachine.HandleMovementInput(msg);
+            sMachine.HandleMovementInput(msg);
         }
 
         public void WantsDodge(Vector2 inputDir)
@@ -109,7 +107,7 @@ namespace Game
             {
                 { Actions.Dodge, inputDir }
             };
-            SMachine.HandleMovementInput(msg);
+            sMachine.HandleMovementInput(msg);
         }
 
         public void WantsJump(Vector2 inputDir)
@@ -118,7 +116,7 @@ namespace Game
             {
                 { Actions.Jump, inputDir }
             };
-             SMachine.HandleMovementInput(msg);
+             sMachine.HandleMovementInput(msg);
         }
 
 
@@ -128,7 +126,7 @@ namespace Game
             {
                 { Actions.Sprint, inputDir}
             };
-            SMachine.HandleMovementInput(msg);
+            sMachine.HandleMovementInput(msg);
         }
 
         public void WantsReleaseSprint()
@@ -137,7 +135,7 @@ namespace Game
             {
                 { Actions.SprintRelease, inputDir }
             };
-            SMachine.HandleMovementInput(msg);
+            sMachine.HandleMovementInput(msg);
         }
 	}
 }
