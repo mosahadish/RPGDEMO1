@@ -10,9 +10,9 @@ namespace Game
 	{
 
 		private Vector2 inputDir;
+		[Export] private Player player;
 		[Export] PlayerStateMachine SMachine;
 		[Export] private float controllerDeadzone = 0.15f;
-		[Export] Player player;
 		[Export] float LightningMultiplier = 1.1f;
 		[Export] float FireMultiplier = 1.0f;
 

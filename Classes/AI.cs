@@ -38,6 +38,7 @@ namespace Game
         public override void _Ready()
         {
             base._Ready();
+
             if (CurrentWeapon != null)
 			    CurrentWeapon.Wielder = this;
             if (CurrentOffhand != null)

@@ -16,6 +16,7 @@ namespace Game
         public float WalkSpeed;
         public float CurrentSpeed;
         public bool _Sprinting = false;
+        [Export] public Actor Actor;
 
         [ExportCategory("MovementStats")]
         [Export] public float Speed;
@@ -25,8 +26,6 @@ namespace Game
 
         [Export] public float JumpVelocity = 4.5f;
 
-        [ExportCategory("Dependencies")]
-        [Export] private Actor actor;
         private Vector3 newVelocity;
 
         private float lerpWeight = 0f;
@@ -47,16 +46,16 @@ namespace Game
         {
             //direction = direction.Normalized();
             
-            newVelocity = actor.Velocity;
+            newVelocity = Actor.Velocity;
             newVelocity.X = direction.X * (CurrentSpeed * (float)delta);
             newVelocity.Z = direction.Z * (CurrentSpeed * (float)delta);
 
             // lerpWeight += (float)delta;
             // if (lerpWeight >= 0.25f) lerpWeight = 0.25f;
 
-            actor.Velocity = actor.Velocity.Slerp(newVelocity, 0.15f); // For some reason 0.2f and above causes exceptions
+            Actor.Velocity = Actor.Velocity.Slerp(newVelocity, 0.15f); // For some reason 0.2f and above causes exceptions
             
-            actor.MoveAndSlide();
+            Actor.MoveAndSlide();
         }
 
         private void SetSpeedValues()

@@ -11,13 +11,14 @@ namespace Game
 	public partial class PlayerStateMachine : StateMachine
 	{
 		[ExportCategory("Dependencies")]
-		[Export] PlayerAnimation Animation;
-		[Export] Stamina Stam;
-		[Export] InputBuffer Buffer;
+		[Export] private Player player;
+		[Export] private PlayerAnimation Animation;
+		[Export] private Stamina Stam;
+		[Export] private InputBuffer Buffer;
 		[Export] new PlayerMovement Movement;
 		private string CurrentAttunement;
 		private string CurrentWeaponName;
-		private Player player;
+		
 		private string bufferNextAction;
 		private Vector2 vectorForState = Vector2.Zero;
 		private string nextAction;

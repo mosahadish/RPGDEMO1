@@ -39,7 +39,7 @@ namespace Game
 		[Export] public AreaInteract Interact;
 
 		[ExportCategory("Help")]
-		[Export] public Marker3D PositiveZ;
+		//[Export] public Marker3D PositiveZ;
 		[Export] private Aim aim;
 
 		#endregion
@@ -49,6 +49,7 @@ namespace Game
 		private Dictionary<Item, Node3D> EquippedItems = new();
 		private int AttunementIterator = 0;
 		private string[] arrAttunement = {Attunements.Fire, Attunements.Lightning};
+		private Vector3 frontDirection;
 
 		private bool _isBlocking = false;
 		bool IBlocker.Blocking
@@ -77,7 +78,13 @@ namespace Game
 		{
 			base._Ready();
 			_isBlocking = false;
-			AttunementChanged.Invoke(CurrentAttunement);
+			AttunementChanged?.Invoke(CurrentAttunement);
+
+
+			// Set front direction, makes it easier to face ahead when required
+			frontDirection.X = Position.X;
+			frontDirection.Y = Position.Y;
+			frontDirection.Z = Position.Z + 1;
 		}
 
 		public override void _Process(double delta)
@@ -96,6 +103,11 @@ namespace Game
 				AttunementChanged?.Invoke(CurrentAttunement);
 			}
 			
+		}
+
+		public Vector3 GetGlobalFrontDir()
+		{
+			return ToGlobal(frontDirection);
 		}
 
 		public Vector3 GetAimPoint()

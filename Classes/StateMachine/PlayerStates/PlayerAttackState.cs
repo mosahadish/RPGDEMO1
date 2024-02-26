@@ -78,9 +78,8 @@ namespace Game
 
         private void CalculateDirToFace()
         {
-            if (camera.Target != null) Direction = Actor.GlobalPosition.DirectionTo(camera.Target.GlobalPosition);
-                // global_transform.basis.z instaed of PositiveZ marker? NOT WORKING
-            else if (InputDir == Vector2.Zero) Direction = (player.PositiveZ.GlobalPosition - Actor.GlobalPosition).Normalized();
+            if (camera.Target != null) Direction = player.GlobalPosition.DirectionTo(camera.Target.GlobalPosition);
+            else if (InputDir == Vector2.Zero) Direction = (player.GetGlobalFrontDir() - player.GlobalPosition).Normalized();
             else 
             {
                 Direction = new Vector3(InputDir.X, 0, InputDir.Y).Rotated(Vector3.Up, camera.Rotation.Y).Normalized();
