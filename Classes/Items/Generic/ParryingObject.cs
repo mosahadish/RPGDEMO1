@@ -21,10 +21,7 @@ namespace Game
         
             if (parryWindow <= 0)
             {
-                parryActive = false;
-
-                SetPhysicsProcess(false);
-                parryWindow = DefaultParryWindowInSec;
+                DeactivateParryWindow();
             }
         }
 
@@ -38,8 +35,6 @@ namespace Game
 
         public void DeactivateParryWindow()
         {
-            if (parryActive == false) return;
-
             SetPhysicsProcess(false);
             parryActive = false;
             parryWindow = DefaultParryWindowInSec;
