@@ -50,11 +50,13 @@ namespace Game
             newVelocity.X = direction.X * (CurrentSpeed * (float)delta);
             newVelocity.Z = direction.Z * (CurrentSpeed * (float)delta);
 
-            // lerpWeight += (float)delta;
-            // if (lerpWeight >= 0.25f) lerpWeight = 0.25f;
+            lerpWeight += (float)delta;
+            if (lerpWeight >= 1f) lerpWeight = 1f;
 
-            Actor.Velocity = Actor.Velocity.Slerp(newVelocity, 0.15f); // For some reason 0.2f and above causes problems
-            
+            //Actor.Velocity = Actor.Velocity.Slerp(newVelocity, lerpWeight); // For some reason 0.15f and above causes problems
+            Actor.Velocity = Actor.Velocity.Lerp(newVelocity, 0.2f);
+            //Actor.Velocity = newVelocity;
+
             Actor.MoveAndSlide();
         }
 

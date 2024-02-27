@@ -88,7 +88,8 @@ namespace Game
 			if (state is PlayerAttackState) return;
 			if (state is PlayerDodgeState) return;
 			if (state is PlayerAirState) return;	
-
+			if (Stam.HasEnough((player.CurrentOffhand as ParryingObject).StaminaConsumption) == false) return;
+			
 			TransitionTo(nameof(PlayerParryingState), Msg);
 		}
 
@@ -182,8 +183,6 @@ namespace Game
 
 		private void Block()
 		{
-			//Animation.Transition("Shield", Animations.Block);
-			//Animation.Block();
 			if (player.IsBlocking()) return;
 			if (player.IsAttacking()) return;
 			CancelSprint();
@@ -326,6 +325,7 @@ namespace Game
 				if (Actor.CurrentWeapon is Bow bow)
 				{
 					bow.Release();
+					Animation.AbortOneShot("Bow");
 				}
 			}
 		}

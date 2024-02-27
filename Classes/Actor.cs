@@ -66,6 +66,7 @@ namespace Game
 			{
 				if (parry.IsActive())
 				{
+					parry.DeactivateParryWindow();
 					hitter.GotParried();
 					return;
 				}

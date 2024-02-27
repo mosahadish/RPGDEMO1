@@ -7,6 +7,7 @@ namespace Game
     {
         //public event NotifyValueChange ParryWindowOver;
         [Export] public double DefaultParryWindowInSec;
+        [Export] public float StaminaConsumption;
         protected double parryWindow;
         protected bool parryActive;
         public bool IsActive()
@@ -33,6 +34,15 @@ namespace Game
 
             SetPhysicsProcess(true);
             parryActive = true;
+        }
+
+        public void DeactivateParryWindow()
+        {
+            if (parryActive == false) return;
+
+            SetPhysicsProcess(false);
+            parryActive = false;
+            parryWindow = DefaultParryWindowInSec;
         }
     }
 }

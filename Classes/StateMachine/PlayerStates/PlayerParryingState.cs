@@ -24,6 +24,7 @@ namespace Game
             currentTransition = (string)Animation.AnimTree.Get("parameters/"+ offhandType +"/current_state");
             Animation.Transition(offhandType, "Parry");
 
+            Stam.DecreaseStamina((player.CurrentOffhand as ParryingObject).StaminaConsumption);
             (player.CurrentOffhand as ParryingObject).ActivateParryWindow();
 
             player.Velocity = Vector3.Zero;

@@ -15,6 +15,7 @@ namespace Game
             AIActor._CanRotate = false;
             AIActor.Velocity = Vector3.Zero;
             Animation.Transition("Stagger");
+            AIActor.WeaponDamageOff();
         }
 
         public override void PhysicsUpdate(double delta)

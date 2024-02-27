@@ -53,6 +53,7 @@ namespace Game
             if (SMachine != null)
             {
                 ActorGotParried += SMachine.OnParry;
+                ActorGotStaggered += SMachine.OnStagger;
             }
 		}
 
@@ -75,7 +76,7 @@ namespace Game
 
         public string DecideOnNextAction(float distToTarget)
         {
-            if (_IsAttacking) return null;
+            if (_IsAttacking || IsDodging()) return null;
             if (canDecide == false) return null;
 
             //Reset to default

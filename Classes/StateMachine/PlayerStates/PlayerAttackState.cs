@@ -8,7 +8,7 @@ namespace Game
     public partial class PlayerAttackState : State
     {
         private Vector2 inputDir;
-        private Vector3 Direction;
+        private Vector3 Direction = Vector3.Zero;
         private int chain = 1;
 
         private Player player;
@@ -82,7 +82,11 @@ namespace Game
             else if (InputDir == Vector2.Zero) Direction = (player.GetGlobalFrontDir() - player.GlobalPosition).Normalized();
             else 
             {
-                Direction = new Vector3(InputDir.X, 0, InputDir.Y).Rotated(Vector3.Up, camera.Rotation.Y).Normalized();
+                //Direction = new Vector3(InputDir.X, 0, InputDir.Y);
+                Direction.X = InputDir.X;
+                Direction.Y = 0;
+                Direction.Z = InputDir.Y;
+                Direction = Direction.Rotated(Vector3.Up, camera.Rotation.Y).Normalized();
                 InputDir = Vector2.Zero;
             } 
         }
