@@ -72,8 +72,16 @@ namespace Game
             //Velocity = Velocity.Slerp(Velocity + DisplacementTest(), 0.1f);
         }
 
+        public override void GotParried()
+        {
+            base.GotParried();
+            timer = 0;
+            canDecide = false;
+        }
+
         public string DecideOnNextAction(float distToTarget)
         {
+            if (_IsAttacking) return null;
             if (canDecide == false) return null;
 
             //Reset to default

@@ -10,29 +10,39 @@ namespace Game
         
         public void Attack1()
         {
-            (Animation as AnimateAI).Transition(Animations.Attack1);
+            (Animation as AnimateAI).Transition("Attack");
+            (Animation as AnimateAI).NodeTransition("Attack1");
 			_IsAttacking = true;
             audio.Play(SoundEffects.SwordAttack1);
+            // Animation.AnimTree.Set("parameters/Attack/conditions/Attack1", false);
         }
 
         public void Attack2()
         {
-            (Animation as AnimateAI).Transition(Animations.Attack2);
+            (Animation as AnimateAI).Transition("Attack");
+            (Animation as AnimateAI).NodeTransition("Attack2");
 			_IsAttacking = true;
             audio.Play(SoundEffects.SwordAttack2);
+            // Animation.AnimTree.Set("parameters/Attack/conditions/Attack2", false);
         }
 
         public void Attack3()
         {
-            (Animation as AnimateAI).Transition(Animations.Attack3);
+            (Animation as AnimateAI).Transition("Attack");
+            (Animation as AnimateAI).NodeTransition("Attack3");
 			_IsAttacking = true;
             audio.Play(SoundEffects.SwordAttack3);
+            // Animation.AnimTree.Set("parameters/Attack/conditions/Attack3", false);
         }
 
         public void ComboAttack()
         {
-            (Animation as AnimateAI).Transition(Animations.ComboAttack);
+            (Animation as AnimateAI).Transition("Attack");
+            (Animation as AnimateAI).NodeTransition("ComboAttack");
+            //Animation.AnimTree.Set("parameters/Attack/conditions/ComboAttack", true);
 			_IsAttacking = true;
+
+            // Animation.AnimTree.Set("parameters/Attack/conditions/ComboAttack", false);
         }
 
         public void FinishAttacking()

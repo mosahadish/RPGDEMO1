@@ -33,6 +33,7 @@ namespace Game
 
         public override void Exit()
         {
+            Animation.Transition("Movement");
             AIActor._CanRotate = true;
         }
     }

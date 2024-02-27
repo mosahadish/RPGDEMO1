@@ -80,6 +80,7 @@ namespace Game
                 if (state is AIParriedState) return;
                 if (state is AIStaggerState) return;
                 if (state is AIDodgeState) return;
+                if (state is AIAttackState) return;
 
 
                 if (target != null) distToTarget = AIActor.GlobalPosition.DistanceTo(target.GlobalPosition);
@@ -89,7 +90,11 @@ namespace Game
                 if (chaseOutOfRange == false)
                     if (distToTarget > AIActor.LoseAggroRange && target != null) target = null;
 
-                if(target == null && state is AIRoamState == false) TransitionTo(nameof(AIRoamState));
+                if(target == null && state is AIRoamState == false) 
+                {
+                    TransitionTo(nameof(AIRoamState));
+                    chaseOutOfRange = true;
+                }
 
 
                 if (target != null && distToTarget <= AIActor.CircleRange) 
@@ -102,7 +107,6 @@ namespace Game
                         TransitionTo(AIActor.DecideOnNextAction(distToTarget));
                     }
                 }
-                //if (target != null && distToTarget <= 4) TransitionTo("AIAttackState");
                 else if (target != null && distToTarget > AIActor.CircleRange +1) 
                 {
                     if (state is AIChaseState == false && state is AIAttackState == false) TransitionTo(nameof(AIChaseState));
@@ -125,6 +129,7 @@ namespace Game
 
         private void OnAnimationFinished(string anim)
         {
+            GD.Print(anim);
             TransitionTo(nameof(AIEngageState));
         }
 

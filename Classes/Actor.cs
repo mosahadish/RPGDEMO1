@@ -40,6 +40,8 @@ namespace Game
 
 		private Timer deathTimer = new();
 
+		private bool dead;
+
         public override void _Ready()
         {
             //deathTimer.Timeout += OnDeathTimer
@@ -51,6 +53,8 @@ namespace Game
 
         public void OnHit(float incDamage, Actor hitter, string hittingObject)
 		{
+			if (dead) return;
+
 			if (this is IDodger dodger)
 				if (dodger.IsDodging()) return;
 
@@ -88,13 +92,18 @@ namespace Game
 
 		public async virtual void OnDeath()
 		{
+			dead = true;
 			SetPhysicsProcess(false);
 			SetProcess(false);
+			
 			if (this is AI ai)
 			{
 				ai.SMachine.SetPhysicsProcess(false);
 				ai.SMachine.TransitionTo(nameof(AIDeathState));
 			}
+			
+			audio?.Play("Death");
+
 			await ToSignal(GetTree().CreateTimer(7), SceneTreeTimer.SignalName.Timeout);
 			EmitSignal(SignalName.ActorDeathWithArgument, this);
 		}
@@ -150,7 +159,7 @@ namespace Game
             Rotation = newRotation;
         }
 
-		public void GotParried()
+		public virtual void GotParried()
 		{
 			EmitSignal(SignalName.ActorGotParried);
 		}

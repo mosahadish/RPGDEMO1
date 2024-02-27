@@ -21,11 +21,17 @@ namespace Game
         private double circleTimer;
         private float waitTimer;
         private int randIndex = 1;
+        private AnimationNodeStateMachinePlayback movementAnim;
 
         public override void Enter(Player target)
         {
+            movementAnim ??= (AnimationNodeStateMachinePlayback)Animation.AnimTree.Get("parameters/Movement/playback");
+            Animation.Transition("Movement");
+            //Animation.AnimTree.Set("parameters/Movement/conditions/Engage", true);
+            Animation.NodeTransition("Engage");
+
             this.target = target;
-            Animation.Transition("Engage");
+            
             Movement.SetSpeed(Movement.WalkSpeed);
 
             circleTimer = rng.RandfRange(1,3);
@@ -73,6 +79,7 @@ namespace Game
 
         public override void Exit()
         {
+            //Animation.AnimTree.Set("parameters/Movement/conditions/Engage", false);
             Movement.SetSpeed(Movement.Speed);
             target = null;
         }
@@ -84,7 +91,9 @@ namespace Game
             circleDir = dirToTarget.Rotated(Vector3.Up * circleSide[randIndex], Mathf.Pi/2);
             blendPos.X = circleSide[randIndex];
             blendPos.Y = 0;
-            Animation.BlendPosition("Engage", -1*blendPos);
+            // Animation.BlendPosition("Engage", -1*blendPos);
+            //Animation.AnimTree.Set("parameters/Movement/Engage/blend_position", -1*blendPos);
+            Animation.BlendPosition("", -1*blendPos);
             Movement.HandleMovement(circleDir, delta);
         }
     }

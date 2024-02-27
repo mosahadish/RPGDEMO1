@@ -11,9 +11,13 @@ namespace Game
         private float distToTarget;
         private RandomNumberGenerator rng = new();
         private float randI = 0;
+        private AnimationNodeStateMachinePlayback attackAnim;
+        private string currentAnim;
 
         public override void Enter(Player target)
         {
+            attackAnim = (AnimationNodeStateMachinePlayback)Animation.AnimTree.Get("parameters/Attack/playback");
+            //attackAnim.
             this.target = target;
             randI = rng.RandiRange(0,10);
 
@@ -32,7 +36,6 @@ namespace Game
                 else if (randI >= 9) melee.ComboAttack();
                 else melee.Attack2();
             }
-            
         }
       
         public override void PhysicsUpdate(double delta)
@@ -53,6 +56,9 @@ namespace Game
           public override void Exit()
         {
             (AIActor as IAttacker).FinishAttacking();
+
+            //Animation.Transition("Movement");
+            //Animation.NodeTransition("Engage");
             target = null;
         }
     }

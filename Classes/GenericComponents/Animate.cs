@@ -17,7 +17,7 @@ namespace Game
 
         public virtual void Transition(string transitionType, string transitionName) {}
 
-        public void BlendPosition(string blendType, Vector2 blendValue)
+        public virtual void BlendPosition(string blendType, Vector2 blendValue)
         {
             currentBlendPos = (Vector2)AnimTree.Get("parameters/" + blendType + "/blend_position");
             AnimTree.Set("parameters/" + blendType + "/blend_position", currentBlendPos.Slerp(blendValue, 0.05f));

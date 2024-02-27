@@ -8,6 +8,7 @@ namespace Game
     [GlobalClass]
     public partial class AIRoamState : AIState
     {
+        AnimationNodeStateMachinePlayback movementAnim;
 
         private Vector3 newVelo;
         private double waitTime;
@@ -17,13 +18,19 @@ namespace Game
         private RandomNumberGenerator rng = new();
         public override void Enter(Player target)
         {
-            Animation.Transition("Roam");
+            movementAnim ??= (AnimationNodeStateMachinePlayback)Animation.AnimTree.Get("parameters/Movement/playback");
+            
+            Animation.Transition("Movement");
+            //Animation.AnimTree.Set("parameters/Movement/conditions/Roam", true);
+            Animation.NodeTransition("Roam");
+            
             SetWanderTime();
             Movement.SetSpeed(Movement.WalkSpeed);
         }
 
         public override void Exit()
         {
+            //Animation.AnimTree.Set("parameters/Movement/conditions/Roam", false);
         }
 
         public override void PhysicsUpdate(double delta)
@@ -63,7 +70,7 @@ namespace Game
 
         private void WanderInDirection(Vector3 direction, double delta)
         {
-            Animation.BlendPosition("Roam", Vector2.Down);
+            Animation.BlendPosition("", Vector2.Down);
             direction += AIActor.DisplacementTest();
             direction = direction.Normalized();
             Movement.HandleMovement(direction, delta);
@@ -83,7 +90,7 @@ namespace Game
         private void Wait(double delta)
         {
             AIActor.Velocity = Vector3.Zero;
-            Animation.BlendPosition("Roam", Vector2.Zero);
+            Animation.BlendPosition("", Vector2.Zero);
             waitTime -= delta;
             AIActor.MoveAndSlide();
         }

@@ -9,16 +9,25 @@ namespace Game
     {
 
         private Vector3 direction = Vector3.Zero;
+        private AnimationNodeStateMachinePlayback movementAnim;
 
         public override void Enter(Player target)
         {
+            movementAnim ??= (AnimationNodeStateMachinePlayback)Animation.AnimTree.Get("parameters/Movement/playback");
+            
+            Animation.Transition("Movement");
+            //Animation.AnimTree.Set("parameters/Movement/conditions/Chase", true);
+            Animation.NodeTransition("Chase");
+
+
             this.target = target;
-            Animation.Transition("Chase");
+           
             Movement.SetSpeed(Movement.Speed);
         }
 
         public override void Exit()
         {
+            //Animation.AnimTree.Set("parameters/Movement/conditions/Chase", false);
             target = null;
         }
 
@@ -38,7 +47,7 @@ namespace Game
             direction = AIActor.GlobalPosition.DirectionTo(target.GlobalPosition);
             direction += AIActor.DisplacementTest();
             
-            Animation.BlendPosition("Chase", Vector2.Down); 
+            Animation.AnimTree.Set("parameters/Movement/Chase/blend_position", Vector2.Down);
             AIActor.LookInDirection(direction);
 
             Movement.HandleMovement(direction, delta);
