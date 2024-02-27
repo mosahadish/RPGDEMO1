@@ -30,20 +30,7 @@ namespace Game
             
             await ToSignal(Owner, "ready");
 
-            if (Owner is Player player)
-            {
-                if (player.SMachine != null)
-                {
-                    Staggered += (player.SMachine as PlayerStateMachine).OnStagger;
-                }
-            }
-            else if (Owner is AI ai)
-            {
-                if (ai.SMachine != null)
-                {
-                    Staggered += ai.SMachine.OnStagger;
-                }
-            }
+            if (Owner is Actor actor) Staggered += actor.GotStaggered;
             
         }
 

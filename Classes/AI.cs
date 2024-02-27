@@ -49,10 +49,6 @@ namespace Game
 
             rng = new();
 
-			if (GetParent() is Map map)
-			{
-                ActorDeathWithArgument += Map.OnAIDeath;
-            }
 
             if (SMachine != null)
             {
@@ -68,8 +64,6 @@ namespace Game
                 canDecide = true;
                 timer = 0;
             }
-
-            //Velocity = Velocity.Slerp(Velocity + DisplacementTest(), 0.1f);
         }
 
         public override void GotParried()

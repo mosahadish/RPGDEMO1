@@ -14,6 +14,8 @@ namespace Game
 
 		[Signal]
 		public delegate void ActorGotParriedEventHandler();
+		[Signal]
+		public delegate void ActorGotStaggeredEventHandler();
 
 		[Export] public StateMachine SMachine;
 		[Export] public Stagger staggerComp;
@@ -44,11 +46,10 @@ namespace Game
 
         public override void _Ready()
         {
-            //deathTimer.Timeout += OnDeathTimer
-			if (audio != null)
+			if (GetParent() is Map map)
 			{
-				ActorGotParried += audio.OnParry;
-			}
+                ActorDeathWithArgument += Map.OnAIDeath;
+            }
         }
 
         public void OnHit(float incDamage, Actor hitter, string hittingObject)
@@ -161,7 +162,14 @@ namespace Game
 
 		public virtual void GotParried()
 		{
+			audio.Play("ParrySuccess");
 			EmitSignal(SignalName.ActorGotParried);
+		}
+
+		public virtual void GotStaggered()
+		{
+			audio.Play("Staggered");
+			EmitSignal(SignalName.ActorGotStaggered);
 		}
     }
 }

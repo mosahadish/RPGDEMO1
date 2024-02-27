@@ -334,11 +334,16 @@ namespace Game
 		
 		#region Signal/Event response
 		
+
 		public void OnStagger()
         {
             TransitionTo(nameof(PlayerStaggerState), null);
         }
 
+		public void OnParry()
+		{
+			
+		}
 		/*
 		This heavily relies on animations finishing
 		Probably better to use timers inside the states and send a signal when state is done

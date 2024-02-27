@@ -39,12 +39,12 @@ namespace Game
                 c.Attack = Attack;
                 c.Stam = Actor.Stam;
 
-                if (Actor is Player && (c is PlayerRunState))
-                    (c as PlayerRunState).SetCamera((Actor as Player).Camera);
-                if (Actor is Player && (c is PlayerDodgeState))
-                    (c as PlayerDodgeState).SetCamera((Actor as Player).Camera);
-                if (Actor is Player && (c is PlayerAttackState))
-                    (c as PlayerAttackState).SetCamera((Actor as Player).Camera);
+                // if (Actor is Player && (c is PlayerRunState))
+                //     (c as PlayerRunState).SetCamera((Actor as Player).Camera);
+                // if (Actor is Player && (c is PlayerDodgeState))
+                //     (c as PlayerDodgeState).SetCamera((Actor as Player).Camera);
+                // if (Actor is Player && (c is PlayerAttackState))
+                //     (c as PlayerAttackState).SetCamera((Actor as Player).Camera);
             }
 
             state.Enter(Msg);
