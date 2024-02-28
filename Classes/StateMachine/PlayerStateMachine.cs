@@ -219,7 +219,6 @@ namespace Game
 			Sprint(Msg);
 			Jump(Msg);
 			Dodge(Msg);
-			
 		}
 
 		private void Move(Dictionary<string, Vector2> Msg)
@@ -245,13 +244,16 @@ namespace Game
 				if (Msg[Actions.Sprint] == Vector2.Zero) return;
 
 				if (state.Anim == Animations.Sprint) return;
-				TransitionTo(nameof(PlayerRunState), Msg);
+				//TransitionTo(nameof(PlayerRunState), Msg);
+				player.Sprint();
 			}
 
 			if (Msg.ContainsKey(Actions.SprintRelease) && player.IsBlocking() == false)
 			{
 				//state.SetAnim(Animations.TransitionMovement, Animations.SprintRelease);
-				TransitionTo(nameof(PlayerRunState), Msg);
+				//TransitionTo(nameof(PlayerRunState), Msg);
+				GD.Print("HHHH");
+				player.ReleaseSprint();
 			}
 		}
 		private void Jump(Dictionary<string, Vector2> Msg)

@@ -26,6 +26,7 @@ namespace Globals
         public const string TransitionMovement = "MovementTransition";
         public const string TransitionOffhand = "OffHandTransition";
         public const string Movement = "Movement";
+        public const string Run = "Run";
         public const string Walk = "Walk";
         public const string Dodge = "Dodge";
         public const string Sprint = "Sprint";

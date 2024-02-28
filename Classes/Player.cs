@@ -169,6 +169,24 @@ namespace Game
 			return aim.GetAimPoint();
 		}
 
+		public void Sprint()
+		{
+			(Animation as PlayerAnimation).MovementTransition("Sprint");
+			Movement._Sprinting = true;
+			Movement.SetSpeed(Movement.SprintSpeed);
+			Stam.Regen = false;
+			Stam.Degen = true;
+		}
+
+		public void ReleaseSprint()
+		{
+			(Animation as PlayerAnimation).MovementTransition("Run");
+			Movement._Sprinting = false;
+			Movement.SetSpeed(Movement.Speed);
+			Stam.Regen = true;
+			Stam.Degen = false;
+		}
+
 		#region Block
 
 		public void Block()
@@ -294,9 +312,11 @@ namespace Game
 			Movement._Sprinting = false;
 			Stam.Degen = false;
 
-			Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.SprintLightAttack);
-			//Animation.Transition(CurrentWeapon.Name + Animations.Movement, CurrentWeapon.Name+Animations.SprintLightAttack);
-			Animation.OneShot(CurrentWeapon.Name);
+			(Animation as PlayerAnimation).MainAttackTransition(Animations.SprintLightAttack);
+			(Animation as PlayerAnimation).RequestOneShot("MainAttack");
+			// Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.SprintLightAttack);
+			// //Animation.Transition(CurrentWeapon.Name + Animations.Movement, CurrentWeapon.Name+Animations.SprintLightAttack);
+			// Animation.OneShot(CurrentWeapon.Name);
         }
 
 		public void SprintHeavyAttack()

@@ -28,13 +28,14 @@ namespace Game
 		{
 			animation??= Animation as PlayerAnimation;
 
-			if (HandleSprint(Msg) == false)
-			{
-				SetAnim(Animations.TransitionMovement, Animations.Movement);
-				Movement.SetSpeed(Movement.Speed);
-			}
+			// if (HandleSprint(Msg) == false)
+			// {
+			// 	SetAnim(Animations.TransitionMovement, Animations.Movement);
+			// 	Movement.SetSpeed(Movement.Speed);
+			// }
 			
-
+			Movement.SetSpeed(Movement.Speed);
+			
 			if (Msg.ContainsKey("input_dir")) InputDir = Msg["input_dir"];
 
 			//Animation.Transition(AnimTransition, Anim);
@@ -103,6 +104,7 @@ namespace Game
 			if (Msg.ContainsKey(Actions.Sprint)) 
 			{
 				SetAnim(Animations.TransitionMovement, Animations.Sprint);
+				(Animation as PlayerAnimation).MovementTransition("Sprint");
 				Movement._Sprinting = true;
 				Movement.SetSpeed(Movement.SprintSpeed);
 				Stam.Regen = false;
@@ -113,6 +115,7 @@ namespace Game
 			if (Msg.ContainsKey(Actions.SprintRelease)) 
 			{
 				SetAnim(Animations.TransitionMovement, Animations.Movement);
+				(Animation as PlayerAnimation).MovementTransition("Run");
 				Movement._Sprinting = false;
 				Movement.SetSpeed(Movement.Speed);
 				Stam.Regen = true;
