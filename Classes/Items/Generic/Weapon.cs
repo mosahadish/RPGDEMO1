@@ -16,11 +16,14 @@ namespace Game
 		[Export] public float LightAttackStamConsumption;
 		[Export] public float HeavyAttackStamConsumption;
 
-		[Export] public bool _CanBlock = false; 
-		[Export] public bool _CanAim = false;
+		
 
 		[ExportCategory("Gameplay")]
 		[Export] private Area3D hitArea;
+		[Export] public bool _CanBlock = false; 
+		[Export] public bool _CanAim = false;
+
+		[ExportCategory("Effects")]
 		[Export] private Node3D Fire;
 		[Export] private Node3D Lightning;
 		

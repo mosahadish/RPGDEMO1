@@ -15,6 +15,8 @@ namespace Game
 
 		private Vector2 newInputDir; //Only for Blend position, need to do X*-1
 
+		private PlayerAnimation animation;
+
         public override void _Ready()
         {
             base._Ready();
@@ -24,7 +26,8 @@ namespace Game
 
         public override void Enter(Dictionary<string, Vector2> Msg)
 		{
-		
+			animation??= Animation as PlayerAnimation;
+
 			if (HandleSprint(Msg) == false)
 			{
 				SetAnim(Animations.TransitionMovement, Animations.Movement);
@@ -34,7 +37,7 @@ namespace Game
 
 			if (Msg.ContainsKey("input_dir")) InputDir = Msg["input_dir"];
 
-			Animation.Transition(AnimTransition, Anim);
+			//Animation.Transition(AnimTransition, Anim);
 		}
 
 
@@ -61,7 +64,8 @@ namespace Game
 						InputDir.Y = 0.5f; 
 					else if (InputDir.Y >= 0.6f && InputDir.Y < 0.85)
 						InputDir.Y = 0.85f; 
-					Animation.BlendPosition(Anim, InputDir);
+					//Animation.BlendPosition(Anim, InputDir);
+					animation.BlendMovement(InputDir);
 				}
 		}
 

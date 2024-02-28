@@ -31,7 +31,9 @@ namespace Game
                 Actor.Velocity = newVelo;
             
                 SetAnim(Animations.TransitionMovement, Anim);
-                Animation.Transition(AnimTransition, Anim);
+                //Animation.Transition(AnimTransition, Anim);
+                (Animation as PlayerAnimation).JumpType(Anim);
+                (Animation as PlayerAnimation).RequestOneShot("Jump");
             }
 
             Actor._CanRotate = false;

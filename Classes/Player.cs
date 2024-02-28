@@ -243,8 +243,10 @@ namespace Game
         public void Attack1()
         {
             _IsAttacking = true;
-			Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.Attack1);
-			Animation.OneShot(CurrentWeapon.Name);
+			// Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.Attack1);
+			// Animation.OneShot(CurrentWeapon.Name);
+			(Animation as PlayerAnimation).MainAttackTransition("Attack1");
+			(Animation as PlayerAnimation).RequestOneShot("MainAttack");
 
 			audio.Play(CurrentAttunement + CurrentWeapon.Name + Animations.Attack1);
 
@@ -255,8 +257,10 @@ namespace Game
         public void Attack2()
         {
             _IsAttacking = true;
-			Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.Attack2);
-			Animation.OneShot(CurrentWeapon.Name);
+			// Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.Attack2);
+			// Animation.OneShot(CurrentWeapon.Name);
+			(Animation as PlayerAnimation).MainAttackTransition("Attack2");
+			(Animation as PlayerAnimation).RequestOneShot("MainAttack");
 
 			audio.Play(CurrentAttunement + CurrentWeapon.Name + Animations.Attack2);
 
@@ -267,8 +271,10 @@ namespace Game
         public void Attack3()
         {
             _IsAttacking = true;
-			Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.Attack3);
-			Animation.OneShot(CurrentWeapon.Name);
+			// Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.Attack3);
+			// Animation.OneShot(CurrentWeapon.Name);
+			(Animation as PlayerAnimation).MainAttackTransition("Attack3");
+			(Animation as PlayerAnimation).RequestOneShot("MainAttack");
 
 			audio.Play(CurrentAttunement + CurrentWeapon.Name + Animations.Attack3);
 

@@ -79,7 +79,6 @@ namespace Game
 				if (player.IsBlocking() && player.CanCounter() == false) return;
 				HandleLightAttack(Msg);
 			}
-		
 		}
 
 		public void HandleParry()
@@ -395,6 +394,7 @@ namespace Game
 		public void OnAttunementChanged(string attun)
 		{
 			CurrentAttunement = attun;
+			(Animation as PlayerAnimation).UpdateAttunement(attun);
 			GD.Print(CurrentAttunement);
 			if (Actor.HasWeapon()) Animation.Transition(Actor.CurrentWeapon.GetType().Name+"AttunementTransition", attun);	
 
@@ -420,14 +420,16 @@ namespace Game
 			// if (weapon.Name == "Sword") Animation.Transition("TypeTransition", WeaponTypes.Melee1H);
 			if (weapon == null)
 			{
-				Animation.Transition("TypeTransition", "KARATE");
+				//Animation.Transition("TypeTransition", "KARATE");
+				(Animation as PlayerAnimation).WeaponTransition("Unarmed");
 				CurrentWeaponName = "";
 			} 
 			else 
 			{
 				CurrentWeaponName = weapon.Name;
-				Animation.Transition("TypeTransition", weapon.SubType);
-				Animation.Transition(CurrentWeaponName+"AttunementTransition", CurrentAttunement);
+				//Animation.Transition("TypeTransition", weapon.SubType);
+				(Animation as PlayerAnimation).WeaponTransition(CurrentWeaponName);
+				//Animation.Transition(CurrentWeaponName+"AttunementTransition", CurrentAttunement);
 			}
 		
 			Attack.CurrentWeapon = weapon;
