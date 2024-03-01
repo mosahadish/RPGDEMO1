@@ -14,6 +14,7 @@ namespace Game
 		[Export] private Label interact;
 		[Export] private TextureRect aim;
 		[Export] private Inventory inventory;
+		[Export] private Control checkPointMenu;
 		private Vector2 screenCenter;
 	// Called when the node enters the scene tree for the first time.
 		public override void _Ready()
@@ -40,6 +41,7 @@ namespace Game
 			aim.GlobalPosition = screenCenter;
 			inventory.GlobalPosition = screenCenter;
 			interact.GlobalPosition = screenCenter;
+			checkPointMenu.Size = GetViewportRect().Size;
         }
 
 

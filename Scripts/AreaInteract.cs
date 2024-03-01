@@ -33,7 +33,7 @@ namespace Game
         public override void _Process(double delta)
         {
             FindClosestItem();
-            
+
             if (Input.IsActionJustPressed(Actions.PickUp))
             {
                 if (itemToPickUp != null)
@@ -75,23 +75,23 @@ namespace Game
         private void OnAreaEntered(Area3D area)
         {
             SetProcess(true);
-            interactable = (InteractableObject) area;
+            interactable = (InteractableObject)area;
 
-            if (interactable is PickUpItem) 
+            if (interactable is PickUpItem)
             {
                 interactable = null;
                 item = (PickUpItem)area;
                 itemsInRange.Add(item);
             }
-            
+
         }
 
         private void OnAreaExited(Area3D area)
         {
             //item = (PickUpItem)area.GetParent();
-            interactable = (InteractableObject) area;
+            interactable = (InteractableObject)area;
 
-            if (interactable is PickUpItem) 
+            if (interactable is PickUpItem)
             {
                 item = (PickUpItem)area;
                 if (itemsInRange.Contains(item))
@@ -104,13 +104,13 @@ namespace Game
 
             interactable = null;
 
-            if (itemsInRange.Count == 0) 
+            if (itemsInRange.Count == 0)
             {
                 SetProcess(false);
                 label.Hide();
                 label.Text = "";
             }
-            
+
         }
     }
 }

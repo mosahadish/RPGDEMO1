@@ -92,4 +92,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 186.281, 151.433, 895.222)
 [node name="Checkpoints" type="Node" parent="."]
 
 [node name="Checkpoint" parent="Checkpoints" instance=ExtResource("15_82kga")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 173.269, 150.127, 878.133)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 174.804, 150.483, 874.481)

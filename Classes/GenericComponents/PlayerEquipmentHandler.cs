@@ -34,7 +34,7 @@ namespace Game
 
 			if (Player == null) QueueFree();
 			if (Inventory == null) QueueFree();
-			else 
+			else
 			{
 				Inventory.EquippedItemWithArgument += OnInventoryEquippedItem;
 				Inventory.UnequippedItemWithArgument += OnInventoryUnequippedItem;
@@ -43,18 +43,18 @@ namespace Game
 		}
 
 
-        public override void _ExitTree()
-        {
-            base._ExitTree();
+		public override void _ExitTree()
+		{
+			base._ExitTree();
 			if (Inventory != null)
 			{
 				Inventory.EquippedItemWithArgument -= OnInventoryEquippedItem;
 				Inventory.UnequippedItemWithArgument -= OnInventoryUnequippedItem;
 				Inventory.ChangedWeaponWithArgument -= OnInventoryChangedWeapon;
 			}
-        }
+		}
 
-        public void OnInventoryChangedWeapon(Weapon weap)
+		public void OnInventoryChangedWeapon(Weapon weap)
 		{
 			if (Player.IsDodging() || Player.IsBlocking() || Player.IsAttacking()) return;
 			if (Player.HasWeapon())
@@ -62,7 +62,7 @@ namespace Game
 				if (Player.CurrentWeapon == weap)
 				{
 					SheatheWeapon(Player.CurrentWeapon);
-					return;	
+					return;
 				}
 
 				if (Player.CurrentWeapon.SubType.Contains("2H"))
@@ -99,7 +99,7 @@ namespace Game
 			DrawWeapon(weap);
 		}
 
-		private void SheatheWeapon(Weapon weap)
+		public void SheatheWeapon(Weapon weap)
 		{
 			if (weap == null) return;
 			if (equippedItems.ContainsKey(weap))
@@ -108,7 +108,7 @@ namespace Game
 				CurrentAttach.RemoveChild(weap);
 
 				weap.Wielder = null;
-				
+
 				if (weap == Player.CurrentWeapon)
 				{
 					Player.CurrentWeapon.NoAttunements();
@@ -147,7 +147,7 @@ namespace Game
 				}
 
 				weap.Wielder = Player;
-				
+
 				if (weap.SubType == WeaponTypes.Offhand)
 				{
 					Player.CurrentOffhand = weap;
@@ -211,7 +211,7 @@ namespace Game
 					OffhandChanged?.Invoke(Player.CurrentOffhand);
 				}
 			}
-			
+
 		}
 
 	}

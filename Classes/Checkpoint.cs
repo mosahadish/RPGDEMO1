@@ -11,7 +11,7 @@ namespace Game
         public bool enemyPresent = false;
 
         public override void OnInteract()
-        {   
+        {
             if (Visiting == true || enemyPresent) return;
 
             EmitSignal(SignalName.OnCheckPointVisitedWithArgument, this);

@@ -8,8 +8,8 @@ namespace Game
 {
 	public delegate void NotifyValueChange(float value);
 	public delegate void NotifyAttunement(string msg);
-	
-	
+
+
 	[GlobalClass]
 	public partial class Player : Actor, IBlocker, IMeleeAttacker, IDodger
 	{
@@ -34,9 +34,9 @@ namespace Game
 		#endregion
 
 		#region Exported members
-		[Export(PropertyHint.Enum, Attunements.Lightning+
+		[Export(PropertyHint.Enum, Attunements.Lightning +
 		 "," + Attunements.Fire)]
-		public string CurrentAttunement {get; set;} = Attunements.Fire;
+		public string CurrentAttunement { get; set; } = Attunements.Fire;
 
 		[ExportCategory("Dependencies")]
 		[Export] public CameraComponent Camera;
@@ -50,43 +50,43 @@ namespace Game
 
 		#region Private members
 
-
+		public bool Resting = false;
 		public Checkpoint lastVisitedCheckpoint;
 		private int AttunementIterator = 0;
-		private string[] arrAttunement = {Attunements.Fire, Attunements.Lightning};
+		private string[] arrAttunement = { Attunements.Fire, Attunements.Lightning };
 		private Vector3 frontDirection;
 
 		private bool _isBlocking = false;
 		bool IBlocker.Blocking
-    	{
-        get { return _isBlocking; }
-        set { _isBlocking = value; }
-    	}
+		{
+			get { return _isBlocking; }
+			set { _isBlocking = value; }
+		}
 
-        private bool _attackBlocked = false;
+		private bool _attackBlocked = false;
 		bool IBlocker.AttackBlocked
-    	{
-        get { return _attackBlocked; }
-        set { _attackBlocked = value; }
-    	}
+		{
+			get { return _attackBlocked; }
+			set { _attackBlocked = value; }
+		}
 
 		private bool _isDodging = false;
 		bool IDodger.Dodging
-    	{
-        get { return _isDodging; }
-        set { _isDodging = value; }
-    	}
+		{
+			get { return _isDodging; }
+			set { _isDodging = value; }
+		}
 
 		#endregion
 
-        public override void _Ready()
+		public override void _Ready()
 		{
 			base._Ready();
 
 			if (GetParent() is Map map)
 			{
 				ActorDeathWithArgument += map.OnPlayerDeath;
-			} 
+			}
 			HandleChildrenDependencies();
 
 			_isBlocking = false;
@@ -118,7 +118,7 @@ namespace Game
 				if (Stam != null)
 					Stam.StaminaChanged += machine.OnStaminaChanged;
 
-				if (audio !=null)
+				if (audio != null)
 					equip.Audio = audio;
 			}
 		}
@@ -131,7 +131,7 @@ namespace Game
 			}
 			if (SMachine is PlayerStateMachine machine)
 			{
-				
+
 				if (equip != null)
 				{
 					equip.WeaponChanged -= machine.OnWeaponChanged;
@@ -147,11 +147,15 @@ namespace Game
 		public void VisitedCheckPoint(Checkpoint checkpoint)
 		{
 			GD.Print("Resting");
+			Resting = true;
+			HP.SetValue(HP.MaxValue);
+			equip.SheatheWeapon(CurrentWeapon);
+			equip.SheatheWeapon(CurrentOffhand);
 			lastVisitedCheckpoint = checkpoint;
 			SMachine.TransitionTo(nameof(PlayerRestingState), null);
 			EmitSignal(SignalName.PlayerResting);
 		}
-		
+
 		public void LeaveCheckpoint()
 		{
 			GD.Print("Stop resting");
@@ -159,21 +163,22 @@ namespace Game
 			{
 				map.OnCheckPointLeft();
 			}
+			Resting = false;
 			lastVisitedCheckpoint.Visiting = false;
 			(Animation as PlayerAnimation).Resting = false;
 		}
 
-        public override void _ExitTree()
-        {
-            base._ExitTree();
+		public override void _ExitTree()
+		{
+			base._ExitTree();
 			DisconnectEvents();
-        }
+		}
 
-        public override void _Process(double delta)
+		public override void _Process(double delta)
 		{
 			if (Input.IsActionJustPressed(Actions.ChangeAttunement) && _IsAttacking == false && Attack.ReadyToShoot == false)
 			{
-				AttunementIterator +=1;
+				AttunementIterator += 1;
 				if (AttunementIterator == arrAttunement.Length) AttunementIterator = 0;
 				CurrentAttunement = arrAttunement[AttunementIterator];
 
@@ -184,7 +189,7 @@ namespace Game
 
 				AttunementChanged?.Invoke(CurrentAttunement);
 			}
-			
+
 		}
 
 		public Vector3 GetGlobalFrontDir()
@@ -218,8 +223,8 @@ namespace Game
 		#region Block
 
 		public void Block()
-        {
-  
+		{
+
 			(Animation as PlayerAnimation).CurrentMovementState = "Walk";
 			(Animation as PlayerAnimation).Blocking = true;
 
@@ -227,16 +232,16 @@ namespace Game
 			_isBlocking = true;
 			Stam.Degen = true;
 			Stam.Regen = false;
-        }
+		}
 
 		public void BlockedAttack(float damageToTake)
-        {
+		{
 			(Animation as PlayerAnimation).BlockedAttack = true;
 			(Animation as PlayerAnimation).RequestOneShot("Offhand");
 			audio.Play(SoundEffects.ShieldBlock);
 			_attackBlocked = true;
 			Stam.DecreaseStamina(damageToTake);
-        }
+		}
 
 		public void BlockCounterAttack()
 		{
@@ -248,23 +253,23 @@ namespace Game
 			//Audio.PlayAudio(SoundEffects.ShieldBlock);
 			(Animation as PlayerAnimation).MainAttack(Animations.CounterLightAttack);
 			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
-            Stam.Regen = false;
+			Stam.Regen = false;
 			_attackBlocked = false;
 			//_isBlocking = false;
 		}
 
-        public void BlockHold()
-        {
+		public void BlockHold()
+		{
 			(Animation as PlayerAnimation).CurrentMovementState = "Walk";
 			(Animation as PlayerAnimation).BlockedAttack = false;
 			//(Animation as PlayerAnimation).Blocking = true;
 			_isBlocking = true;
 			_attackBlocked = false;
-            //Animation.Transition("Shield", Animations.BlockHold);
-        }
+			//Animation.Transition("Shield", Animations.BlockHold);
+		}
 
-        public void BlockRelease()
-        {
+		public void BlockRelease()
+		{
 			if (_isBlocking == false) return;
 
 			(Animation as PlayerAnimation).Blocking = false;
@@ -272,28 +277,28 @@ namespace Game
 			//(Animation as PlayerAnimation).RequestOneShot("Offhand");
 			_attackBlocked = false;
 
-            
+
 			_isBlocking = false;
 			Stam.Degen = false;
 			Stam.Regen = true;
-        }
+		}
 
-        public bool IsBlocking()
-        {
-            return _isBlocking;
-        }
+		public bool IsBlocking()
+		{
+			return _isBlocking;
+		}
 		public bool CanCounter()
-        {
-            return _attackBlocked;
-        }
+		{
+			return _attackBlocked;
+		}
 
 		#endregion
-		
+
 		#region Attack
 
-        public void Attack1()
-        {
-            _IsAttacking = true;
+		public void Attack1()
+		{
+			_IsAttacking = true;
 			// Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.Attack1);
 			// Animation.OneShot(CurrentWeapon.Name);
 			(Animation as PlayerAnimation).MainAttack("Attack1");
@@ -302,12 +307,12 @@ namespace Game
 			audio.Play(CurrentAttunement + CurrentWeapon.Name + Animations.Attack1);
 
 			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
-            Stam.Regen = false;
-        }
+			Stam.Regen = false;
+		}
 
-        public void Attack2()
-        {
-            _IsAttacking = true;
+		public void Attack2()
+		{
+			_IsAttacking = true;
 			// Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.Attack2);
 			// Animation.OneShot(CurrentWeapon.Name);
 			(Animation as PlayerAnimation).MainAttack("Attack2");
@@ -316,12 +321,12 @@ namespace Game
 			audio.Play(CurrentAttunement + CurrentWeapon.Name + Animations.Attack2);
 
 			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
-            Stam.Regen = false;
-        }
+			Stam.Regen = false;
+		}
 
-        public void Attack3()
-        {
-            _IsAttacking = true;
+		public void Attack3()
+		{
+			_IsAttacking = true;
 			// Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.Attack3);
 			// Animation.OneShot(CurrentWeapon.Name);
 			(Animation as PlayerAnimation).MainAttack("Attack3");
@@ -330,18 +335,18 @@ namespace Game
 			audio.Play(CurrentAttunement + CurrentWeapon.Name + Animations.Attack3);
 
 			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
-            Stam.Regen = false;
+			Stam.Regen = false;
 		}
 
 		public void ComboAttack()
 		{
-			
+
 		}
 
 		public void SprintLightAttack()
-        {
+		{
 			_CanRotate = false;
-            _IsAttacking = true;
+			_IsAttacking = true;
 			Movement._Sprinting = false;
 			Stam.Degen = false;
 
@@ -351,19 +356,19 @@ namespace Game
 			// Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.SprintLightAttack);
 			// //Animation.Transition(CurrentWeapon.Name + Animations.Movement, CurrentWeapon.Name+Animations.SprintLightAttack);
 			// Animation.OneShot(CurrentWeapon.Name);
-        }
+		}
 
 		public void SprintHeavyAttack()
-        {
-            // _IsAttacking = true;
+		{
+			// _IsAttacking = true;
 			// Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.SprintAttack);
 			// Animation.OneShot(CurrentWeapon.Name);
-        }
+		}
 
-        public void DodgeLightAttack()
-        {
-            _CanRotate = false;
-            _IsAttacking = true;
+		public void DodgeLightAttack()
+		{
+			_CanRotate = false;
+			_IsAttacking = true;
 			Movement._Sprinting = false;
 			Stam.Regen = false;
 			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
@@ -371,17 +376,17 @@ namespace Game
 			(Animation as PlayerAnimation).MainAttack(Animations.DodgeLightAttack);
 			// Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.DodgeLightAttack);
 			// Animation.OneShot(CurrentWeapon.Name);
-        }
+		}
 
-        public void JumpAttack()
-        {
+		public void JumpAttack()
+		{
 
-        }
+		}
 
-        public void HeavyAttack()
-        {
+		public void HeavyAttack()
+		{
 
-        }
+		}
 
 		public void FinishAttacking()
 		{
@@ -390,42 +395,42 @@ namespace Game
 			Stam.Regen = true;
 		}
 
-        public bool IsAttacking()
-        {
-            return _IsAttacking;
-        }
+		public bool IsAttacking()
+		{
+			return _IsAttacking;
+		}
 		#endregion
 
 		#region Dodge
 
-        public void Dodge()
-        {
+		public void Dodge()
+		{
 			Stam.DecreaseStamina(Stam.DodgeConsumption);
-            Stam.Regen = false;
-            Movement.CurrentSpeed = Movement.DodgeSpeed;
-            _isDodging = true;
-            _CanRotate = false;
+			Stam.Regen = false;
+			Movement.CurrentSpeed = Movement.DodgeSpeed;
+			_isDodging = true;
+			_CanRotate = false;
 			(Animation as PlayerAnimation).RequestOneShot("Dodge");
 			// if (HasWeapon())
-            // 	Animation.Transition(CurrentWeapon.Name + Animations.TransitionMovement, CurrentWeapon.Name + Animations.Dodge);
+			// 	Animation.Transition(CurrentWeapon.Name + Animations.TransitionMovement, CurrentWeapon.Name + Animations.Dodge);
 			// else Animation.Transition(Animations.TransitionMovement, Animations.Dodge);
-        }
+		}
 
 		public void FinishDodging()
 		{
 			Movement.CurrentSpeed = Movement.Speed;
-            Stam.Regen = true;
-            _isDodging = false;
-            _CanRotate = true;
+			Stam.Regen = true;
+			_isDodging = false;
+			_CanRotate = true;
 		}
 
-        public bool IsDodging()
-        {
-            return _isDodging;
-        }
+		public bool IsDodging()
+		{
+			return _isDodging;
+		}
 
 		#endregion
-    
+
 	}
 }
 

@@ -48,6 +48,8 @@ namespace Game
 
             await ToSignal(Owner, "ready");
 
+            //AddItem(GameData.Instance.FetchItem("HealPotion"));
+
             Input.MouseMode = Input.MouseModeEnum.Hidden;
             SetProcess(false);
             Hide();
@@ -83,6 +85,8 @@ namespace Game
 
         public override void _UnhandledInput(InputEvent @event)
         {
+            if (player.Resting) return;
+
             base._UnhandledInput(@event);
             if (@event is InputEventJoypadButton)
             {
@@ -171,9 +175,9 @@ namespace Game
         private void Drop()
         {
             toSlot = focusedSlot;
-            fromSlot.Disabled = true;
+            fromSlot.Disabled = false;
             fromSlot.MoveItem(toSlot);
-            dragging = true;
+            dragging = false;
         }
 
         private void Open()

@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://bdikorwn774ck"]
+
+[ext_resource type="Script" path="res://Classes/Items/Consumables/HealPotion.cs" id="1_3p3rl"]
+[ext_resource type="Texture2D" uid="uid://b5yjuguv8dm36" path="res://Assets/InventoryIcons/healpotion.png" id="2_wqi0h"]
+
+[node name="HealPotion" type="Node3D"]
+script = ExtResource("1_3p3rl")
+Name = "Heal Potion"
+Texture = ExtResource("2_wqi0h")
+Quantity = 1
+HoverText = "Heal you right up boi"

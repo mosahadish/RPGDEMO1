@@ -39,7 +39,7 @@ length = 1.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CheckpointMenuBackground:modulate")
+tracks/0/path = NodePath(".:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -55,7 +55,7 @@ length = 1.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CheckpointMenuBackground:modulate")
+tracks/0/path = NodePath(".:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -145,7 +145,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 text = "Press ` to hide"
 
-[node name="OnScreen" type="Control" parent="." node_paths=PackedStringArray("stamBar", "healthBar", "attun", "interact", "aim", "inventory")]
+[node name="OnScreen" type="Control" parent="." node_paths=PackedStringArray("stamBar", "healthBar", "attun", "interact", "aim", "inventory", "checkPointMenu")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -161,6 +161,7 @@ attun = NodePath("Attun")
 interact = NodePath("LabelInteract")
 aim = NodePath("Aim")
 inventory = NodePath("Inventory")
+checkPointMenu = NodePath("CheckpointMenu")
 
 [node name="StaminaBar" type="ProgressBar" parent="OnScreen"]
 layout_mode = 1
@@ -248,46 +249,51 @@ offset_right = -1.5
 offset_bottom = -1.0
 
 [node name="CheckpointMenu" type="Control" parent="OnScreen" node_paths=PackedStringArray("anim", "leaveBtn", "restBtn")]
+modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -298.5
-offset_top = -19.6519
-offset_right = 20.5
-offset_bottom = 187.348
+offset_left = -800.5
+offset_top = -398.652
+offset_right = 797.5
+offset_bottom = 398.348
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("5_ffmt1")
 anim = NodePath("AnimationPlayer")
-leaveBtn = NodePath("CheckpointMenuBackground/VBoxContainer/Leave")
-restBtn = NodePath("CheckpointMenuBackground/VBoxContainer/Rest")
+leaveBtn = NodePath("VBoxContainer/Leave")
+restBtn = NodePath("VBoxContainer/Rest")
 
 [node name="CheckpointMenuBackground" type="Sprite2D" parent="OnScreen/CheckpointMenu"]
-modulate = Color(1, 1, 1, 0)
-position = Vector2(297.5, 16.5)
-scale = Vector2(0.833854, 0.737963)
+position = Vector2(799.5, 395)
+scale = Vector2(0.833854, 0.738889)
 texture = ExtResource("5_oijdd")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="OnScreen/CheckpointMenu/CheckpointMenuBackground"]
-offset_left = -673.0
-offset_top = -289.0
-offset_right = -446.0
-offset_bottom = 47.0
-
-[node name="Rest" type="Button" parent="OnScreen/CheckpointMenu/CheckpointMenuBackground/VBoxContainer"]
-layout_mode = 2
-text = "Rest"
-
-[node name="Leave" type="Button" parent="OnScreen/CheckpointMenu/CheckpointMenuBackground/VBoxContainer"]
-layout_mode = 2
-text = "Leave"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="OnScreen/CheckpointMenu"]
 libraries = {
 "": SubResource("AnimationLibrary_awaqu")
 }
 
-[connection signal="pressed" from="OnScreen/CheckpointMenu/CheckpointMenuBackground/VBoxContainer/Leave" to="OnScreen/CheckpointMenu" method="OnLeavePressed"]
+[node name="VBoxContainer" type="VBoxContainer" parent="OnScreen/CheckpointMenu"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 86.0
+offset_top = -103.5
+offset_right = 313.0
+offset_bottom = 232.5
+grow_vertical = 2
+
+[node name="Rest" type="Button" parent="OnScreen/CheckpointMenu/VBoxContainer"]
+layout_mode = 2
+text = "Rest"
+
+[node name="Leave" type="Button" parent="OnScreen/CheckpointMenu/VBoxContainer"]
+layout_mode = 2
+text = "Leave"
+
+[connection signal="pressed" from="OnScreen/CheckpointMenu/VBoxContainer/Leave" to="OnScreen/CheckpointMenu" method="OnLeavePressed"]

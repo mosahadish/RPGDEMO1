@@ -79,6 +79,7 @@ namespace Game
             empty = false;
 
             if (item is Weapon) itemInfo += "Damage: " + (item as Weapon).Damage.ToString() + "\n";
+            
             itemInfo += item.HoverText;
             TooltipText = itemInfo;
         }
