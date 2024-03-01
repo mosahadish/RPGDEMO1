@@ -17,6 +17,8 @@ namespace Game
             player??= Actor as Player;
             //currentTransition = (string)Animation.AnimTree.Get("parameters/TypeTransition/current_state");
             //Animation.Transition("TypeTransition", "STAGGER");
+            (Animation as PlayerAnimation).RequestOneShot("Stagger");
+            
             player.Velocity = Vector3.Zero;
             Actor._CanRotate = false;
             Movement.SetSpeed(0);

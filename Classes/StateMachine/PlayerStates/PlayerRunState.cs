@@ -36,7 +36,8 @@ namespace Game
 			
 			Movement.SetSpeed(Movement.Speed);
 			
-			if (Msg.ContainsKey("input_dir")) InputDir = Msg["input_dir"];
+			if (Msg != null)
+				if (Msg.ContainsKey("input_dir")) InputDir = Msg["input_dir"];
 
 			//Animation.Transition(AnimTransition, Anim);
 		}

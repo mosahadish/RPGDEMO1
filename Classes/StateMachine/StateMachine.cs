@@ -72,6 +72,13 @@ namespace Game
             }
         }
 
+        
+		public void OnStagger()
+        {
+            TransitionTo(nameof(PlayerStaggerState), null);
+        }
+
+
         public abstract void HandleMovementInput(Dictionary<string, Vector2> Msg);
         public abstract void HandleAttackInput(Dictionary<string, bool> Msg);
 

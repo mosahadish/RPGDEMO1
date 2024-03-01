@@ -31,6 +31,11 @@ namespace Game
             {
                 checkpoint.OnCheckPointVisitedWithArgument += OnCheckPointVisited;
             }
+
+            if (Player != null)
+            {
+                Player.ActorDeathWithArgument += OnPlayerDeath;
+            }
         }
 
         public static void OnAIDeath(Actor actor)
@@ -49,7 +54,26 @@ namespace Game
 
         public void OnPlayerDeath(Actor player)
         {
+            ResetEnemies();
+            if (Player.lastVisitedCheckpoint == null)
+            {
+                Player.GlobalPosition = PlayerSpawnPos.GlobalPosition;
+            }
 
+            else
+            {
+                Player.GlobalPosition = Player.lastVisitedCheckpoint.SpawnPos.GlobalPosition;
+            }
+
+            Player.SMachine.TransitionTo(nameof(PlayerRunState), null);
+            Player.SMachine.SetProcess(true);
+            Player.SMachine.SetPhysicsProcess(true);
+            Player.SetPhysicsProcess(true);
+            Player.SetProcess(true);
+            Player.HP.Heal(Player.HP.MaxValue);
+            Player.Dead = false;
+
+           RespawnEnemies();
         }
 
         public void OnCheckPointVisited(Checkpoint checkpoint)
@@ -82,10 +106,12 @@ namespace Game
             foreach (AI enemy in enemies.GetChildren().Cast<AI>())
             {
                 enemy.SMachine.TransitionTo(nameof(AIRoamState));
+                enemy.SMachine.target = null;
+                enemy.target = null;
                 enemy.SMachine.SetProcess(true);
                 enemy.SMachine.SetPhysicsProcess(true);
-                enemy.SetPhysicsProcess(false);
-                enemy.SetProcess(false);
+                enemy.SetPhysicsProcess(true);
+                enemy.SetProcess(true);
                 enemy.Visible = true;
                 enemy.Dead = false;
                 enemy.SetCollisionLayerValue(2, true);

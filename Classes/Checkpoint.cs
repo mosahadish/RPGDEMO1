@@ -7,6 +7,7 @@ namespace Game
     {
         [Signal] public delegate void OnCheckPointVisitedWithArgumentEventHandler(Checkpoint cp);
 
+        [Export] public Marker3D SpawnPos;
         public bool Visiting = false;
         public bool enemyPresent = false;
 

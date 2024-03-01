@@ -13,6 +13,7 @@ namespace Game
 
         [Export] Label label;
 
+        public Player Player;
 
         private const float MaxDistance = 9999999;
         private PickUpItem item;
@@ -22,6 +23,7 @@ namespace Game
         private string pickUpBtn;
         private float shortestDistToItem = MaxDistance;
         private float dist;
+
 
         public override void _Ready()
         {
@@ -34,7 +36,7 @@ namespace Game
         {
             FindClosestItem();
 
-            if (Input.IsActionJustPressed(Actions.PickUp))
+            if (Input.IsActionJustPressed(Actions.PickUp) && Player.CanInteract)
             {
                 if (itemToPickUp != null)
                 {

@@ -29,7 +29,6 @@ namespace Game
                 newVelo = Actor.Velocity;
                 newVelo.Y = Movement.JumpVelocity;
                 Actor.Velocity = newVelo;
-
                 (Animation as PlayerAnimation).RequestOneShot("Jump");
             }
 

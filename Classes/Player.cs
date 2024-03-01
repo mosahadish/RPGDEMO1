@@ -30,6 +30,8 @@ namespace Game
 		public event NotifyAttunement AttunementChanged;
 		[Signal]
 		public delegate void PlayerRestingEventHandler();
+		[Signal]
+		public delegate void ItemUseSuccessEventHandler();
 
 		#endregion
 
@@ -48,8 +50,11 @@ namespace Game
 
 		#endregion
 
+		public bool CanInteract = true;
+
 		#region Private members
 
+		
 		public bool Resting = false;
 		public Checkpoint lastVisitedCheckpoint;
 		private int AttunementIterator = 0;
@@ -103,6 +108,8 @@ namespace Game
 			if (Inventory != null && Interact != null)
 			{
 				Interact.PickedUpItemWithArgument += Inventory.AddItem;
+				Inventory.UsedItemWithArgument += OnInventoryUsedItem;
+				ItemUseSuccess += Inventory.ItemUsed;
 			}
 			if (SMachine is PlayerStateMachine machine)
 			{
@@ -115,19 +122,41 @@ namespace Game
 				}
 				AttunementChanged += machine.OnAttunementChanged;
 
+				if (staggerComp != null)
+					ActorGotStaggered += SMachine.OnStagger;
+
 				if (Stam != null)
 					Stam.StaminaChanged += machine.OnStaminaChanged;
 
 				if (audio != null)
 					equip.Audio = audio;
 			}
+
+			if (Interact != null)
+			{
+				Interact.Player = this;
+			}
 		}
 
-		private void DisconnectEvents()
+        private void OnInventoryUsedItem(Item item)
+        {
+            if (item is Consumable consumable)
+			{
+				if (consumable.ConsumableType == ConsumableTypes.Heal)
+				{
+					HP.Heal(consumable.Consume());
+					EmitSignal(SignalName.ItemUseSuccess);
+				}
+			}
+        }
+
+        private void DisconnectEvents()
 		{
 			if (Inventory != null)
 			{
 				Interact.PickedUpItemWithArgument -= Inventory.AddItem;
+				Inventory.UsedItemWithArgument -= OnInventoryUsedItem;
+				ItemUseSuccess -= Inventory.ItemUsed;
 			}
 			if (SMachine is PlayerStateMachine machine)
 			{
@@ -138,6 +167,10 @@ namespace Game
 					equip.OffhandChanged -= machine.OnOffhandChanged;
 				}
 				AttunementChanged -= machine.OnAttunementChanged;
+
+				
+				if (staggerComp != null)
+					ActorGotStaggered -= SMachine.OnStagger;
 
 				if (Stam != null)
 					Stam.StaminaChanged -= machine.OnStaminaChanged;
@@ -211,11 +244,12 @@ namespace Game
 			Stam.Degen = true;
 		}
 
-		public void ReleaseSprint()
+		public void ReleaseSprint(bool changeSpeed = true)
 		{
 			(Animation as PlayerAnimation).CurrentMovementState = "Run";
 			Movement._Sprinting = false;
-			Movement.SetSpeed(Movement.Speed);
+			if (changeSpeed)
+				Movement.SetSpeed(Movement.Speed);
 			Stam.Regen = true;
 			Stam.Degen = false;
 		}
@@ -248,14 +282,11 @@ namespace Game
 			BlockRelease();
 			_CanRotate = false;
 			_IsAttacking = true;
-			// Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.CounterAttack);
-			// Animation.OneShot(CurrentWeapon.Name);
-			//Audio.PlayAudio(SoundEffects.ShieldBlock);
+			
 			(Animation as PlayerAnimation).MainAttack(Animations.CounterLightAttack);
 			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
 			Stam.Regen = false;
 			_attackBlocked = false;
-			//_isBlocking = false;
 		}
 
 		public void BlockHold()
@@ -313,10 +344,7 @@ namespace Game
 		public void Attack2()
 		{
 			_IsAttacking = true;
-			// Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.Attack2);
-			// Animation.OneShot(CurrentWeapon.Name);
 			(Animation as PlayerAnimation).MainAttack("Attack2");
-			//(Animation as PlayerAnimation).RequestOneShot("MainAttack");
 
 			audio.Play(CurrentAttunement + CurrentWeapon.Name + Animations.Attack2);
 
@@ -327,10 +355,7 @@ namespace Game
 		public void Attack3()
 		{
 			_IsAttacking = true;
-			// Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.Attack3);
-			// Animation.OneShot(CurrentWeapon.Name);
 			(Animation as PlayerAnimation).MainAttack("Attack3");
-			//(Animation as PlayerAnimation).RequestOneShot("MainAttack");
 
 			audio.Play(CurrentAttunement + CurrentWeapon.Name + Animations.Attack3);
 
@@ -347,22 +372,16 @@ namespace Game
 		{
 			_CanRotate = false;
 			_IsAttacking = true;
-			Movement._Sprinting = false;
 			Stam.Degen = false;
 
 			(Animation as PlayerAnimation).MainAttack(Animations.SprintLightAttack);
+			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
 			ReleaseSprint();
-			//(Animation as PlayerAnimation).RequestOneShot("MainAttack");
-			// Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.SprintLightAttack);
-			// //Animation.Transition(CurrentWeapon.Name + Animations.Movement, CurrentWeapon.Name+Animations.SprintLightAttack);
-			// Animation.OneShot(CurrentWeapon.Name);
+			Movement.SetSpeed(Movement.SprintSpeed);
 		}
 
 		public void SprintHeavyAttack()
 		{
-			// _IsAttacking = true;
-			// Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.SprintAttack);
-			// Animation.OneShot(CurrentWeapon.Name);
 		}
 
 		public void DodgeLightAttack()

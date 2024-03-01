@@ -96,6 +96,10 @@ namespace Game
                     chaseOutOfRange = true;
                 }
 
+                // if (target != null && distToTarget <= AIActor.DodgeRange)
+                // {
+                //     if (AIActor.ShouldDodge()) TransitionTo(nameof(AIDodgeState));
+                // }
 
                 if (target != null && distToTarget <= AIActor.CircleRange) 
                 {
@@ -129,8 +133,8 @@ namespace Game
 
         private void OnAnimationFinished(string anim)
         {
-            GD.Print(anim);
-            TransitionTo(nameof(AIEngageState));
+            if (anim.Contains("Parried") == false)
+                TransitionTo(nameof(AIEngageState));
         }
 
          private void OnArea3DEntered(Node3D body)

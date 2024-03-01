@@ -95,15 +95,23 @@ namespace Game
 			SetPhysicsProcess(false);
 			SetProcess(false);
 			
+
 			if (this is AI ai)
 			{
 				ai.SMachine.SetPhysicsProcess(false);
+				ai.SMachine.SetProcess(false);
 				ai.SMachine.TransitionTo(nameof(AIDeathState));
 			}
-			
+			else
+			{
+				SMachine.SetPhysicsProcess(false);
+				SMachine.SetProcess(false);
+				SMachine.TransitionTo(nameof(PlayerDeathState), null);
+			}
+	
 			audio?.Play("Death");
 
-			await ToSignal(GetTree().CreateTimer(7), SceneTreeTimer.SignalName.Timeout);
+			await ToSignal(GetTree().CreateTimer(10), SceneTreeTimer.SignalName.Timeout);
 			EmitSignal(SignalName.ActorDeathWithArgument, this);
 		}
 

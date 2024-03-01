@@ -26,9 +26,10 @@ namespace Game
             Text = Type;
         }
 
-        public void UpdateQuantity(int addedQuant)
+
+        public void UpdateQuantity()
         {
-            item.Quantity += addedQuant;
+            //item.Quantity += addedQuant;
             if (item.Quantity == 0) RemoveItem();
         }
 

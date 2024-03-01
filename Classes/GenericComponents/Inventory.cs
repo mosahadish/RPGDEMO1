@@ -15,6 +15,8 @@ namespace Game
         public delegate void UnequippedItemWithArgumentEventHandler(Item item);
         [Signal]
         public delegate void ChangedWeaponWithArgumentEventHandler(Weapon item);
+        [Signal]
+        public delegate void UsedItemWithArgumentEventHandler(Item item);
 
         [Export] Player player;
         [Export] private GridContainer inventory;
@@ -34,6 +36,7 @@ namespace Game
         private InventorySlot focusedSlot;
         private InventorySlot fromSlot;
         private InventorySlot toSlot;
+        private InventorySlot lastUsedSlot;
         private bool dragging = false;
         private Vector2 mousePos;
 
@@ -48,7 +51,7 @@ namespace Game
 
             await ToSignal(Owner, "ready");
 
-            //AddItem(GameData.Instance.FetchItem("HealPotion"));
+            AddItem(GameData.Instance.FetchItem("HealPotion"));
 
             Input.MouseMode = Input.MouseModeEnum.Hidden;
             SetProcess(false);
@@ -80,12 +83,20 @@ namespace Game
                     toSlot.EquipItem(focusedSlot);
                     EmitSignal(SignalName.EquippedItemWithArgument, toSlot.item);
                 }
+                else if (focusedSlot.item is Consumable)
+                {
+                    lastUsedSlot = focusedSlot;
+                    EmitSignal(SignalName.UsedItemWithArgument, focusedSlot.item);
+                }
             }
         }
 
         public override void _UnhandledInput(InputEvent @event)
         {
-            if (player.Resting) return;
+            if (player.Resting)
+            {
+                return;
+            }
 
             base._UnhandledInput(@event);
             if (@event is InputEventJoypadButton)
@@ -184,6 +195,7 @@ namespace Game
         {
             //if (GetViewport().IsConnected("GuiFocusChanged", Callable.From(() => OnFocusedChanged(focusedSlot))) == false)
             GetViewport().GuiFocusChanged += OnFocusedChanged;
+            player.CanInteract = false;
 
             SetProcess(true);
             Show();
@@ -194,6 +206,7 @@ namespace Game
         private void Close()
         {
             GetViewport().GuiFocusChanged -= OnFocusedChanged;
+            player.CanInteract = true;
 
             SetProcess(false);
             Hide();
@@ -232,6 +245,11 @@ namespace Game
             mousePos.Y -= 10;
 
             mousePos += focusedSlot.Position;
+        }
+
+        internal void ItemUsed()
+        {
+            lastUsedSlot.UpdateQuantity();
         }
     }
 }

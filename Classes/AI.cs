@@ -77,25 +77,29 @@ namespace Game
 
         public string DecideOnNextAction(float distToTarget)
         {
-            if (_IsAttacking || IsDodging()) return null;
-            if (canDecide == false) return null;
-
             //Reset to default
             dodgeChance = DodgeChancePercent;
             attackChance = AttackChancePercent;
-            canDecide = false;
-
-            rngResult = rng.RandiRange(0,99);
-
+            
             if (distToTarget <= DodgeRange)
             {
                 dodgeChance += (100-HP.AsPercent())/6;
                 
                 if (ShouldDodge())
                 {
+                    rngResult = rng.RandiRange(0,99);
                     return nameof(AIDodgeState);
                 }
             }
+
+            if (_IsAttacking) return null;
+            if (canDecide == false) return null;
+
+
+            canDecide = false;
+
+            rngResult = rng.RandiRange(0,99);
+            
 
             if (distToTarget <= AttackRange) 
             {
@@ -108,7 +112,7 @@ namespace Game
             return action;
         }
 
-        private bool ShouldDodge()
+        public bool ShouldDodge()
         {
             return SMachine.target.IsAttacking() && rngResult <= dodgeChance;
         }

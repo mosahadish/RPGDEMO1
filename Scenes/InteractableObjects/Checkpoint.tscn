@@ -136,10 +136,11 @@ proximity_fade_distance = 0.0
 [sub_resource type="QuadMesh" id="QuadMesh_85p0o"]
 material = SubResource("StandardMaterial3D_vr7yh")
 
-[node name="Checkpoint" type="Area3D"]
+[node name="Checkpoint" type="Area3D" node_paths=PackedStringArray("SpawnPos")]
 collision_layer = 64
 collision_mask = 64
 script = ExtResource("1_th26s")
+SpawnPos = NodePath("SpawnPosition")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_ax5t6")
@@ -180,6 +181,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.79752, 0.88772, 0)
 light_color = Color(1, 0.733333, 0, 1)
 light_energy = 3.0
 omni_range = 5.862
+
+[node name="SpawnPosition" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, -1.5)
 
 [connection signal="body_entered" from="Radar" to="." method="OnEnemyEnteredArea"]
 [connection signal="body_exited" from="Radar" to="." method="OnEnemyLeftArea"]

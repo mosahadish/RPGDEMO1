@@ -21,9 +21,11 @@ namespace Game
             currentOffhand = player.CurrentOffhand;
             offhandType = currentOffhand.GetType().Name;
 
-            currentTransition = (string)Animation.AnimTree.Get("parameters/"+ offhandType +"/current_state");
-            Animation.Transition(offhandType, "Parry");
-
+            // currentTransition = (string)Animation.AnimTree.Get("parameters/"+ offhandType +"/current_state");
+            // Animation.Transition(offhandType, "Parry");
+            (Animation as PlayerAnimation).Parry = true;
+            (Animation as PlayerAnimation).BlendMovement(Vector2.Zero);
+            (Animation as PlayerAnimation).RequestOneShot("Offhand");
             Stam.DecreaseStamina((player.CurrentOffhand as ParryingObject).StaminaConsumption);
             (player.CurrentOffhand as ParryingObject).ActivateParryWindow();
 
@@ -49,7 +51,8 @@ namespace Game
         public override void Exit()
         {
             player._CanRotate = true;
-            GD.Print(currentTransition);
+            (Animation as PlayerAnimation).Parry = false;
+            //GD.Print(currentTransition);
             Animation.Transition(offhandType, currentTransition);
         }
     }

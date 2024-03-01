@@ -31,7 +31,7 @@ namespace Game
             Animation.NodeTransition("Engage");
 
             this.target = target;
-            
+            distToTarget = 9999;
             Movement.SetSpeed(Movement.WalkSpeed);
 
             circleTimer = rng.RandfRange(1,3);
@@ -47,9 +47,13 @@ namespace Game
                 circleTimer = rng.RandfRange(1,3);
             }
 
-            distToTarget = AIActor.GlobalPosition.DistanceTo(target.GlobalPosition);
-            dirToTarget = AIActor.GlobalPosition.DirectionTo(target.GlobalPosition);
-            AIActor.LookInDirection(dirToTarget);
+            if (target != null)
+            {
+                distToTarget = AIActor.GlobalPosition.DistanceTo(target.GlobalPosition);
+                dirToTarget = AIActor.GlobalPosition.DirectionTo(target.GlobalPosition);
+                AIActor.LookInDirection(dirToTarget);
+            }
+            else distToTarget = 9999;
           
             
             if (distToTarget < AIActor.AttackRange*0.8)

@@ -208,6 +208,8 @@ namespace Game
 			if (state is PlayerDodgeState) return;
 			if (state is PlayerParryingState) return;
 
+			
+
 			if (Actor.IsOnFloor() == false)
 			{
 				if ((state is PlayerAirState) == false) TransitionTo(nameof(PlayerAirState), Msg);
@@ -215,9 +217,9 @@ namespace Game
 			}
 
 			Move(Msg);
-
+			
 			if (state is PlayerAttackState) return;
-
+			
 			Sprint(Msg);
 			Jump(Msg);
 			Dodge(Msg);
@@ -262,7 +264,7 @@ namespace Game
 		{
 			if (Msg.ContainsKey(Actions.Jump)) 
 			{
-				CancelSprint();
+				player.ReleaseSprint(false);
 				TransitionTo(nameof(PlayerAirState), Msg);
 			}
 		}
@@ -337,11 +339,6 @@ namespace Game
 		
 		#region Signal/Event response
 		
-
-		public void OnStagger()
-        {
-            TransitionTo(nameof(PlayerStaggerState), null);
-        }
 
 		public void OnParry()
 		{
