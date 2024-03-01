@@ -207,6 +207,7 @@ Parry={
 3d_physics/layer_4="Map"
 3d_physics/layer_5="Radar"
 3d_physics/layer_6="Weapons"
+3d_physics/layer_7="Interactable"
 
 [physics]
 

@@ -1,9 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://w11iy5tl7h41"]
+[gd_scene load_steps=14 format=3 uid="uid://w11iy5tl7h41"]
 
 [ext_resource type="PackedScene" uid="uid://dlfpn58g0wlys" path="res://Scenes/UI/Debug.tscn" id="1_cawhn"]
 [ext_resource type="PackedScene" uid="uid://yb43ks5ned6a" path="res://Scenes/UI/NewInventory/inventory.tscn" id="2_hlurj"]
 [ext_resource type="Script" path="res://Scenes/UI/OnScreen/OnScreen.cs" id="3_ew6pn"]
 [ext_resource type="Texture2D" uid="uid://ddc422hhrh3xp" path="res://Assets/Icons/add.svg" id="4_wul28"]
+[ext_resource type="Script" path="res://Classes/PlayerUI/CheckpointMenu.cs" id="5_ffmt1"]
+[ext_resource type="Texture2D" uid="uid://5b64u8jwgv7r" path="res://Assets/Backgrounds/checkpoint_menu_background.png" id="5_oijdd"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bb8dq"]
 border_width_left = 2
@@ -30,6 +32,44 @@ bg_color = Color(0.6, 0.129412, 0.0862745, 1)
 border_width_left = 2
 border_width_top = 2
 border_color = Color(0.00392157, 0.00392157, 0.00392157, 1)
+
+[sub_resource type="Animation" id="Animation_ymt6g"]
+resource_name = "FadeIn"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CheckpointMenuBackground:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_05rsq"]
+resource_name = "FadeOut"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CheckpointMenuBackground:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_awaqu"]
+_data = {
+"FadeIn": SubResource("Animation_ymt6g"),
+"FadeOut": SubResource("Animation_05rsq")
+}
 
 [node name="PlayerUI" type="Control"]
 layout_mode = 3
@@ -156,6 +196,7 @@ value = 5.0
 show_percentage = false
 
 [node name="Aim" type="TextureRect" parent="OnScreen"]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -194,6 +235,7 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 
 [node name="Inventory" parent="OnScreen" instance=ExtResource("2_hlurj")]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -204,3 +246,48 @@ offset_left = -1.5
 offset_top = -1.0
 offset_right = -1.5
 offset_bottom = -1.0
+
+[node name="CheckpointMenu" type="Control" parent="OnScreen" node_paths=PackedStringArray("anim", "leaveBtn", "restBtn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -298.5
+offset_top = -19.6519
+offset_right = 20.5
+offset_bottom = 187.348
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_ffmt1")
+anim = NodePath("AnimationPlayer")
+leaveBtn = NodePath("CheckpointMenuBackground/VBoxContainer/Leave")
+restBtn = NodePath("CheckpointMenuBackground/VBoxContainer/Rest")
+
+[node name="CheckpointMenuBackground" type="Sprite2D" parent="OnScreen/CheckpointMenu"]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(297.5, 16.5)
+scale = Vector2(0.833854, 0.737963)
+texture = ExtResource("5_oijdd")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="OnScreen/CheckpointMenu/CheckpointMenuBackground"]
+offset_left = -673.0
+offset_top = -289.0
+offset_right = -446.0
+offset_bottom = 47.0
+
+[node name="Rest" type="Button" parent="OnScreen/CheckpointMenu/CheckpointMenuBackground/VBoxContainer"]
+layout_mode = 2
+text = "Rest"
+
+[node name="Leave" type="Button" parent="OnScreen/CheckpointMenu/CheckpointMenuBackground/VBoxContainer"]
+layout_mode = 2
+text = "Leave"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="OnScreen/CheckpointMenu"]
+libraries = {
+"": SubResource("AnimationLibrary_awaqu")
+}
+
+[connection signal="pressed" from="OnScreen/CheckpointMenu/CheckpointMenuBackground/VBoxContainer/Leave" to="OnScreen/CheckpointMenu" method="OnLeavePressed"]

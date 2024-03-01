@@ -19,6 +19,7 @@ namespace Game
 		private Vector3 desiredVelo;
         
         public Player target;
+        public Vector3 spawnPosition;
    
         private bool canDecide = true;
         private string action;

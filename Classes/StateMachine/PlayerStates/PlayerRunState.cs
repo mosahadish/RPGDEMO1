@@ -98,31 +98,5 @@ namespace Game
 		{
 			this.camera = camera;
 		}
-
-		private bool HandleSprint(Dictionary<string, Vector2> Msg)
-		{
-			if (Msg.ContainsKey(Actions.Sprint)) 
-			{
-				SetAnim(Animations.TransitionMovement, Animations.Sprint);
-				(Animation as PlayerAnimation).MovementTransition("Sprint");
-				Movement._Sprinting = true;
-				Movement.SetSpeed(Movement.SprintSpeed);
-				Stam.Regen = false;
-				Stam.Degen = true;
-				return true;
-			}
-
-			if (Msg.ContainsKey(Actions.SprintRelease)) 
-			{
-				SetAnim(Animations.TransitionMovement, Animations.Movement);
-				(Animation as PlayerAnimation).MovementTransition("Run");
-				Movement._Sprinting = false;
-				Movement.SetSpeed(Movement.Speed);
-				Stam.Regen = true;
-				Stam.Degen = false;
-				return true;
-			}
-			return false;
-		}
 	}
 }

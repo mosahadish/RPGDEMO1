@@ -18,6 +18,7 @@ namespace Game
             player = (Player)playerScene.Instantiate();
             
             currentMapInstance.AddChild(player);
+            currentMapInstance.Player = player;
             player.GlobalPosition = currentMapInstance.PlayerSpawnPos.GlobalPosition;
             await ToSignal(GetTree().CreateTimer(0.5), SceneTreeTimer.SignalName.Timeout);
         }

@@ -23,16 +23,13 @@ namespace Game
         {   
             if (Msg.ContainsKey(Actions.Jump))
             {
-                if (Msg[Actions.Jump] != Vector2.Zero) Anim = Animations.JumpRunning;
-                else Anim = Animations.JumpStand;
+                if (Msg[Actions.Jump] != Vector2.Zero) (Animation as PlayerAnimation).JumpType = "Running";
+                else (Animation as PlayerAnimation).JumpType = "Standing";
 
                 newVelo = Actor.Velocity;
                 newVelo.Y = Movement.JumpVelocity;
                 Actor.Velocity = newVelo;
-            
-                SetAnim(Animations.TransitionMovement, Anim);
-                //Animation.Transition(AnimTransition, Anim);
-                (Animation as PlayerAnimation).JumpType(Anim);
+
                 (Animation as PlayerAnimation).RequestOneShot("Jump");
             }
 

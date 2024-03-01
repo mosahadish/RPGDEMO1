@@ -36,6 +36,7 @@ namespace Game
         public override void Exit()
         {
             AIActor._CanRotate = true;
+            playback.Travel("Movement");
         }
     }
 }

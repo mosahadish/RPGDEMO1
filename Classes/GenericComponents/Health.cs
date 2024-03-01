@@ -39,6 +39,11 @@ namespace Game
             MaxValue = newVal;
         }
 
+        public void SetValue(float val)
+        {
+            currentVal = val;
+        }
+
         public float GetValue()
         {
             return currentVal;

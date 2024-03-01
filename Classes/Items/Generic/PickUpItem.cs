@@ -3,7 +3,7 @@ using Godot;
 namespace Game
 {
     [GlobalClass]
-    public partial class PickUpItem : Node3D
+    public partial class PickUpItem : InteractableObject
     {
         [Export] PackedScene ItemScene = null;
 
@@ -26,6 +26,11 @@ namespace Game
             PickedUp = true;
             SetProcess(true);
             return (Item)ItemScene.Instantiate();
+        }
+
+        public override void OnInteract()
+        {
+            
         }
     }
 }

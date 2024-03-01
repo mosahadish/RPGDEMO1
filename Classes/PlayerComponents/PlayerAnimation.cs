@@ -15,20 +15,23 @@ namespace Game
 
     public string CurrentMovementState = "Run";
     public string CurrentWeaponState = "Unarmed";
+    public int CurrentChain = 1;
+    public string CurrentOffhandState = "Unarmed";
     public string CurrentAttunement = "Fire";
+    public string JumpType = "Standing";
     public string PreviousAttack = "";
+    public bool Blocking = false;
+    public bool BlockedAttack = false;
+    public bool Resting = false;
 
     public override void _Ready()
     {
       base._Ready();
-      WeaponTransition("Unarmed");
-      UpdateAttunement(CurrentAttunement);
     }
 
     public override void _Process(double delta)
     {
       base._Process(delta);
-      //GD.Print(CurrentMovementState);
     }
 
     public override void Transition(string transitionType, string transitionName)
@@ -36,15 +39,8 @@ namespace Game
       AnimTree.Set("parameters/" + transitionType + "/transition_request", transitionName);
     }
 
-    public void MovementTransition(string movementType)
-    { //set to walk, run, sprint etc
-      AnimTree.Set("parameters/MovementState/" + CurrentWeaponState + "/conditions/" + CurrentMovementState, false);
-      AnimTree.Set("parameters/MovementState/" + CurrentWeaponState + "/conditions/" + movementType, true);
 
-      CurrentMovementState = movementType;
-    }
-
-    public void MainAttackTransition(string attack)
+    public void MainAttack(string attack)
     {
       AnimTree.Set("parameters/MainhandState/" + CurrentWeaponState
         + "/" + CurrentAttunement + "/conditions/" + PreviousAttack, false);
@@ -52,32 +48,24 @@ namespace Game
       AnimTree.Set("parameters/MainhandState/" + CurrentWeaponState
         + "/" + CurrentAttunement + "/conditions/" + attack, true);
 
-
       PreviousAttack = attack;
+      RequestOneShot("MainAttack");
+    }
+
+    public void Offhand(string action)
+    {
+      //advance_condition
+
     }
 
     public void UpdateAttunement(string attun)
     {
-      AnimTree.Set("parameters/MainhandState/" + CurrentWeaponState + "/conditions/" + CurrentAttunement, false);
       CurrentAttunement = attun;
-      AnimTree.Set("parameters/MainhandState/" + CurrentWeaponState + "/conditions/" + attun, true);
-      //parameters/MainhandState/Sword/conditions/Fire
     }
 
-    public void WeaponTransition(string weaponName)
+    public void OffhandBlend(double val)
     {
-      AnimTree.Set("parameters/MovementState/conditions/" + CurrentWeaponState, false);
-      AnimTree.Set("parameters/JumpState/conditions/" + CurrentWeaponState, false);
-      AnimTree.Set("parameters/MainhandState/conditions/" + CurrentWeaponState, false);
-      AnimTree.Set("parameters/MainhandState/" + CurrentWeaponState + "/conditions/" + CurrentAttunement, false);
-
-      AnimTree.Set("parameters/MovementState/conditions/" + weaponName, true);
-      AnimTree.Set("parameters/JumpState/conditions/" + weaponName, true);
-      AnimTree.Set("parameters/MainhandState/conditions/" + weaponName, true);
-      AnimTree.Set("parameters/MainhandState/" + weaponName + "/conditions/" + CurrentAttunement, true);
-
-      CurrentWeaponState = weaponName;
-      //same for attack etc
+      AnimTree.Set("parameters/OffhandBlend/blend_amount", val);
     }
 
     public void BlendMovement(Vector2 blendPos)
@@ -89,12 +77,6 @@ namespace Game
     public void RequestOneShot(string oneShotName)
     {
       AnimTree.Set("parameters/" + oneShotName + "/request", (int)AnimationNodeOneShot.OneShotRequest.Fire);
-    }
-
-    public void JumpType(string jumpType)
-    {
-      AnimTree.Set("parameters/JumpState/" + CurrentWeaponState + "/conditions/" + jumpType, true);
-      //AnimTree.Set("parameters/JumpState/" + CurrentWeaponState +"/conditions/" + jumpType, false);
     }
   }
 }

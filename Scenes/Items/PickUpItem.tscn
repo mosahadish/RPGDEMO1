@@ -5,7 +5,9 @@
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_whtpj"]
 
-[node name="PickUpItem" type="Node3D"]
+[node name="PickUpItem" type="Area3D"]
+collision_layer = 64
+collision_mask = 64
 script = ExtResource("1_3yif6")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
@@ -13,9 +15,5 @@ transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
 billboard = 1
 texture = ExtResource("1_8b7le")
 
-[node name="Area3D" type="Area3D" parent="."]
-collision_layer = 128
-collision_mask = 128
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_whtpj")

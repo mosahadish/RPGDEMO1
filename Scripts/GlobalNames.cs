@@ -20,6 +20,7 @@ namespace Globals
     }
     public class Animations
     {
+        public const string Rest = "Rest";
         public const string Parry = "Parry";
         public const string JumpRunning = "RunningJump";
         public const string JumpStand = "StandingJump";
@@ -39,7 +40,7 @@ namespace Globals
         public const string SprintLightAttack = "SprintLightAttack";
         public const string SprintHeavyAttack = "SprintHeavyAttack";
         public const string DodgeLightAttack = "DodgeLightAttack";
-        public const string CounterAttack = "CounterAttack";
+        public const string CounterLightAttack = "CounterLightAttack";
         public const string JumpAttack = "JumpAttack";
         public const string AttackGeneral = "Attack";
         public const string Block = "Block";

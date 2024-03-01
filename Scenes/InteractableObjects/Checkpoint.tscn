@@ -1,0 +1,82 @@
+[gd_scene load_steps=12 format=3 uid="uid://cdg0ik5rv3mc3"]
+
+[ext_resource type="Script" path="res://Classes/Checkpoint.cs" id="1_th26s"]
+[ext_resource type="Material" uid="uid://ba87f3piferoj" path="res://Scenes/Particles/firering_partical.tres" id="2_1bq8w"]
+[ext_resource type="Texture2D" uid="uid://d3pcx87k1kj23" path="res://Scenes/Particles/particle_sprite_smoke.webp" id="3_mdv3w"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ax5t6"]
+radius = 0.7
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_li6uk"]
+top_radius = 0.2
+bottom_radius = 0.4
+height = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uu6yg"]
+albedo_color = Color(0.129412, 0.0705882, 0.00392157, 1)
+
+[sub_resource type="Curve" id="Curve_hac87"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.816176, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ma6lu"]
+curve = SubResource("Curve_hac87")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vr7yh"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("3_mdv3w")
+refraction_scale = 1.0
+refraction_texture = SubResource("CurveTexture_ma6lu")
+billboard_mode = 3
+particles_anim_h_frames = 8
+particles_anim_v_frames = 8
+particles_anim_loop = false
+grow_amount = 1.28
+proximity_fade_distance = 0.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_85p0o"]
+material = SubResource("StandardMaterial3D_vr7yh")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_l35pj"]
+size = Vector3(10, 2, 10)
+
+[node name="Checkpoint" type="Area3D"]
+collision_layer = 64
+collision_mask = 64
+script = ExtResource("1_th26s")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_ax5t6")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CylinderMesh_li6uk")
+surface_material_override/0 = SubResource("StandardMaterial3D_uu6yg")
+
+[node name="FireRing" type="Node3D" parent="."]
+transform = Transform3D(0.005, 0, 0, 0, 0.005, 0, 0, 0, 0.005, 0, 0.451217, 0)
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="FireRing"]
+amount = 10
+lifetime = 3.0
+visibility_aabb = AABB(-0.481784, -2.04012, -0.248887, 0.963569, 7.10857, 0.497774)
+process_material = ExtResource("2_1bq8w")
+draw_pass_1 = SubResource("QuadMesh_85p0o")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="FireRing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.79752, 0.88772, 0)
+light_color = Color(1, 0.733333, 0, 1)
+light_energy = 3.0
+omni_range = 5.862
+
+[node name="Radar" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.840064, 0)
+collision_layer = 16
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Radar"]
+shape = SubResource("BoxShape3D_l35pj")
+
+[connection signal="body_entered" from="Radar" to="." method="OnEnemyEnteredArea"]
+[connection signal="body_exited" from="Radar" to="." method="OnEnemyLeftArea"]

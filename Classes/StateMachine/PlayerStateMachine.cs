@@ -62,6 +62,7 @@ namespace Game
 		#region Combat stuff
 		public override void HandleAttackInput(Dictionary<string, bool> Msg)
 		{
+			if (state is PlayerRestingState) return;
 			if (state is PlayerStaggerState) return;
 			if (state is PlayerParryingState) return;
 
@@ -202,6 +203,7 @@ namespace Game
 
 		public override void HandleMovementInput(Dictionary<string, Vector2> Msg)
 		{
+			if (state is PlayerRestingState) return;
 			if (state is PlayerStaggerState) return;
 			if (state is PlayerDodgeState) return;
 			if (state is PlayerParryingState) return;
@@ -352,15 +354,20 @@ namespace Game
 		*/
 		public void OnAnimationFinished(string anim)
 		{
-			GD.Print(anim);
 
+			GD.Print(anim);
 			if (anim.Contains(Animations.Parry))
 			{
 				TransitionTo(nameof(PlayerRunState), Msg);
 			}
 
-			else if (anim == Animations.Block) player.BlockHold();
-			else if (anim.Contains(Animations.BlockedAttack) && player.IsBlocking()) player.BlockHold();
+			else if (anim.Contains("RestToStand")) TransitionTo(nameof(PlayerRunState), Msg);
+
+			// else if (anim == Animations.Block) player.BlockHold();
+			else if (anim.Contains(Animations.BlockedAttack) && player.IsBlocking()) 
+			{
+				//player.BlockHold();
+			}
 			else if (anim.Contains(Animations.Stagger)) TransitionTo(nameof(PlayerRunState), Msg);
 
 			else if (anim.Contains(Animations.AttackGeneral) )
@@ -422,18 +429,17 @@ namespace Game
 			// if (weapon.Name == "Sword") Animation.Transition("TypeTransition", WeaponTypes.Melee1H);
 			if (weapon == null)
 			{
-				//Animation.Transition("TypeTransition", "KARATE");
-				(Animation as PlayerAnimation).WeaponTransition("Unarmed");
-				CurrentWeaponName = "";
+				CurrentWeaponName = "Unarmed";
+				
 			} 
 			else 
 			{
 				CurrentWeaponName = weapon.Name;
-				//Animation.Transition("TypeTransition", weapon.SubType);
-				(Animation as PlayerAnimation).WeaponTransition(CurrentWeaponName);
-				//Animation.Transition(CurrentWeaponName+"AttunementTransition", CurrentAttunement);
 			}
-		
+
+
+			Animation.CurrentWeaponState = CurrentWeaponName;
+
 			Attack.CurrentWeapon = weapon;
 
 			foreach (State s in GetChildren().Cast<State>())
@@ -454,12 +460,25 @@ namespace Game
 		{
 			if (weapon == null)
 			{
-				Animation.AnimTree.Set("parameters/OffhandBlend/blend_amount", 0.0);
+				Animation.CurrentOffhandState = "Unarmed";
+				Animation.OffhandBlend(0.0);
+				//Animation.AnimTree.Set("parameters/OffhandBlend/blend_amount", 0.0);
+				//Animation.OffhandBlend(0.0);
 			}
 			else
 			{
-				Animation.Transition(Animations.TransitionOffhand, weapon.GetType().Name);
-				Animation.AnimTree.Set("parameters/OffhandBlend/blend_amount", 1.0);
+				//Animation.Transition(Animations.TransitionOffhand, weapon.GetType().Name);
+				//Animation.AnimTree.Set("parameters/OffhandBlend/blend_amount", 1.0);
+				//Animation.OffhandTransition(weapon.GetType().Name);
+				if (weapon is Shield)
+				{
+					Animation.CurrentOffhandState = "Shield";
+					Animation.OffhandBlend(0.8);
+				}
+				// if (weapon is Shield)
+				// {
+				// 	Animation.OffhandBlend(1.0);
+				// }
 			}
 		}
 

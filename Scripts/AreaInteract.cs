@@ -18,6 +18,7 @@ namespace Game
         private PickUpItem item;
         private List<PickUpItem> itemsInRange = new();
         private PickUpItem itemToPickUp;
+        private InteractableObject interactable;
         private string pickUpBtn;
         private float shortestDistToItem = MaxDistance;
         private float dist;
@@ -38,6 +39,10 @@ namespace Game
                 if (itemToPickUp != null)
                 {
                     EmitSignal(SignalName.PickedUpItemWithArgument, item.GetItem());
+                }
+                else
+                {
+                    interactable?.OnInteract();
                 }
             }
 
@@ -70,18 +75,34 @@ namespace Game
         private void OnAreaEntered(Area3D area)
         {
             SetProcess(true);
-            item = (PickUpItem)area.GetParent();
-            itemsInRange.Add(item);
+            interactable = (InteractableObject) area;
+
+            if (interactable is PickUpItem) 
+            {
+                interactable = null;
+                item = (PickUpItem)area;
+                itemsInRange.Add(item);
+            }
+            
         }
 
         private void OnAreaExited(Area3D area)
         {
-            item = (PickUpItem)area.GetParent();
-            if (itemsInRange.Contains(item))
+            //item = (PickUpItem)area.GetParent();
+            interactable = (InteractableObject) area;
+
+            if (interactable is PickUpItem) 
             {
-                itemsInRange.Remove(item);
-                if (item == itemToPickUp) itemToPickUp = null;
+                item = (PickUpItem)area;
+                if (itemsInRange.Contains(item))
+                {
+                    itemsInRange.Remove(item);
+                    if (item == itemToPickUp) itemToPickUp = null;
+                }
+
             }
+
+            interactable = null;
 
             if (itemsInRange.Count == 0) 
             {
@@ -89,6 +110,7 @@ namespace Game
                 label.Hide();
                 label.Text = "";
             }
+            
         }
     }
 }

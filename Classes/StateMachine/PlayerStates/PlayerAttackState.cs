@@ -31,7 +31,7 @@ namespace Game
             if (Msg.ContainsKey(Actions.LightAttack))
             {
                 chain = (int)Msg[Actions.LightAttack].Y;
-
+                
                 if (chain == 1) player.Attack1();
                 if (chain == 2) player.Attack2();
                 if (chain ==3) player.Attack3();

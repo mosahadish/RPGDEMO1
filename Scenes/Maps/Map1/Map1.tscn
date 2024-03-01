@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://j53ipofpbddx"]
+[gd_scene load_steps=20 format=3 uid="uid://j53ipofpbddx"]
 
 [ext_resource type="Script" path="res://Classes/Map.cs" id="1_5xqog"]
 [ext_resource type="Sky" uid="uid://dieri5a8r5agg" path="res://Scenes/Maps/Map1/Map1Sky.tres" id="1_8byvb"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://odsxeljnokdn" path="res://Scenes/Items/Weapons/Bow.tscn" id="12_ha2fn"]
 [ext_resource type="PackedScene" uid="uid://bnu5rvi2ojq62" path="res://Scenes/Items/Weapons/Shield.tscn" id="13_g2ao4"]
 [ext_resource type="PackedScene" uid="uid://bwcnco5r8xygd" path="res://Scenes/Models/MeleeAI/MeleeAI.tscn" id="14_qhv36"]
+[ext_resource type="PackedScene" uid="uid://cdg0ik5rv3mc3" path="res://Scenes/InteractableObjects/Checkpoint.tscn" id="15_82kga"]
 
 [sub_resource type="Environment" id="Environment_jyw0s"]
 background_mode = 2
@@ -46,9 +47,11 @@ normal_texture = ExtResource("6_nfxj1")
 [sub_resource type="Terrain3DTextureList" id="Terrain3DTextureList_7qe6q"]
 textures = Array[Terrain3DTexture]([SubResource("Terrain3DTexture_m1iaf"), SubResource("Terrain3DTexture_nj5pb")])
 
-[node name="Map1" type="Node3D" node_paths=PackedStringArray("PlayerSpawnPos")]
+[node name="Map1" type="Node3D" node_paths=PackedStringArray("PlayerSpawnPos", "enemies", "checkpoints")]
 script = ExtResource("1_5xqog")
 PlayerSpawnPos = NodePath("PlayerSpawnPos")
+enemies = NodePath("Enemies")
+checkpoints = NodePath("Checkpoints")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_jyw0s")
@@ -81,5 +84,12 @@ ItemScene = ExtResource("12_ha2fn")
 transform = Transform3D(0.837957, 0, 0.545736, 0, 1, 0, -0.545736, 0, 0.837957, 168.681, 150.267, 871.982)
 ItemScene = ExtResource("13_g2ao4")
 
-[node name="MeleeAI" parent="." instance=ExtResource("14_qhv36")]
+[node name="Enemies" type="Node" parent="."]
+
+[node name="MeleeAI" parent="Enemies" instance=ExtResource("14_qhv36")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 186.281, 151.433, 895.222)
+
+[node name="Checkpoints" type="Node" parent="."]
+
+[node name="Checkpoint" parent="Checkpoints" instance=ExtResource("15_82kga")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 173.269, 150.127, 878.133)

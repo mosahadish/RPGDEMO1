@@ -25,9 +25,11 @@ namespace Game
 		Aim - Handles the aim point when Aiming so we can shoot projectiles
 		*/
 
-		#region Events
+		#region Events/Signals
 
 		public event NotifyAttunement AttunementChanged;
+		[Signal]
+		public delegate void PlayerRestingEventHandler();
 
 		#endregion
 
@@ -48,6 +50,8 @@ namespace Game
 
 		#region Private members
 
+
+		public Checkpoint lastVisitedCheckpoint;
 		private int AttunementIterator = 0;
 		private string[] arrAttunement = {Attunements.Fire, Attunements.Lightning};
 		private Vector3 frontDirection;
@@ -79,6 +83,10 @@ namespace Game
 		{
 			base._Ready();
 
+			if (GetParent() is Map map)
+			{
+				ActorDeathWithArgument += map.OnPlayerDeath;
+			} 
 			HandleChildrenDependencies();
 
 			_isBlocking = false;
@@ -92,12 +100,12 @@ namespace Game
 
 		private void HandleChildrenDependencies()
 		{
+			if (Inventory != null && Interact != null)
+			{
+				Interact.PickedUpItemWithArgument += Inventory.AddItem;
+			}
 			if (SMachine is PlayerStateMachine machine)
 			{
-				if (Inventory != null && Interact != null)
-				{
-					Interact.PickedUpItemWithArgument += Inventory.AddItem;
-				}
 				if (equip != null)
 				{
 					equip.WeaponChanged += machine.OnWeaponChanged;
@@ -117,12 +125,13 @@ namespace Game
 
 		private void DisconnectEvents()
 		{
+			if (Inventory != null)
+			{
+				Interact.PickedUpItemWithArgument -= Inventory.AddItem;
+			}
 			if (SMachine is PlayerStateMachine machine)
 			{
-				if (Inventory != null)
-				{
-					Interact.PickedUpItemWithArgument -= Inventory.AddItem;
-				}
+				
 				if (equip != null)
 				{
 					equip.WeaponChanged -= machine.OnWeaponChanged;
@@ -133,6 +142,25 @@ namespace Game
 				if (Stam != null)
 					Stam.StaminaChanged -= machine.OnStaminaChanged;
 			}
+		}
+
+		public void VisitedCheckPoint(Checkpoint checkpoint)
+		{
+			GD.Print("Resting");
+			lastVisitedCheckpoint = checkpoint;
+			SMachine.TransitionTo(nameof(PlayerRestingState), null);
+			EmitSignal(SignalName.PlayerResting);
+		}
+		
+		public void LeaveCheckpoint()
+		{
+			GD.Print("Stop resting");
+			if (GetParent() is Map map)
+			{
+				map.OnCheckPointLeft();
+			}
+			lastVisitedCheckpoint.Visiting = false;
+			(Animation as PlayerAnimation).Resting = false;
 		}
 
         public override void _ExitTree()
@@ -171,7 +199,7 @@ namespace Game
 
 		public void Sprint()
 		{
-			(Animation as PlayerAnimation).MovementTransition("Sprint");
+			(Animation as PlayerAnimation).CurrentMovementState = "Sprint";
 			Movement._Sprinting = true;
 			Movement.SetSpeed(Movement.SprintSpeed);
 			Stam.Regen = false;
@@ -180,7 +208,7 @@ namespace Game
 
 		public void ReleaseSprint()
 		{
-			(Animation as PlayerAnimation).MovementTransition("Run");
+			(Animation as PlayerAnimation).CurrentMovementState = "Run";
 			Movement._Sprinting = false;
 			Movement.SetSpeed(Movement.Speed);
 			Stam.Regen = true;
@@ -191,10 +219,11 @@ namespace Game
 
 		public void Block()
         {
-            Animation.Transition("Shield", Animations.Block);
-			if (HasWeapon())
-				Animation.Transition(CurrentWeapon.Name+Animations.TransitionMovement, CurrentWeapon.Name + Animations.Walk);
-			else Animation.Transition(Animations.TransitionMovement, Animations.Walk);
+  
+			(Animation as PlayerAnimation).CurrentMovementState = "Walk";
+			(Animation as PlayerAnimation).Blocking = true;
+
+			Movement._Sprinting = false;
 			_isBlocking = true;
 			Stam.Degen = true;
 			Stam.Regen = false;
@@ -202,7 +231,8 @@ namespace Game
 
 		public void BlockedAttack(float damageToTake)
         {
-            Animation.Transition("Shield", Animations.BlockedAttack);
+			(Animation as PlayerAnimation).BlockedAttack = true;
+			(Animation as PlayerAnimation).RequestOneShot("Offhand");
 			audio.Play(SoundEffects.ShieldBlock);
 			_attackBlocked = true;
 			Stam.DecreaseStamina(damageToTake);
@@ -213,32 +243,35 @@ namespace Game
 			BlockRelease();
 			_CanRotate = false;
 			_IsAttacking = true;
-			Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.CounterAttack);
-			Animation.OneShot(CurrentWeapon.Name);
+			// Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.CounterAttack);
+			// Animation.OneShot(CurrentWeapon.Name);
 			//Audio.PlayAudio(SoundEffects.ShieldBlock);
-			
+			(Animation as PlayerAnimation).MainAttack(Animations.CounterLightAttack);
 			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
             Stam.Regen = false;
 			_attackBlocked = false;
-			//_IsBlocking = false;
+			//_isBlocking = false;
 		}
 
         public void BlockHold()
         {
+			(Animation as PlayerAnimation).CurrentMovementState = "Walk";
+			(Animation as PlayerAnimation).BlockedAttack = false;
+			//(Animation as PlayerAnimation).Blocking = true;
 			_isBlocking = true;
 			_attackBlocked = false;
-            Animation.Transition("Shield", Animations.BlockHold);
+            //Animation.Transition("Shield", Animations.BlockHold);
         }
 
         public void BlockRelease()
         {
 			if (_isBlocking == false) return;
-			
+
+			(Animation as PlayerAnimation).Blocking = false;
+			(Animation as PlayerAnimation).CurrentMovementState = "Run";
+			//(Animation as PlayerAnimation).RequestOneShot("Offhand");
 			_attackBlocked = false;
-			Animation.Transition("Shield", Animations.BlockRelease);
-			if (HasWeapon())
-				Animation.Transition(CurrentWeapon.Name+Animations.TransitionMovement, CurrentWeapon.Name+Animations.Movement);
-			else Animation.Transition(Animations.TransitionMovement, Animations.Movement);
+
             
 			_isBlocking = false;
 			Stam.Degen = false;
@@ -263,8 +296,8 @@ namespace Game
             _IsAttacking = true;
 			// Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.Attack1);
 			// Animation.OneShot(CurrentWeapon.Name);
-			(Animation as PlayerAnimation).MainAttackTransition("Attack1");
-			(Animation as PlayerAnimation).RequestOneShot("MainAttack");
+			(Animation as PlayerAnimation).MainAttack("Attack1");
+			//(Animation as PlayerAnimation).RequestOneShot("MainAttack");
 
 			audio.Play(CurrentAttunement + CurrentWeapon.Name + Animations.Attack1);
 
@@ -277,8 +310,8 @@ namespace Game
             _IsAttacking = true;
 			// Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.Attack2);
 			// Animation.OneShot(CurrentWeapon.Name);
-			(Animation as PlayerAnimation).MainAttackTransition("Attack2");
-			(Animation as PlayerAnimation).RequestOneShot("MainAttack");
+			(Animation as PlayerAnimation).MainAttack("Attack2");
+			//(Animation as PlayerAnimation).RequestOneShot("MainAttack");
 
 			audio.Play(CurrentAttunement + CurrentWeapon.Name + Animations.Attack2);
 
@@ -291,8 +324,8 @@ namespace Game
             _IsAttacking = true;
 			// Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.Attack3);
 			// Animation.OneShot(CurrentWeapon.Name);
-			(Animation as PlayerAnimation).MainAttackTransition("Attack3");
-			(Animation as PlayerAnimation).RequestOneShot("MainAttack");
+			(Animation as PlayerAnimation).MainAttack("Attack3");
+			//(Animation as PlayerAnimation).RequestOneShot("MainAttack");
 
 			audio.Play(CurrentAttunement + CurrentWeapon.Name + Animations.Attack3);
 
@@ -312,8 +345,9 @@ namespace Game
 			Movement._Sprinting = false;
 			Stam.Degen = false;
 
-			(Animation as PlayerAnimation).MainAttackTransition(Animations.SprintLightAttack);
-			(Animation as PlayerAnimation).RequestOneShot("MainAttack");
+			(Animation as PlayerAnimation).MainAttack(Animations.SprintLightAttack);
+			ReleaseSprint();
+			//(Animation as PlayerAnimation).RequestOneShot("MainAttack");
 			// Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.SprintLightAttack);
 			// //Animation.Transition(CurrentWeapon.Name + Animations.Movement, CurrentWeapon.Name+Animations.SprintLightAttack);
 			// Animation.OneShot(CurrentWeapon.Name);
@@ -334,8 +368,9 @@ namespace Game
 			Stam.Regen = false;
 			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
 
-			Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.DodgeLightAttack);
-			Animation.OneShot(CurrentWeapon.Name);
+			(Animation as PlayerAnimation).MainAttack(Animations.DodgeLightAttack);
+			// Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.DodgeLightAttack);
+			// Animation.OneShot(CurrentWeapon.Name);
         }
 
         public void JumpAttack()
@@ -370,9 +405,10 @@ namespace Game
             Movement.CurrentSpeed = Movement.DodgeSpeed;
             _isDodging = true;
             _CanRotate = false;
-			if (HasWeapon())
-            	Animation.Transition(CurrentWeapon.Name + Animations.TransitionMovement, CurrentWeapon.Name + Animations.Dodge);
-			else Animation.Transition(Animations.TransitionMovement, Animations.Dodge);
+			(Animation as PlayerAnimation).RequestOneShot("Dodge");
+			// if (HasWeapon())
+            // 	Animation.Transition(CurrentWeapon.Name + Animations.TransitionMovement, CurrentWeapon.Name + Animations.Dodge);
+			// else Animation.Transition(Animations.TransitionMovement, Animations.Dodge);
         }
 
 		public void FinishDodging()

@@ -42,19 +42,16 @@ namespace Game
 
 		private Timer deathTimer = new();
 
-		private bool dead;
+		public bool Dead;
 
         public override void _Ready()
         {
-			if (GetParent() is Map map)
-			{
-                ActorDeathWithArgument += Map.OnAIDeath;
-            }
+		
         }
 
         public void OnHit(float incDamage, Actor hitter, string hittingObject)
 		{
-			if (dead) return;
+			if (Dead) return;
 
 			if (this is IDodger dodger)
 				if (dodger.IsDodging()) return;
@@ -94,7 +91,7 @@ namespace Game
 
 		public async virtual void OnDeath()
 		{
-			dead = true;
+			Dead = true;
 			SetPhysicsProcess(false);
 			SetProcess(false);
 			
