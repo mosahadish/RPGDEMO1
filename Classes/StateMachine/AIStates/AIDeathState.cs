@@ -16,7 +16,11 @@ namespace Game
             AIActor._CanRotate = false;
             AIActor.Velocity = Vector3.Zero;
             playback = (AnimationNodeStateMachinePlayback)Animation.AnimTree.Get("parameters/playback");
-            playback.Travel("Death");
+            playback.Stop();
+            
+
+            Animation.Transition("Movement");
+            playback.Travel("Death", true);
         }
 
         public override void PhysicsUpdate(double delta)

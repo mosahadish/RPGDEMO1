@@ -108,6 +108,7 @@ namespace Game
 			if (Inventory != null && Interact != null)
 			{
 				Interact.PickedUpItemWithArgument += Inventory.AddItem;
+				Interact.PickedUpItemWithArgument += PickedUpItem;
 				Inventory.UsedItemWithArgument += OnInventoryUsedItem;
 				ItemUseSuccess += Inventory.ItemUsed;
 			}
@@ -137,6 +138,12 @@ namespace Game
 				Interact.Player = this;
 			}
 		}
+
+        private void PickedUpItem(Item i)
+        {
+			SMachine.TransitionTo(nameof(PlayerPickUpState), null);
+        }
+
 
         private void OnInventoryUsedItem(Item item)
         {
@@ -179,9 +186,8 @@ namespace Game
 
 		public void VisitedCheckPoint(Checkpoint checkpoint)
 		{
-			GD.Print("Resting");
 			Resting = true;
-			HP.SetValue(HP.MaxValue);
+			HP.Heal(HP.MaxValue);
 			equip.SheatheWeapon(CurrentWeapon);
 			equip.SheatheWeapon(CurrentOffhand);
 			lastVisitedCheckpoint = checkpoint;
@@ -191,7 +197,6 @@ namespace Game
 
 		public void LeaveCheckpoint()
 		{
-			GD.Print("Stop resting");
 			if (GetParent() is Map map)
 			{
 				map.OnCheckPointLeft();

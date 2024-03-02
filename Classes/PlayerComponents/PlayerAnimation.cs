@@ -24,6 +24,7 @@ namespace Game
     public bool BlockedAttack = false;
     public bool Resting = false;
     public bool Parry = false;
+    public bool Pickup = false;
 
     public override void _Ready()
     {

@@ -15,10 +15,6 @@ namespace Game
 
         public Player Player;
 
-        private Dictionary<string, PackedScene> enemyScenes = new();
-
-        private Vector3 lastPlayerRestedPosition;
-
         public override void _Ready()
         {
             foreach (AI enemy in enemies.GetChildren().Cast<AI>())
@@ -38,10 +34,10 @@ namespace Game
             }
         }
 
-        public static void OnAIDeath(Actor actor)
+        public async void OnAIDeath(Actor actor)
         {
             GD.Print(actor.Name + " Died");
-
+            await ToSignal(GetTree().CreateTimer(6), SceneTreeTimer.SignalName.Timeout);
             if (actor is AI ai)
             {
                 ai.SMachine.SetProcess(false);
@@ -52,8 +48,9 @@ namespace Game
             // actor.QueueFree();
         }
 
-        public void OnPlayerDeath(Actor player)
+        public async void OnPlayerDeath(Actor player)
         {
+            await ToSignal(GetTree().CreateTimer(5.5), SceneTreeTimer.SignalName.Timeout);
             ResetEnemies();
             if (Player.lastVisitedCheckpoint == null)
             {
@@ -80,7 +77,6 @@ namespace Game
         {
             Player.VisitedCheckPoint(checkpoint);
             checkpoint.Visiting = true;
-            lastPlayerRestedPosition = Player.GlobalPosition;
             ResetEnemies();
         }
 
@@ -95,7 +91,7 @@ namespace Game
             {
                 enemy.SMachine.SetProcess(false);
                 enemy.SMachine.SetPhysicsProcess(false);
-                enemy.HP.SetValue(enemy.HP.MaxValue);
+                enemy.HP.Heal(enemy.HP.MaxValue);
                 enemy.GlobalPosition = enemy.spawnPosition;
                 enemy.Visible = false;
             }

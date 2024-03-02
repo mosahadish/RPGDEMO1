@@ -89,7 +89,7 @@ namespace Game
 			}
 		}
 
-		public async virtual void OnDeath()
+		public virtual void OnDeath()
 		{
 			Dead = true;
 			SetPhysicsProcess(false);
@@ -110,8 +110,6 @@ namespace Game
 			}
 	
 			audio?.Play("Death");
-
-			await ToSignal(GetTree().CreateTimer(10), SceneTreeTimer.SignalName.Timeout);
 			EmitSignal(SignalName.ActorDeathWithArgument, this);
 		}
 

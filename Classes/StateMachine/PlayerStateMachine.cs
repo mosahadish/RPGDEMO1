@@ -65,6 +65,8 @@ namespace Game
 			if (state is PlayerRestingState) return;
 			if (state is PlayerStaggerState) return;
 			if (state is PlayerParryingState) return;
+			if (state is PlayerDeathState) return;
+			if (state is PlayerPickUpState) return;
 
 			if (Actor.HasParryingWeapon())
 			{
@@ -207,6 +209,8 @@ namespace Game
 			if (state is PlayerStaggerState) return;
 			if (state is PlayerDodgeState) return;
 			if (state is PlayerParryingState) return;
+			if (state is PlayerDeathState) return;
+			if (state is PlayerPickUpState) return;
 
 			
 
@@ -358,6 +362,10 @@ namespace Game
 				TransitionTo(nameof(PlayerRunState), Msg);
 			}
 
+			else if (anim.Contains("PickUp")) 
+			{
+				TransitionTo(nameof(PlayerRunState), Msg);
+			}
 			else if (anim.Contains("RestToStand")) TransitionTo(nameof(PlayerRunState), Msg);
 
 			// else if (anim == Animations.Block) player.BlockHold();

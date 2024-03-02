@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://w11iy5tl7h41"]
+[gd_scene load_steps=20 format=3 uid="uid://w11iy5tl7h41"]
 
 [ext_resource type="PackedScene" uid="uid://dlfpn58g0wlys" path="res://Scenes/UI/Debug.tscn" id="1_cawhn"]
 [ext_resource type="PackedScene" uid="uid://yb43ks5ned6a" path="res://Scenes/UI/NewInventory/inventory.tscn" id="2_hlurj"]
@@ -6,6 +6,109 @@
 [ext_resource type="Texture2D" uid="uid://ddc422hhrh3xp" path="res://Assets/Icons/add.svg" id="4_wul28"]
 [ext_resource type="Script" path="res://Classes/PlayerUI/CheckpointMenu.cs" id="5_ffmt1"]
 [ext_resource type="Texture2D" uid="uid://5b64u8jwgv7r" path="res://Assets/Backgrounds/checkpoint_menu_background.png" id="5_oijdd"]
+[ext_resource type="Script" path="res://Classes/PlayerUI/YouDied.cs" id="7_5eoo3"]
+[ext_resource type="Texture2D" uid="uid://cmtq8ce0bvhnt" path="res://Assets/Backgrounds/death_strip.png" id="7_355tt"]
+[ext_resource type="Texture2D" uid="uid://vp4p8fbwbuns" path="res://Assets/Backgrounds/Blackscreen.png" id="9_d4tqg"]
+
+[sub_resource type="Animation" id="Animation_ymt6g"]
+resource_name = "FadeIn"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_05rsq"]
+resource_name = "FadeOut"
+length = 2.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../BlackscreenRect:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5, 2.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_awaqu"]
+_data = {
+"FadeIn": SubResource("Animation_ymt6g"),
+"FadeOut": SubResource("Animation_05rsq")
+}
+
+[sub_resource type="Animation" id="Animation_xm8mn"]
+resource_name = "FadeIn"
+length = 2.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_1ph74"]
+resource_name = "FadeOut"
+length = 6.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.5, 3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../BlackscreenRect:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(2.5, 3, 4.5, 6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_l7bpr"]
+_data = {
+"FadeIn": SubResource("Animation_xm8mn"),
+"FadeOut": SubResource("Animation_1ph74")
+}
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bb8dq"]
 border_width_left = 2
@@ -32,44 +135,6 @@ bg_color = Color(0.6, 0.129412, 0.0862745, 1)
 border_width_left = 2
 border_width_top = 2
 border_color = Color(0.00392157, 0.00392157, 0.00392157, 1)
-
-[sub_resource type="Animation" id="Animation_ymt6g"]
-resource_name = "FadeIn"
-length = 1.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_05rsq"]
-resource_name = "FadeOut"
-length = 1.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_awaqu"]
-_data = {
-"FadeIn": SubResource("Animation_ymt6g"),
-"FadeOut": SubResource("Animation_05rsq")
-}
 
 [node name="PlayerUI" type="Control"]
 layout_mode = 3
@@ -145,7 +210,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 text = "Press ` to hide"
 
-[node name="OnScreen" type="Control" parent="." node_paths=PackedStringArray("stamBar", "healthBar", "attun", "interact", "aim", "inventory", "checkPointMenu")]
+[node name="OnScreen" type="Control" parent="." node_paths=PackedStringArray("stamBar", "healthBar", "attun", "interact", "aim", "inventory", "checkPointMenu", "youDied", "blackScreen", "checkPointRect")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -162,6 +227,123 @@ interact = NodePath("LabelInteract")
 aim = NodePath("Aim")
 inventory = NodePath("Inventory")
 checkPointMenu = NodePath("CheckpointMenu")
+youDied = NodePath("YouDied")
+blackScreen = NodePath("BlackscreenRect")
+checkPointRect = NodePath("CheckpointMenu/CheckpointMenuRect")
+
+[node name="BlackscreenRect" type="TextureRect" parent="OnScreen"]
+modulate = Color(1, 1, 1, 0)
+z_index = 1
+layout_mode = 0
+offset_right = 1600.0
+offset_bottom = 800.0
+texture = ExtResource("9_d4tqg")
+expand_mode = 1
+
+[node name="CheckpointMenu" type="Control" parent="OnScreen" node_paths=PackedStringArray("anim", "leaveBtn", "restBtn")]
+z_index = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -800.5
+offset_top = -398.652
+offset_right = 811.5
+offset_bottom = 405.348
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_ffmt1")
+anim = NodePath("AnimationPlayer")
+leaveBtn = NodePath("VBoxContainer/Leave")
+restBtn = NodePath("VBoxContainer/Rest")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="OnScreen/CheckpointMenu"]
+libraries = {
+"": SubResource("AnimationLibrary_awaqu")
+}
+
+[node name="CheckpointMenuRect" type="TextureRect" parent="OnScreen/CheckpointMenu"]
+layout_mode = 0
+offset_right = 1600.0
+offset_bottom = 800.0
+texture = ExtResource("5_oijdd")
+expand_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="OnScreen/CheckpointMenu"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 86.0
+offset_top = -103.5
+offset_right = 313.0
+offset_bottom = 232.5
+grow_vertical = 2
+
+[node name="Rest" type="Button" parent="OnScreen/CheckpointMenu/VBoxContainer"]
+layout_mode = 2
+text = "Rest"
+
+[node name="Leave" type="Button" parent="OnScreen/CheckpointMenu/VBoxContainer"]
+layout_mode = 2
+text = "Leave"
+
+[node name="YouDied" type="Control" parent="OnScreen" node_paths=PackedStringArray("anim")]
+modulate = Color(1, 1, 1, 0)
+z_index = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("7_5eoo3")
+anim = NodePath("AnimationPlayer")
+
+[node name="TextureRect" type="TextureRect" parent="OnScreen/YouDied"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_355tt")
+
+[node name="Label" type="Label" parent="OnScreen/YouDied/TextureRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -38.0
+offset_top = -11.5
+offset_right = 38.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.447059, 0, 0, 1)
+theme_override_font_sizes/font_size = 70
+text = "YOU DIED"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="OnScreen/YouDied"]
+libraries = {
+"": SubResource("AnimationLibrary_l7bpr")
+}
 
 [node name="StaminaBar" type="ProgressBar" parent="OnScreen"]
 layout_mode = 1
@@ -248,52 +430,5 @@ offset_top = -1.0
 offset_right = -1.5
 offset_bottom = -1.0
 
-[node name="CheckpointMenu" type="Control" parent="OnScreen" node_paths=PackedStringArray("anim", "leaveBtn", "restBtn")]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -800.5
-offset_top = -398.652
-offset_right = 797.5
-offset_bottom = 398.348
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("5_ffmt1")
-anim = NodePath("AnimationPlayer")
-leaveBtn = NodePath("VBoxContainer/Leave")
-restBtn = NodePath("VBoxContainer/Rest")
-
-[node name="CheckpointMenuBackground" type="Sprite2D" parent="OnScreen/CheckpointMenu"]
-position = Vector2(799.5, 395)
-scale = Vector2(0.833854, 0.738889)
-texture = ExtResource("5_oijdd")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="OnScreen/CheckpointMenu"]
-libraries = {
-"": SubResource("AnimationLibrary_awaqu")
-}
-
-[node name="VBoxContainer" type="VBoxContainer" parent="OnScreen/CheckpointMenu"]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 86.0
-offset_top = -103.5
-offset_right = 313.0
-offset_bottom = 232.5
-grow_vertical = 2
-
-[node name="Rest" type="Button" parent="OnScreen/CheckpointMenu/VBoxContainer"]
-layout_mode = 2
-text = "Rest"
-
-[node name="Leave" type="Button" parent="OnScreen/CheckpointMenu/VBoxContainer"]
-layout_mode = 2
-text = "Leave"
-
 [connection signal="pressed" from="OnScreen/CheckpointMenu/VBoxContainer/Leave" to="OnScreen/CheckpointMenu" method="OnLeavePressed"]
+[connection signal="animation_finished" from="OnScreen/YouDied/AnimationPlayer" to="OnScreen/YouDied" method="AnimationFinished"]

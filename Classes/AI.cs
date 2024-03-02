@@ -61,7 +61,7 @@ namespace Game
         public override void _PhysicsProcess(double delta)
         {
             timer += delta;
-            if (timer > rng.RandfRange(canDecideTimer - 0.5f, canDecideTimer + 1.2f)) 
+            if (timer > rng.RandfRange(canDecideTimer - canDecideTimer*0.1f, canDecideTimer + canDecideTimer/2)) 
             {   
                 canDecide = true;
                 timer = 0;
@@ -81,6 +81,8 @@ namespace Game
             dodgeChance = DodgeChancePercent;
             attackChance = AttackChancePercent;
             
+            if (_IsAttacking) return null;
+
             if (distToTarget <= DodgeRange)
             {
                 dodgeChance += (100-HP.AsPercent())/6;
@@ -92,19 +94,19 @@ namespace Game
                 }
             }
 
-            if (_IsAttacking) return null;
             if (canDecide == false) return null;
-
 
             canDecide = false;
 
             rngResult = rng.RandiRange(0,99);
-            
+            GD.Print("RNG" + rngResult);
+            GD.Print("AtkChance " + attackChance);
 
             if (distToTarget <= AttackRange) 
             {
                 if (ShouldAttack())
                 {
+                    timer = 0;
                     return nameof(AIAttackState);
                 }
             }

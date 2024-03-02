@@ -75,6 +75,8 @@ namespace Game
         
 		public void OnStagger()
         {
+            if (state is PlayerDeathState) return;
+            
             TransitionTo(nameof(PlayerStaggerState), null);
         }
 
