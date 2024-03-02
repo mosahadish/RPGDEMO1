@@ -63,6 +63,7 @@ namespace Globals
 
     public class Actions
     {
+        public const string UseItem = "UseItem";
         public const string Parry = "Parry";
         public const string LockOn = "LockOn";
         public const string LockOff = "LockOff";

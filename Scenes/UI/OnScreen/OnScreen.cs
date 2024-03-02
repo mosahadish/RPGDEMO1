@@ -18,6 +18,7 @@ namespace Game
 		[Export] private YouDied youDied;
 		[Export] private TextureRect blackScreen;
 		[Export] private TextureRect checkPointRect;
+		[Export] private Hotbar hotbar;
 		private Vector2 screenCenter;
 		private Vector2 viewPortSize;
 		
@@ -37,6 +38,14 @@ namespace Game
 			player.AttunementChanged += OnAttunementChanged;
 			player.ActorDeathWithArgument += OnPlayerDeath;
 			player.PlayerResting += checkPointMenu.PlayerResting;
+			
+			checkPointMenu.PlayerFinishedResting += player.LeaveCheckpoint;
+
+			if (inventory != null && hotbar != null)
+			{
+				hotbar.HotbarInventory = inventory.hotbar;
+				hotbar.HotbarUsedWithArgument += inventory.OnHotBarItemUsed;
+			}
 
 			GetViewport().SizeChanged += OnWindowSizeChanged;
 		}

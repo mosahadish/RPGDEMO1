@@ -67,6 +67,8 @@ namespace Game
 			if (state is PlayerParryingState) return;
 			if (state is PlayerDeathState) return;
 			if (state is PlayerPickUpState) return;
+			if (state is PlayerDrinkState) return;
+			//if (player.Consuming == true) return;
 
 			if (Actor.HasParryingWeapon())
 			{
@@ -211,8 +213,9 @@ namespace Game
 			if (state is PlayerParryingState) return;
 			if (state is PlayerDeathState) return;
 			if (state is PlayerPickUpState) return;
-
+			if (state is PlayerDrinkState) return;
 			
+
 
 			if (Actor.IsOnFloor() == false)
 			{
@@ -223,7 +226,9 @@ namespace Game
 			Move(Msg);
 			
 			if (state is PlayerAttackState) return;
-			
+			//if (player.Consuming == true) return;
+
+
 			Sprint(Msg);
 			Jump(Msg);
 			Dodge(Msg);
@@ -365,17 +370,14 @@ namespace Game
 			else if (anim.Contains("PickUp")) 
 			{
 				TransitionTo(nameof(PlayerRunState), Msg);
+			
 			}
+			else if (anim.Contains("Drink")) TransitionTo(nameof(PlayerRunState), Msg);
 			else if (anim.Contains("RestToStand")) TransitionTo(nameof(PlayerRunState), Msg);
 
-			// else if (anim == Animations.Block) player.BlockHold();
-			else if (anim.Contains(Animations.BlockedAttack) && player.IsBlocking()) 
-			{
-				//player.BlockHold();
-			}
 			else if (anim.Contains(Animations.Stagger)) TransitionTo(nameof(PlayerRunState), Msg);
 
-			else if (anim.Contains(Animations.AttackGeneral) )
+			else if (anim.Contains(Animations.AttackGeneral) && anim.Contains("Block") == false)
 			{
 				Buffer.Chain = 1;
 				TransitionTo(nameof(PlayerRunState), msgForState);

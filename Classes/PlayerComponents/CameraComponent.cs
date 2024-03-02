@@ -42,6 +42,8 @@ namespace Game
 		private List<Actor> possibleTargets = new();
 		private float weight = 0;
 
+		private Vector3 originalRotation;
+
         public override void _Ready()
         {
             if (lockOnComponent != null)
@@ -49,7 +51,14 @@ namespace Game
 				lockOnComponent.camera = this;
 				lockOnComponent.TargetChanged += TargetChanged;
 			}
+
+			originalRotation = Rotation;
         }
+
+		public void ResetRotation()
+		{
+			Rotation = originalRotation;
+		}
 
         public override void _Process(double delta)
 		{

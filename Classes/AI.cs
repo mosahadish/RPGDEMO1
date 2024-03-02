@@ -99,8 +99,6 @@ namespace Game
             canDecide = false;
 
             rngResult = rng.RandiRange(0,99);
-            GD.Print("RNG" + rngResult);
-            GD.Print("AtkChance " + attackChance);
 
             if (distToTarget <= AttackRange) 
             {

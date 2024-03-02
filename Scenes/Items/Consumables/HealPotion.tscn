@@ -8,5 +8,5 @@ script = ExtResource("1_3p3rl")
 value = 5.0
 Name = "Heal Potion"
 Texture = ExtResource("2_wqi0h")
-Quantity = 1
+Quantity = 5
 HoverText = "Heal you right up boi"

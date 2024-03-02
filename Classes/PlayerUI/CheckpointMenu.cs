@@ -7,9 +7,9 @@ namespace Game
 	public partial class CheckpointMenu : Control
 	{
 		[Signal] public delegate void PlayerFinishedRestingEventHandler();
-		[Export] private AnimationPlayer anim;
- 		[Export] private Button leaveBtn;
-		[Export] private Button restBtn;
+		private AnimationPlayer anim;
+ 		private Button leaveBtn;
+		private Button restBtn;
 		
 		private Color newMod;
 
@@ -20,9 +20,13 @@ namespace Game
 			newMod.A = 0;
 
 			Modulate = newMod;
+
+			leaveBtn = GetNode<Button>("VBoxContainer/Leave");
+			restBtn = GetNode<Button>("VBoxContainer/Rest");
+			anim = GetNode<AnimationPlayer>("AnimationPlayer");
         }
 
-		//this needs to be connected to the PlayerResting signal in the Player, should be done my OnScreen.cs
+		//this needs to be connected to the PlayerResting signal in the Player, should be done by OnScreen.cs
 		public void PlayerResting()
 		{
 			GD.Print("resting fade in ");
@@ -35,7 +39,7 @@ namespace Game
 			anim.Play("FadeOut");
 			await ToSignal(GetTree().CreateTimer(0.5), SceneTreeTimer.SignalName.Timeout);
 			
-			EmitSignal(SignalName.PlayerFinishedResting);
+			EmitSignal(SignalName.PlayerFinishedResting); //Connected by OnScreen.cs
 		}
 
 		private void OnLeavePressed()

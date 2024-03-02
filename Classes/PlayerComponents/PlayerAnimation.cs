@@ -25,6 +25,7 @@ namespace Game
     public bool Resting = false;
     public bool Parry = false;
     public bool Pickup = false;
+    public string UseItem = "";
 
     public override void _Ready()
     {

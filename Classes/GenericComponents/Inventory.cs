@@ -21,7 +21,7 @@ namespace Game
         [Export] Player player;
         [Export] private GridContainer inventory;
         [Export] private GridContainer equipment;
-        [Export] private GridContainer hotbar;
+        [Export] public GridContainer hotbar;
 
         [ExportCategory("Equipment Slots")]
         [Export] private InventorySlot headSlot;
@@ -89,6 +89,7 @@ namespace Game
                     EmitSignal(SignalName.UsedItemWithArgument, focusedSlot.item);
                 }
             }
+
         }
 
         public override void _UnhandledInput(InputEvent @event)
@@ -186,6 +187,17 @@ namespace Game
         private void Drop()
         {
             toSlot = focusedSlot;
+            if (hotbar.GetChildren().Contains(toSlot))
+            {
+                if (fromSlot.item is Consumable == false) 
+                {
+                    CancelDrag();
+                    return;
+                }
+            }
+
+            
+
             fromSlot.Disabled = false;
             fromSlot.MoveItem(toSlot);
             dragging = false;
@@ -250,6 +262,12 @@ namespace Game
         internal void ItemUsed()
         {
             lastUsedSlot.UpdateQuantity();
+        }
+
+        internal void OnHotBarItemUsed(InventorySlot slot)
+        {
+            lastUsedSlot = slot;
+            EmitSignal(SignalName.UsedItemWithArgument, slot.item);
         }
     }
 }

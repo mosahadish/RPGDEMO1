@@ -6,7 +6,7 @@ namespace Game
 	[GlobalClass]
 	public partial class YouDied : Control
 	{
-		[Export] private AnimationPlayer anim;
+		private AnimationPlayer anim;
 
 		private Color newMod;
 
@@ -17,6 +17,8 @@ namespace Game
 			newMod.A = 0;
 
 			Modulate = newMod;
+			
+			anim = GetNode<AnimationPlayer>("AnimationPlayer");
         }
         public void FadeIn()
 		{

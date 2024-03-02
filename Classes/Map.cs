@@ -61,14 +61,14 @@ namespace Game
             {
                 Player.GlobalPosition = Player.lastVisitedCheckpoint.SpawnPos.GlobalPosition;
             }
-
-            Player.SMachine.TransitionTo(nameof(PlayerRunState), null);
-            Player.SMachine.SetProcess(true);
-            Player.SMachine.SetPhysicsProcess(true);
-            Player.SetPhysicsProcess(true);
-            Player.SetProcess(true);
-            Player.HP.Heal(Player.HP.MaxValue);
-            Player.Dead = false;
+            Player.Respawn();
+            // Player.SMachine.TransitionTo(nameof(PlayerRunState), null);
+            // Player.SMachine.SetProcess(true);
+            // Player.SMachine.SetPhysicsProcess(true);
+            // Player.SetPhysicsProcess(true);
+            // Player.SetProcess(true);
+            // Player.HP.Heal(Player.HP.MaxValue);
+            // Player.Dead = false;
 
            RespawnEnemies();
         }
@@ -80,6 +80,7 @@ namespace Game
             ResetEnemies();
         }
 
+        //Called by the player
         public void OnCheckPointLeft()
         {
             RespawnEnemies();

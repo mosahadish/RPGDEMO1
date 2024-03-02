@@ -125,7 +125,7 @@ namespace Game
 			}
 		}
 
-		private void DrawWeapon(Weapon weap)
+		public void DrawWeapon(Weapon weap)
 		{
 			if (equippedItems.ContainsKey(weap))
 			{

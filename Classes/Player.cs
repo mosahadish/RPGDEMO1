@@ -44,12 +44,12 @@ namespace Game
 		[Export] public CameraComponent Camera;
 		[Export] public new PlayerMovement Movement;
 		[Export] public AreaInteract Interact;
-		[Export] private PlayerEquipmentHandler equip;
+		[Export] public PlayerEquipmentHandler Equip;
 		[Export] Inventory Inventory;
 		[Export] private Aim aim;
 
 		#endregion
-
+		public bool Consuming = false;
 		public bool CanInteract = true;
 
 		#region Private members
@@ -114,12 +114,12 @@ namespace Game
 			}
 			if (SMachine is PlayerStateMachine machine)
 			{
-				if (equip != null)
+				if (Equip != null)
 				{
-					equip.WeaponChanged += machine.OnWeaponChanged;
-					equip.OffhandChanged += machine.OnOffhandChanged;
-					equip.Inventory = Inventory;
-					equip.Player = this;
+					Equip.WeaponChanged += machine.OnWeaponChanged;
+					Equip.OffhandChanged += machine.OnOffhandChanged;
+					Equip.Inventory = Inventory;
+					Equip.Player = this;
 				}
 				AttunementChanged += machine.OnAttunementChanged;
 
@@ -130,7 +130,7 @@ namespace Game
 					Stam.StaminaChanged += machine.OnStaminaChanged;
 
 				if (audio != null)
-					equip.Audio = audio;
+					Equip.Audio = audio;
 			}
 
 			if (Interact != null)
@@ -147,11 +147,15 @@ namespace Game
 
         private void OnInventoryUsedItem(Item item)
         {
+			if (_IsAttacking == true || _isDodging == true || _isBlocking == true || _InAir == true || Consuming == true) return;
+			
             if (item is Consumable consumable)
 			{
 				if (consumable.ConsumableType == ConsumableTypes.Heal)
 				{
 					HP.Heal(consumable.Consume());
+					Consuming = true;
+					SMachine.TransitionTo(nameof(PlayerDrinkState), null);
 					EmitSignal(SignalName.ItemUseSuccess);
 				}
 			}
@@ -168,10 +172,10 @@ namespace Game
 			if (SMachine is PlayerStateMachine machine)
 			{
 
-				if (equip != null)
+				if (Equip != null)
 				{
-					equip.WeaponChanged -= machine.OnWeaponChanged;
-					equip.OffhandChanged -= machine.OnOffhandChanged;
+					Equip.WeaponChanged -= machine.OnWeaponChanged;
+					Equip.OffhandChanged -= machine.OnOffhandChanged;
 				}
 				AttunementChanged -= machine.OnAttunementChanged;
 
@@ -188,8 +192,8 @@ namespace Game
 		{
 			Resting = true;
 			HP.Heal(HP.MaxValue);
-			equip.SheatheWeapon(CurrentWeapon);
-			equip.SheatheWeapon(CurrentOffhand);
+			Equip.SheatheWeapon(CurrentWeapon);
+			Equip.SheatheWeapon(CurrentOffhand);
 			lastVisitedCheckpoint = checkpoint;
 			SMachine.TransitionTo(nameof(PlayerRestingState), null);
 			EmitSignal(SignalName.PlayerResting);
@@ -206,7 +210,21 @@ namespace Game
 			(Animation as PlayerAnimation).Resting = false;
 		}
 
-		public override void _ExitTree()
+		public void Respawn()
+		{
+			Equip.SheatheWeapon(CurrentWeapon);
+			Equip.SheatheWeapon(CurrentOffhand);
+			Camera.Rotation = Rotation;
+			SMachine.TransitionTo(nameof(PlayerRunState), null);
+            SMachine.SetProcess(true);
+            SMachine.SetPhysicsProcess(true);
+            SetPhysicsProcess(true);
+            SetProcess(true);
+            HP.Heal(HP.MaxValue);
+            Dead = false;
+		}
+
+        public override void _ExitTree()
 		{
 			base._ExitTree();
 			DisconnectEvents();
