@@ -428,6 +428,7 @@ namespace Game
 			if (value == 0)
 			{
 				CancelSprint();
+				BlockRelease();
 			}
 		}
 

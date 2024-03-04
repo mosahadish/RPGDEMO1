@@ -68,7 +68,7 @@ directional_shadow_max_distance = 140.0
 directional_shadow_pancake_size = 10.0
 
 [node name="PlayerSpawnPos" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 167.198, 149.845, 869.705)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 167.198, 149.834, 869.705)
 
 [node name="Items" type="Node" parent="."]
 
@@ -88,7 +88,6 @@ ItemScene = ExtResource("13_g2ao4")
 
 [node name="MeleeAI" parent="Enemies" instance=ExtResource("14_qhv36")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 186.281, 151.433, 895.222)
-_CanRotate = true
 
 [node name="Checkpoints" type="Node" parent="."]
 

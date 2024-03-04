@@ -8,11 +8,6 @@ namespace Game
   public partial class PlayerAnimation : Animate
   {
 
-    // public override void Transition(string transitionType, string transitionName)
-    // {
-    //   AnimTree.Set("parameters/" + transitionType + "/transition_request", transitionName);
-    // }
-
     public string CurrentMovementState = "Run";
     public string CurrentWeaponState = "Unarmed";
     public int CurrentChain = 1;
@@ -26,6 +21,10 @@ namespace Game
     public bool Parry = false;
     public bool Pickup = false;
     public string UseItem = "";
+    public string CurrentAttack = "";
+    public bool Fall = false;
+    public string FallState = "";
+    public string LandState = "";
 
     public override void _Ready()
     {
@@ -45,13 +44,14 @@ namespace Game
 
     public void MainAttack(string attack)
     {
-      AnimTree.Set("parameters/MainhandState/" + CurrentWeaponState
-        + "/" + CurrentAttunement + "/conditions/" + PreviousAttack, false);
+      CurrentAttack = attack;
+      // AnimTree.Set("parameters/MainhandState/" + CurrentWeaponState
+      //   + "/" + CurrentAttunement + "/conditions/" + PreviousAttack, false);
 
-      AnimTree.Set("parameters/MainhandState/" + CurrentWeaponState
-        + "/" + CurrentAttunement + "/conditions/" + attack, true);
+      // AnimTree.Set("parameters/MainhandState/" + CurrentWeaponState
+      //   + "/" + CurrentAttunement + "/conditions/" + attack, true);
 
-      PreviousAttack = attack;
+      // PreviousAttack = attack;
       RequestOneShot("MainAttack");
     }
 

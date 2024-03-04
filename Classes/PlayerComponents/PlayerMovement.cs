@@ -24,7 +24,6 @@ namespace Game
         {
             base._Ready();
 			(Actor as Player).AttunementChanged += OnAttunementChanged;
-			Speed = 200;
         }
 
         private void OnAttunementChanged(string msg)

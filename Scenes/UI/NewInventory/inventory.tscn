@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://yb43ks5ned6a"]
 
-[ext_resource type="PackedScene" uid="uid://dmsjjurjggdpo" path="res://Scenes/UI/NewInventory/inv_slot.tscn" id="1_4u5be"]
 [ext_resource type="Script" path="res://Classes/GenericComponents/Inventory.cs" id="1_76x8l"]
+[ext_resource type="PackedScene" uid="uid://dmsjjurjggdpo" path="res://Scenes/UI/NewInventory/InventorySlot.tscn" id="2_0lv2g"]
 
 [node name="Inventory" type="Control" node_paths=PackedStringArray("inventory", "equipment", "hotbar", "headSlot", "bodySlot", "legsSlot", "rightHandSlot", "leftHandSlot")]
 layout_mode = 3
@@ -51,23 +51,23 @@ size_flags_horizontal = 4
 size_flags_vertical = 0
 columns = 5
 
-[node name="equip_head" parent="PanelContainer/VBoxContainer/EquipmentGrid" instance=ExtResource("1_4u5be")]
+[node name="equip_head" parent="PanelContainer/VBoxContainer/EquipmentGrid" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
 Type = "HEAD"
 
-[node name="equip_body" parent="PanelContainer/VBoxContainer/EquipmentGrid" instance=ExtResource("1_4u5be")]
+[node name="equip_body" parent="PanelContainer/VBoxContainer/EquipmentGrid" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
 Type = "BODY"
 
-[node name="equip_legs" parent="PanelContainer/VBoxContainer/EquipmentGrid" instance=ExtResource("1_4u5be")]
+[node name="equip_legs" parent="PanelContainer/VBoxContainer/EquipmentGrid" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
 Type = "LEGS"
 
-[node name="equip_righthand" parent="PanelContainer/VBoxContainer/EquipmentGrid" instance=ExtResource("1_4u5be")]
+[node name="equip_righthand" parent="PanelContainer/VBoxContainer/EquipmentGrid" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
 Type = "RIGHT_HAND"
 
-[node name="equip_lefthand" parent="PanelContainer/VBoxContainer/EquipmentGrid" instance=ExtResource("1_4u5be")]
+[node name="equip_lefthand" parent="PanelContainer/VBoxContainer/EquipmentGrid" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
 Type = "LEFT_HAND"
 
@@ -76,28 +76,28 @@ layout_mode = 2
 size_flags_horizontal = 4
 columns = 4
 
-[node name="InvSlot1" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("1_4u5be")]
+[node name="InvSlot1" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
 
-[node name="InvSlot2" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("1_4u5be")]
+[node name="InvSlot2" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
 
-[node name="InvSlot3" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("1_4u5be")]
+[node name="InvSlot3" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
 
-[node name="InvSlot4" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("1_4u5be")]
+[node name="InvSlot4" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
 
-[node name="InvSlot5" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("1_4u5be")]
+[node name="InvSlot5" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
 
-[node name="InvSlot6" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("1_4u5be")]
+[node name="InvSlot6" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
 
-[node name="InvSlot7" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("1_4u5be")]
+[node name="InvSlot7" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
 
-[node name="InvSlot8" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("1_4u5be")]
+[node name="InvSlot8" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
 
 [node name="MarginContainer2" type="MarginContainer" parent="PanelContainer/VBoxContainer"]
@@ -109,14 +109,14 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 columns = 4
 
-[node name="hot_bar1" parent="PanelContainer/VBoxContainer/GridContainer" instance=ExtResource("1_4u5be")]
+[node name="hot_bar1" parent="PanelContainer/VBoxContainer/GridContainer" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
 
-[node name="hot_bar2" parent="PanelContainer/VBoxContainer/GridContainer" instance=ExtResource("1_4u5be")]
+[node name="hot_bar2" parent="PanelContainer/VBoxContainer/GridContainer" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
 
-[node name="hot_bar3" parent="PanelContainer/VBoxContainer/GridContainer" instance=ExtResource("1_4u5be")]
+[node name="hot_bar3" parent="PanelContainer/VBoxContainer/GridContainer" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
 
-[node name="hot_bar4" parent="PanelContainer/VBoxContainer/GridContainer" instance=ExtResource("1_4u5be")]
+[node name="hot_bar4" parent="PanelContainer/VBoxContainer/GridContainer" instance=ExtResource("2_0lv2g")]
 layout_mode = 2

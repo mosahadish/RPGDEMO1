@@ -75,8 +75,12 @@ namespace Game
 					foreach (Actor bodyToDamage in bodiesToDamage)
 					{
 						if (bodyToDamage.HasMethod("OnHit"))
+						{
 							bodyToDamage.OnHit(Damage, Wielder, Name);
+						}
 					}
+					bodiesToDamage.Clear();
+
 					DamageOn = false;
 				}
 			}

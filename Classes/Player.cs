@@ -101,6 +101,7 @@ namespace Game
 			frontDirection.X = Position.X;
 			frontDirection.Y = Position.Y;
 			frontDirection.Z = Position.Z + 1;
+
 		}
 
 		private void HandleChildrenDependencies()
@@ -212,6 +213,7 @@ namespace Game
 
 		public void Respawn()
 		{
+			Camera.lockOnComponent.Targetted(null);
 			Equip.SheatheWeapon(CurrentWeapon);
 			Equip.SheatheWeapon(CurrentOffhand);
 			Camera.Rotation = Rotation;
@@ -269,6 +271,7 @@ namespace Game
 
 		public void ReleaseSprint(bool changeSpeed = true)
 		{
+			if (Movement._Sprinting == false) return;
 			(Animation as PlayerAnimation).CurrentMovementState = "Run";
 			Movement._Sprinting = false;
 			if (changeSpeed)
@@ -353,10 +356,7 @@ namespace Game
 		public void Attack1()
 		{
 			_IsAttacking = true;
-			// Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.Attack1);
-			// Animation.OneShot(CurrentWeapon.Name);
 			(Animation as PlayerAnimation).MainAttack("Attack1");
-			//(Animation as PlayerAnimation).RequestOneShot("MainAttack");
 
 			audio.Play(CurrentAttunement + CurrentWeapon.Name + Animations.Attack1);
 
@@ -399,7 +399,7 @@ namespace Game
 
 			(Animation as PlayerAnimation).MainAttack(Animations.SprintLightAttack);
 			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
-			ReleaseSprint();
+			//ReleaseSprint();
 			Movement.SetSpeed(Movement.SprintSpeed);
 		}
 
@@ -435,6 +435,7 @@ namespace Game
 			_IsAttacking = false;
 			_CanRotate = true;
 			Stam.Regen = true;
+			ReleaseSprint();
 		}
 
 		public bool IsAttacking()

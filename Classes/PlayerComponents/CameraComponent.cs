@@ -19,7 +19,7 @@ namespace Game
 		[Export] Player player;
 		[Export] private Camera3D camera;
 		[Export] PlayerStateMachine sMachine;
-		[Export] LockOnComponent lockOnComponent;
+		[Export] public LockOnComponent lockOnComponent;
 		
 		public Actor Target;
 
