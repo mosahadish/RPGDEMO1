@@ -44,6 +44,7 @@ namespace Game
                 ai.SMachine.SetPhysicsProcess(false);
                 actor.Visible = false;
                 actor.SetCollisionLayerValue(2, false);
+                actor.SetCollisionMaskValue(5, false);
             }
             // actor.QueueFree();
         }
@@ -62,14 +63,7 @@ namespace Game
                 Player.GlobalPosition = Player.lastVisitedCheckpoint.SpawnPos.GlobalPosition;
             }
             Player.Respawn();
-            // Player.SMachine.TransitionTo(nameof(PlayerRunState), null);
-            // Player.SMachine.SetProcess(true);
-            // Player.SMachine.SetPhysicsProcess(true);
-            // Player.SetPhysicsProcess(true);
-            // Player.SetProcess(true);
-            // Player.HP.Heal(Player.HP.MaxValue);
-            // Player.Dead = false;
-
+    
            RespawnEnemies();
         }
 
@@ -112,6 +106,7 @@ namespace Game
                 enemy.Visible = true;
                 enemy.Dead = false;
                 enemy.SetCollisionLayerValue(2, true);
+                enemy.SetCollisionMaskValue(5, true);
             }
         }
 
