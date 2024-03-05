@@ -17,12 +17,11 @@ namespace Game
         public override void Enter(Dictionary<string, Vector2> msg)
         {
             player??= Actor as Player;
-            //currentTransition = (string)Animation.AnimTree.Get("parameters/TypeTransition/current_state");
-            //Animation.Transition("TypeTransition", "STAGGER");
+
             player.Velocity = Vector3.Zero;
             player._CanRotate = false;
             (Animation as PlayerAnimation).Resting = true;
-            //(Animation as PlayerAnimation).CurrentMovementState = "Resting";
+
             t = (AnimationNodeStateMachinePlayback)(Animation as PlayerAnimation).AnimTree.Get("parameters/InteractState/playback");
             GD.Print(t.GetCurrentNode());
             
@@ -33,11 +32,7 @@ namespace Game
 
         public override void PhysicsUpdate(double delta)
         {
-            // newVelo = player.Velocity;
-            // newVelo.Y += -Movement.Gravity * (float)delta;
-            
-            // player.Velocity = newVelo;
-            // player.MoveAndSlide();
+   
         }
 
         public override void Update(double delta)

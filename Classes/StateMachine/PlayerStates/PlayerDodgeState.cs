@@ -8,9 +8,10 @@ namespace Game
     [GlobalClass]
     public partial class PlayerDodgeState : State
     {
-
+        private const double DefaultTimer = 1.2;
         private Vector3 direction;
         private CameraComponent camera;
+        private double dodgeTimer = DefaultTimer;
 
         public override void Enter(Dictionary<string, Vector2> msg)
         {   
@@ -19,6 +20,7 @@ namespace Game
 
             direction = new Vector3(InputDir.X, 0, InputDir.Y).Rotated(Vector3.Up, camera.Rotation.Y).Normalized();
             
+            dodgeTimer = DefaultTimer;
             (Actor as Player).Dodge();
         }
 
@@ -26,6 +28,13 @@ namespace Game
         {
             Actor.LookInDirection(direction, true);
             Movement.HandleMovement(direction, delta);
+
+            dodgeTimer -= delta;
+
+            if (dodgeTimer <= 0)
+            {
+                EmitSignal(SignalName.StateFinishedWithArgument, nameof(PlayerDodgeState));
+            }
         }
 
         public override void Update(double delta)

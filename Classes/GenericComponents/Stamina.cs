@@ -19,29 +19,30 @@ namespace Game
         public bool Degen = false;
         
         private float currentValue = 0;
-        private float regenRate = 0;
-        private float degenRate = 0;
+        public float RegenRate = 0;
+        public float DegenRate = 0;
+
 
         public override void _Ready()
         {
-            regenRate = RegenPerSec/ Engine.PhysicsTicksPerSecond;
-            degenRate = DegenPerSec/ Engine.PhysicsTicksPerSecond;
+            RegenRate = RegenPerSec/ Engine.PhysicsTicksPerSecond;
+            DegenRate = DegenPerSec/ Engine.PhysicsTicksPerSecond;
             
             IncreaseStamina(MaxValue);
         }
 
         public override void _PhysicsProcess(double delta)
         {
-            if (Regen == true)
-            {
-                if (currentValue < MaxValue)
-                    IncreaseStamina(regenRate);
-            }
+            // if (Regen == true)
+            // {
+            //     if (currentValue < MaxValue)
+            //         IncreaseStamina(RegenRate);
+            // }
 
-            if (Degen == true)
-            {
-                DecreaseStamina(degenRate);
-            }
+            // if (Degen == true)
+            // {
+            //     DecreaseStamina(DegenRate);
+            // }
         }
 
         public void IncreaseStamina(float value)

@@ -6,10 +6,13 @@ namespace Game
     [GlobalClass]
     public partial class PlayerPickUpState : State
     {
+        private const double DefaultTimer = 0.8;
         private Player player;
         private string currentTransition;
 
         private Vector3 newVelo;
+
+        private double pickUpTimer = DefaultTimer;
 
         public override void Enter(Dictionary<string, Vector2> msg)
         {
@@ -25,11 +28,9 @@ namespace Game
 
         public override void PhysicsUpdate(double delta)
         {
-            // newVelo = player.Velocity;
-            // newVelo.Y += -Movement.Gravity * (float)delta;
-            
-            // player.Velocity = newVelo;
-            // player.MoveAndSlide();
+            pickUpTimer -= delta;
+            if (pickUpTimer <= 0)
+                EmitSignal(SignalName.StateFinishedWithArgument, nameof(PlayerPickUpState));
         }
 
         public override void Update(double delta)
@@ -39,6 +40,7 @@ namespace Game
 
         public override void Exit()
         {
+            pickUpTimer = DefaultTimer;
             player._CanRotate = true;
             (Animation as PlayerAnimation).Pickup = false;
             

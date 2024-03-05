@@ -132,6 +132,8 @@ namespace Game
 
 				if (audio != null)
 					Equip.Audio = audio;
+
+				ItemUseSuccess += machine.OnItemUse;
 			}
 
 			if (Interact != null)
@@ -156,7 +158,7 @@ namespace Game
 				{
 					HP.Heal(consumable.Consume());
 					Consuming = true;
-					SMachine.TransitionTo(nameof(PlayerDrinkState), null);
+					//SMachine.TransitionTo(nameof(PlayerDrinkState), null);
 					EmitSignal(SignalName.ItemUseSuccess);
 				}
 			}
@@ -262,11 +264,11 @@ namespace Game
 
 		public void Sprint()
 		{
-			(Animation as PlayerAnimation).CurrentMovementState = "Sprint";
-			Movement._Sprinting = true;
-			Movement.SetSpeed(Movement.SprintSpeed);
-			Stam.Regen = false;
-			Stam.Degen = true;
+			//(Animation as PlayerAnimation).CurrentMovementState = "Sprint";
+			// Movement._Sprinting = true;
+			// Movement.SetSpeed(Movement.SprintSpeed);
+			// Stam.Regen = false;
+			// Stam.Degen = true;
 		}
 
 		public void ReleaseSprint(bool changeSpeed = true)
@@ -284,14 +286,12 @@ namespace Game
 
 		public void Block()
 		{
-
-			(Animation as PlayerAnimation).CurrentMovementState = "Walk";
-			(Animation as PlayerAnimation).Blocking = true;
-
-			Movement._Sprinting = false;
 			_isBlocking = true;
-			Stam.Degen = true;
-			Stam.Regen = false;
+		}
+
+		public void ResetBlockedAttack()
+		{
+			_attackBlocked = false;
 		}
 
 		public void BlockedAttack(float damageToTake)
@@ -305,13 +305,11 @@ namespace Game
 
 		public void BlockCounterAttack()
 		{
-			BlockRelease();
 			_CanRotate = false;
 			_IsAttacking = true;
 			
 			(Animation as PlayerAnimation).MainAttack(Animations.CounterLightAttack);
 			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
-			Stam.Regen = false;
 			_attackBlocked = false;
 		}
 
@@ -319,25 +317,17 @@ namespace Game
 		{
 			(Animation as PlayerAnimation).CurrentMovementState = "Walk";
 			(Animation as PlayerAnimation).BlockedAttack = false;
-			//(Animation as PlayerAnimation).Blocking = true;
+
 			_isBlocking = true;
 			_attackBlocked = false;
-			//Animation.Transition("Shield", Animations.BlockHold);
 		}
 
 		public void BlockRelease()
 		{
-			if (_isBlocking == false) return;
-
-			(Animation as PlayerAnimation).Blocking = false;
-			(Animation as PlayerAnimation).CurrentMovementState = "Run";
-			//(Animation as PlayerAnimation).RequestOneShot("Offhand");
 			_attackBlocked = false;
-
-
 			_isBlocking = false;
-			Stam.Degen = false;
-			Stam.Regen = true;
+			//Stam.Degen = false;
+			//Stam.Regen = true;
 		}
 
 		public bool IsBlocking()
@@ -361,7 +351,6 @@ namespace Game
 			audio.Play(CurrentAttunement + CurrentWeapon.Name + Animations.Attack1);
 
 			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
-			Stam.Regen = false;
 		}
 
 		public void Attack2()
@@ -372,7 +361,6 @@ namespace Game
 			audio.Play(CurrentAttunement + CurrentWeapon.Name + Animations.Attack2);
 
 			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
-			Stam.Regen = false;
 		}
 
 		public void Attack3()
@@ -383,7 +371,6 @@ namespace Game
 			audio.Play(CurrentAttunement + CurrentWeapon.Name + Animations.Attack3);
 
 			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
-			Stam.Regen = false;
 		}
 
 		public void ComboAttack()
@@ -393,14 +380,10 @@ namespace Game
 
 		public void SprintLightAttack()
 		{
-			_CanRotate = false;
-			_IsAttacking = true;
-			Stam.Degen = false;
-
 			(Animation as PlayerAnimation).MainAttack(Animations.SprintLightAttack);
 			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
-			//ReleaseSprint();
-			Movement.SetSpeed(Movement.SprintSpeed);
+			_CanRotate = false;
+			_IsAttacking = true;
 		}
 
 		public void SprintHeavyAttack()
@@ -409,15 +392,10 @@ namespace Game
 
 		public void DodgeLightAttack()
 		{
+			(Animation as PlayerAnimation).MainAttack(Animations.DodgeLightAttack);
+			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
 			_CanRotate = false;
 			_IsAttacking = true;
-			Movement._Sprinting = false;
-			Stam.Regen = false;
-			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
-
-			(Animation as PlayerAnimation).MainAttack(Animations.DodgeLightAttack);
-			// Animation.Transition(CurrentWeapon.Name + CurrentAttunement, CurrentWeapon.Name+Animations.DodgeLightAttack);
-			// Animation.OneShot(CurrentWeapon.Name);
 		}
 
 		public void JumpAttack()
@@ -434,8 +412,6 @@ namespace Game
 		{
 			_IsAttacking = false;
 			_CanRotate = true;
-			Stam.Regen = true;
-			ReleaseSprint();
 		}
 
 		public bool IsAttacking()

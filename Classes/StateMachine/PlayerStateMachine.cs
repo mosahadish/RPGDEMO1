@@ -12,6 +12,7 @@ namespace Game
 	{
 		[ExportCategory("Dependencies")]
 		[Export] private Player player;
+		[Export] private ActionStateMachine aMachine;
 		[Export] private PlayerAnimation Animation;
 		[Export] private Stamina Stam;
 		[Export] private InputBuffer Buffer;
@@ -48,6 +49,11 @@ namespace Game
                 c.Attack = Attack;
                 c.Stam = Actor.Stam;
 
+				if (c.HasSignal("StateFinishedWithArgument"))
+                {
+                    c.StateFinishedWithArgument += StateFinished;
+                }
+
                 if (Actor is Player && (c is PlayerRunState))
                     (c as PlayerRunState).SetCamera((Actor as Player).Camera);
                 if (Actor is Player && (c is PlayerDodgeState))
@@ -67,21 +73,23 @@ namespace Game
 			if (state is PlayerParryingState) return;
 			if (state is PlayerDeathState) return;
 			if (state is PlayerPickUpState) return;
-			if (state is PlayerDrinkState) return;
-			//if (player.Consuming == true) return;
 
+		
 			if (Actor.HasParryingWeapon())
 			{
-				//if (CurrentOffhand is ParryingObject parry) parry.ActivateParryWindow(); 
 				if (Msg.ContainsKey(Actions.Parry)) HandleParry();
 			}
 			if (Actor.HasBlockWeapon())
 			{
-				if (Msg.ContainsKey(Actions.Block)) HandleBlock(Msg[Actions.Block]);
+				if (Msg.ContainsKey(Actions.Block))
+				{
+					HandleBlock(Msg[Actions.Block]);
+				}
 			}
 			if (player.HasWeapon())
 			{
 				if (player.IsBlocking() && player.CanCounter() == false) return;
+				
 				HandleLightAttack(Msg);
 			}
 		}
@@ -133,6 +141,7 @@ namespace Game
 						else if(player.IsBlocking()) nextAction = Actions.CounterLightAttack;
 
 						msgForState[nextAction] = vectorForState;
+						aMachine.TransitionTo(nameof(PlayerIdleState));
 						TransitionTo(nameof(PlayerAttackState), msgForState);
 					}
 				}
@@ -152,8 +161,6 @@ namespace Game
 
 			if (action == Actions.LightAttack)
 			{
-				Animation.Transition("Bow" + CurrentAttunement, Animations.Release);
-				Animation.OneShot("Bow");
 				(Actor.CurrentWeapon as Bow).Release();
 				(Attack as PlayerAttack).ReleaseArrow(CurrentAttunement);
 				Attack.ReadyToShoot = false;
@@ -181,24 +188,19 @@ namespace Game
 		private void HandleBlock(bool pressed)
 		{
 			if (player.IsDodging()) return;
-			if (pressed) Block();
-			else BlockRelease();
-		}
 
-		private void Block()
-		{
-			if (player.IsBlocking()) return;
-			if (player.IsAttacking()) return;
-			CancelSprint();
-			Walk();
-			player.Block();
-		}
+			if (pressed)
+			{
+				if (aMachine.state is PlayerBlockState ||
+				state is PlayerAttackState) return;
 
-		private void BlockRelease()
-		{
-
-			CancelWalk();
-			player.BlockRelease();
+				aMachine.TransitionTo(nameof(PlayerBlockState));
+			}
+			else 
+			{
+				if (aMachine.state is PlayerBlockState == true)
+					aMachine.TransitionTo(nameof(PlayerIdleState));
+			}
 		}
 
 		#endregion
@@ -214,8 +216,6 @@ namespace Game
 			if (state is PlayerDeathState) return;
 			if (state is PlayerPickUpState) return;
 			if (state is PlayerDrinkState) return;
-			
-
 
 			if (Actor.IsOnFloor() == false)
 			{
@@ -224,10 +224,9 @@ namespace Game
 			}
 
 			Move(Msg);
-			
 			if (state is PlayerAttackState) return;
 			//if (player.Consuming == true) return;
-
+			
 
 			Sprint(Msg);
 			Jump(Msg);
@@ -256,17 +255,13 @@ namespace Game
 			{
 				if (Msg[Actions.Sprint] == Vector2.Zero) return;
 
-				if (state.Anim == Animations.Sprint) return;
-				//TransitionTo(nameof(PlayerRunState), Msg);
-				player.Sprint();
+				if (aMachine.state is PlayerSprintState == false)
+					aMachine.TransitionTo(nameof(PlayerSprintState));
 			}
 
 			if (Msg.ContainsKey(Actions.SprintRelease) && player.IsBlocking() == false)
 			{
-				//state.SetAnim(Animations.TransitionMovement, Animations.SprintRelease);
-				//TransitionTo(nameof(PlayerRunState), Msg);
-				GD.Print("HHHH");
-				player.ReleaseSprint();
+				aMachine.TransitionTo(nameof(PlayerIdleState));
 			}
 		}
 		private void Jump(Dictionary<string, Vector2> Msg)
@@ -281,7 +276,7 @@ namespace Game
 		{
 			if (Msg.ContainsKey(Actions.Dodge) && Stam.HasEnough(Stam.DodgeConsumption)) 
 			{
-				BlockRelease();
+				//BlockRelease();
 				HandleCameraInput(Actions.AimCancel);
 				TransitionTo(nameof(PlayerDodgeState), Msg);
 			}
@@ -317,11 +312,11 @@ namespace Game
 			if (Actor.HasAimingWeapon() == false) return;
 			if (action == Actions.Aim)
 			{
-				CancelSprint();
+				//CancelSprint();
 
 				(Actor as Player).Camera._AimOn = true;
 				Movement.SetSpeed(Movement.WalkSpeed);
-				Walk();	
+				//Walk();	
 
 				if (Actor.CurrentWeapon is Bow)
 				{
@@ -334,7 +329,7 @@ namespace Game
 			{
 				player.Camera._AimOn = false;
 				Attack.ReadyToShoot = false;
-				CancelWalk();	
+				//CancelWalk();	
 
 				if (Actor.CurrentWeapon is Bow bow)
 				{
@@ -353,36 +348,28 @@ namespace Game
 		{
 			
 		}
-		/*
-		This heavily relies on animations finishing
-		Probably better to use timers inside the states and send a signal when state is done
-		We'll deal with it when we start having problems, so far so good 
-		*/
-		public void OnAnimationFinished(string anim)
+
+		internal void OnItemUse()
+        {
+            aMachine.TransitionTo(nameof(PlayerDrinkState));
+        }
+
+		private void StateFinished(string stateName)
 		{
-
-			GD.Print(anim);
-			if (anim.Contains(Animations.Parry))
+			if (stateName == nameof(PlayerPickUpState))
 			{
 				TransitionTo(nameof(PlayerRunState), Msg);
 			}
-
-			else if (anim.Contains("PickUp")) 
+			if (stateName == nameof(PlayerStaggerState))
 			{
 				TransitionTo(nameof(PlayerRunState), Msg);
-			
 			}
-			else if (anim.Contains("Drink")) TransitionTo(nameof(PlayerRunState), Msg);
-			else if (anim.Contains("RestToStand")) TransitionTo(nameof(PlayerRunState), Msg);
-
-			else if (anim.Contains(Animations.Stagger)) TransitionTo(nameof(PlayerRunState), Msg);
-
-			else if (anim.Contains(Animations.AttackGeneral) && anim.Contains("Block") == false)
+			if (stateName == nameof(PlayerParryingState))
 			{
-				Buffer.Chain = 1;
-				TransitionTo(nameof(PlayerRunState), msgForState);
+				if (state is PlayerStaggerState == false)
+					TransitionTo(nameof(PlayerRunState), Msg);
 			}
-			else if (anim.Contains(Animations.Dodge))
+			if (stateName == nameof(PlayerDodgeState))
 			{
 				if (Buffer.IsEmpty())
 				{
@@ -390,20 +377,25 @@ namespace Game
 				}
 				else
 				{
-					ExecuteBufferInput(anim);
+					ExecuteBufferInput(null);
 				}
 			}
+		}
+		/*
+		This heavily relies on animations finishing
+		Probably better to use timers inside the states and send a signal when state is done
+		We'll deal with it when we start having problems, so far so good 
+		*/
+		public void OnAnimationFinished(string anim)
+		{
+			GD.Print(anim);
+			if (anim.Contains("RestToStand")) TransitionTo(nameof(PlayerRunState), Msg);
 
-			else if (anim.Contains(Animations.DrawBow))
+			else if (anim.Contains(Animations.AttackGeneral) && anim.Contains("Block") == false)
 			{
-				if (player.Camera._AimOn)
-					Attack.ReadyToShoot = true;
-			}
-
-			else if (anim.Contains(Animations.Release))
-			{
-				if (player.Camera._AimOn)
-					DrawBow();
+				Buffer.Chain = 1;
+				if (state is PlayerStaggerState == false)
+					TransitionTo(nameof(PlayerRunState), msgForState);
 			}
 		}
 
@@ -411,57 +403,30 @@ namespace Game
 		{
 			CurrentAttunement = attun;
 			(Animation as PlayerAnimation).UpdateAttunement(attun);
-			GD.Print(CurrentAttunement);
-			if (Actor.HasWeapon()) Animation.Transition(Actor.CurrentWeapon.GetType().Name+"AttunementTransition", attun);	
-
-		foreach (State s in GetChildren().Cast<State>())
-			{	
-				if (s is PlayerAttackState)
-				{
-					s.SetAnim(CurrentAttunement, Animations.Attack1);
-				}
-			}
 		}
 
 		public void OnStaminaChanged(float value)
 		{
 			if (value == 0)
 			{
-				CancelSprint();
-				BlockRelease();
+				if (aMachine.state is PlayerBlockState)
+					aMachine.TransitionTo(nameof(PlayerIdleState));
 			}
 		}
 
 		public void OnWeaponChanged(Weapon weapon)
 		{
-			// if (weapon.Name == "Sword") Animation.Transition("TypeTransition", WeaponTypes.Melee1H);
 			if (weapon == null)
 			{
 				CurrentWeaponName = "Unarmed";
-				
 			} 
 			else 
 			{
 				CurrentWeaponName = weapon.Name;
 			}
 
-
 			Animation.CurrentWeaponState = CurrentWeaponName;
-
 			Attack.CurrentWeapon = weapon;
-
-			foreach (State s in GetChildren().Cast<State>())
-			{	
-				s.WeaponName = CurrentWeaponName;
-				if (s is PlayerAttackState)
-				{
-					s.SetAnim(CurrentAttunement, Animations.Attack1);
-				}
-			}
-			// //Current state should be Air or Run, can't switch during Attack/Dodge
-			if (state is PlayerRunState) state.SetAnim(Animations.TransitionMovement, Animations.Movement);
-
-			// if (state is PlayerAirState) state.SetAnim(Animations.TransitionMovement, Animations.Fall);
 		}
 
 		public void OnOffhandChanged(Weapon weapon)
@@ -470,23 +435,14 @@ namespace Game
 			{
 				Animation.CurrentOffhandState = "Unarmed";
 				Animation.OffhandBlend(0.0);
-				//Animation.AnimTree.Set("parameters/OffhandBlend/blend_amount", 0.0);
-				//Animation.OffhandBlend(0.0);
 			}
 			else
 			{
-				//Animation.Transition(Animations.TransitionOffhand, weapon.GetType().Name);
-				//Animation.AnimTree.Set("parameters/OffhandBlend/blend_amount", 1.0);
-				//Animation.OffhandTransition(weapon.GetType().Name);
 				if (weapon is Shield)
 				{
 					Animation.CurrentOffhandState = "Shield";
 					Animation.OffhandBlend(0.8);
 				}
-				// if (weapon is Shield)
-				// {
-				// 	Animation.OffhandBlend(1.0);
-				// }
 			}
 		}
 
@@ -503,40 +459,20 @@ namespace Game
 			
 
 			msgHandleAttack.Add(Buffer.Pop1(), true);
-			//Buffer.DeactivateBuffer();
 			bufferAttackInc = true;
 			HandleAttackInput(msgHandleAttack);
 		}
 		
 		#region Temporary functions
 
-		private void CancelSprint()
-		{
-			if (state.Anim.Contains(Animations.Sprint)) player.Movement.WantsReleaseSprint();
-		}
-
-		private void Walk()
-		{
-			state.SetAnim(Animations.TransitionMovement, Animations.Walk);
-			Animation.Transition(CurrentWeaponName+Animations.TransitionMovement, CurrentWeaponName+Animations.Walk);
-			Movement.SetSpeed(Movement.WalkSpeed);
-		}
-
-		private void CancelWalk()
-		{
-			state.SetAnim(Animations.TransitionMovement, Animations.Movement);
-			Animation.Transition(CurrentWeaponName+Animations.TransitionMovement, CurrentWeaponName+Animations.Movement);
-			Movement.SetSpeed(Movement.Speed);
-		}
-
 		private async void DrawBow()
 		{
-			Animation.Transition("Bow"+CurrentAttunement, "Draw");
+			//Animation.Transition("Bow"+CurrentAttunement, "Draw");
 			Animation.OneShot("Bow");
 			await ToSignal(GetTree().CreateTimer(0.6), SceneTreeTimer.SignalName.Timeout);
 			(player.CurrentWeapon as Bow).Draw();
 		}
 
-		#endregion
-	}  
+        #endregion
+    }  
 }

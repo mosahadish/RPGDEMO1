@@ -7,10 +7,12 @@ namespace Game
     [GlobalClass]
     public partial class PlayerStaggerState : State
     {
+        private const double DefaultTimer = 0.9;
         private Player player;
         private string currentTransition;
 
         private Vector3 newVelo;
+        private double staggerTimer = DefaultTimer;
 
         public override void Enter(Dictionary<string, Vector2> msg)
         {
@@ -31,6 +33,12 @@ namespace Game
             
             Actor.Velocity = newVelo;
             player.MoveAndSlide();
+
+            staggerTimer -= delta;
+            if (staggerTimer <= 0)
+            {
+                EmitSignal(SignalName.StateFinishedWithArgument, nameof(PlayerStaggerState));
+            }
         }
 
         public override void Update(double delta)
@@ -41,6 +49,7 @@ namespace Game
         public override void Exit()
         {
             Actor._CanRotate = true;
+            staggerTimer = DefaultTimer;
             //Animation.Transition("TypeTransition", currentTransition);
         }
     }

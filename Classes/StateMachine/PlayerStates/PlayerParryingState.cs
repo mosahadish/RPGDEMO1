@@ -7,6 +7,7 @@ namespace Game
     [GlobalClass]
     public partial class PlayerParryingState : State
     {
+        private const double DefaultTimer = 0.5;
         private Player player;
         private string currentTransition;
 
@@ -14,6 +15,8 @@ namespace Game
         private float timer;
         private Weapon currentOffhand;
         private string offhandType;
+
+        private double parryTimer = DefaultTimer;
 
         public override void Enter(Dictionary<string, Vector2> msg)
         {
@@ -41,6 +44,13 @@ namespace Game
             
             player.Velocity = newVelo;
             player.MoveAndSlide();
+
+            parryTimer -= delta;
+
+            if (parryTimer <= 0)
+            {
+                EmitSignal(SignalName.StateFinishedWithArgument, nameof(PlayerParryingState));
+            }
         }
 
         public override void Update(double delta)
@@ -51,6 +61,7 @@ namespace Game
         public override void Exit()
         {
             player._CanRotate = true;
+            parryTimer = DefaultTimer;
             (Animation as PlayerAnimation).Parry = false;
             //GD.Print(currentTransition);
             Animation.Transition(offhandType, currentTransition);

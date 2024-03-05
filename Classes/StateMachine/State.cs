@@ -6,6 +6,7 @@ namespace Game
 {
     public abstract partial class State : Node
     {
+        [Signal] public delegate void StateFinishedWithArgumentEventHandler(string stateName);
         public Actor Actor;
         public Movement Movement;
         public Attack Attack;

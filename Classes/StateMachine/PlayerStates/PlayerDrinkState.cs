@@ -6,35 +6,36 @@ namespace Game
     [GlobalClass]
     public partial class PlayerDrinkState : State
     {
+        private const double defaultDrinkTime = 2;
         private Player player;
         private Vector3 newVelo;
 
         private Weapon weaponToRedraw = null;
 
+        private double drinkTimer = defaultDrinkTime;
+
         public override void Enter(Dictionary<string, Vector2> msg)
         {
             player??= Actor as Player;
-            player.Velocity = Vector3.Zero;
-            player._CanRotate = false;
 
-            //(Animation as PlayerAnimation).CurrentMovementState = "Walk";
-            (Animation as PlayerAnimation).BlendMovement(Vector2.Zero);
+            (Animation as PlayerAnimation).CurrentMovementState = "Walk";
+           // (Animation as PlayerAnimation).BlendMovement(Vector2.Zero);
             if (player.HasOffhand()) weaponToRedraw = player.CurrentOffhand;
             player.Equip.SheatheWeapon(weaponToRedraw);
 
             (Animation as PlayerAnimation).UseItem = "Drink";
 			(Animation as PlayerAnimation).RequestOneShot("UseItem");
             
-            Movement.SetSpeed(0);
+            Movement.SetSpeed(Movement.WalkSpeed);
         }
 
         public override void PhysicsUpdate(double delta)
         {
-            newVelo = player.Velocity;
-            newVelo.Y += -Movement.Gravity * (float)delta;
-            
-            player.Velocity = newVelo;
-            player.MoveAndSlide();
+            drinkTimer -= delta;
+            if (drinkTimer <= 0) 
+            {
+                EmitSignal(SignalName.StateFinishedWithArgument, nameof(PlayerDrinkState));
+            }
         }
 
         public override void Update(double delta)
@@ -44,13 +45,13 @@ namespace Game
 
         public override void Exit()
         {
-            player._CanRotate = true;
             if (weaponToRedraw != null) player.Equip.DrawWeapon(weaponToRedraw);
-            //(Animation as PlayerAnimation).CurrentMovementState = "Run";
+            (Animation as PlayerAnimation).CurrentMovementState = "Run";
             weaponToRedraw = null;
             (Animation as PlayerAnimation).UseItem = "";
-            
+            player.Consuming = false;
             Movement.SetSpeed(Movement.Speed);
+            drinkTimer = defaultDrinkTime;
         }
     }
 }
