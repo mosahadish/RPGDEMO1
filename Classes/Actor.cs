@@ -30,8 +30,8 @@ namespace Game
 		public bool _InAir = false;
 		public bool _IsAttacking = false;
 
-		[Export] //for animations
- 		public bool _CanRotate = true;
+		[Export] public bool _CanRotate;
+ 		
 		
 		[Export] public Weapon CurrentWeapon = null;
 		public Weapon CurrentOffhand = null;
@@ -159,7 +159,7 @@ namespace Game
 			
             float TargetAngle = Mathf.Atan2(Dir.X, Dir.Z);
             Vector3 newRotation = Rotation;
-            newRotation.Y = (float)Mathf.LerpAngle(Rotation.Y, TargetAngle, 0.2);
+            newRotation.Y = (float)Mathf.LerpAngle(Rotation.Y, TargetAngle, 0.1);
 
             Rotation = newRotation;
         }

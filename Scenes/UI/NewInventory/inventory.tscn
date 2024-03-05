@@ -78,27 +78,35 @@ columns = 4
 
 [node name="InvSlot1" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
+Type = null
 
 [node name="InvSlot2" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
+Type = null
 
 [node name="InvSlot3" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
+Type = null
 
 [node name="InvSlot4" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
+Type = null
 
 [node name="InvSlot5" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
+Type = null
 
 [node name="InvSlot6" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
+Type = null
 
 [node name="InvSlot7" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
+Type = null
 
 [node name="InvSlot8" parent="PanelContainer/VBoxContainer/InventoryGrid" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
+Type = null
 
 [node name="MarginContainer2" type="MarginContainer" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
@@ -111,12 +119,16 @@ columns = 4
 
 [node name="hot_bar1" parent="PanelContainer/VBoxContainer/GridContainer" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
+Type = null
 
 [node name="hot_bar2" parent="PanelContainer/VBoxContainer/GridContainer" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
+Type = null
 
 [node name="hot_bar3" parent="PanelContainer/VBoxContainer/GridContainer" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
+Type = null
 
 [node name="hot_bar4" parent="PanelContainer/VBoxContainer/GridContainer" instance=ExtResource("2_0lv2g")]
 layout_mode = 2
+Type = null

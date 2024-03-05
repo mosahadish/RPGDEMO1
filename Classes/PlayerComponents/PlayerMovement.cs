@@ -11,9 +11,9 @@ namespace Game
 
 		private Vector2 inputDir;
 		[Export] private PlayerStateMachine sMachine;
-		[Export] private float controllerDeadzone = 0.15f;
-		[Export] private float lightningMultiplier = 1.1f;
-		[Export] private float fireMultiplier = 1.0f;
+		[Export] private float controllerDeadzone;
+		[Export] private float lightningMultiplier;
+		[Export] private float fireMultiplier;
 
 		private bool sprintTimerToggle = false;
 		private float sprintTimer = 0.0f;

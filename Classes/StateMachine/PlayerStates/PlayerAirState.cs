@@ -10,20 +10,10 @@ namespace Game
         private Vector2 inputDir;
         private Vector3 newVelo;
 
-
-        // public override void _Ready()
-        // {
-        //     base._Ready();
-            
-		// 	AnimTransition = Animations.TransitionMovement;
-		// 	Anim = Animations.JumpStand;
-        // }
-
         private double airTime = 0;
 
         public override void Enter(Dictionary<string, Vector2> Msg)
         {   
-            airTime = 0;
             if (Msg.ContainsKey(Actions.Jump))
             {
                 if (Msg[Actions.Jump] != Vector2.Zero) (Animation as PlayerAnimation).JumpType = "Running";
@@ -62,10 +52,16 @@ namespace Game
         public override void Exit()
         {
             GD.Print(airTime);
+            // if (airTime >= 2)
+            // {
+            //     airTime *= 5;
+            //     Actor.HP.TakeDamage((float)airTime);
+            // }
             // (Animation as PlayerAnimation).Fall = false;
             // (Animation as PlayerAnimation).LandState = "Roll";
             Actor._InAir = false;
             Actor._CanRotate = true;
+            airTime = 0;
         }
     }
 }

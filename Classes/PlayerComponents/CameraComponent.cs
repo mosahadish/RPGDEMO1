@@ -9,9 +9,9 @@ namespace Game
 	public partial class CameraComponent : Node3D
 	{
 		[ExportCategory("Camera Settings")]
-		[Export] private float deadZone = 0.15f;
-		[Export] private float lockOnMaxAngle = 60.0f;
-		[Export] private float lockOnMinAngle = -35.0f;
+		[Export] private float deadZone;// = 0.15f;
+		[Export] private float lockOnMaxAngle;// = 60.0f;
+		[Export] private float lockOnMinAngle;  // = -35.0f;
 		[Export] private float hSensitivity;
 		[Export] private float vSensitivity;
 

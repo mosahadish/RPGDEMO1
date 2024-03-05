@@ -7,7 +7,6 @@ namespace Game
   [GlobalClass]
   public partial class PlayerAnimation : Animate
   {
-
     public string CurrentMovementState = "Run";
     public string CurrentWeaponState = "Unarmed";
     public int CurrentChain = 1;
@@ -25,6 +24,8 @@ namespace Game
     public bool Fall = false;
     public string FallState = "";
     public string LandState = "";
+    public bool Aiming = false;
+    public bool ReadyToShoot = false;
 
     public override void _Ready()
     {
@@ -45,15 +46,15 @@ namespace Game
     public void MainAttack(string attack)
     {
       CurrentAttack = attack;
-      // AnimTree.Set("parameters/MainhandState/" + CurrentWeaponState
-      //   + "/" + CurrentAttunement + "/conditions/" + PreviousAttack, false);
-
-      // AnimTree.Set("parameters/MainhandState/" + CurrentWeaponState
-      //   + "/" + CurrentAttunement + "/conditions/" + attack, true);
-
-      // PreviousAttack = attack;
       RequestOneShot("MainAttack");
     }
+
+    public void RangeAttack(string attack)
+    {
+      CurrentAttack = attack;
+      RequestOneShot("RangeAttack");
+    }
+
 
     public void Offhand(string action)
     {

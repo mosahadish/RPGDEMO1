@@ -19,6 +19,7 @@ icon_alignment = 1
 expand_icon = true
 script = ExtResource("1_0mstg")
 quantityLabel = NodePath("Label")
+Type = "PASSIVE"
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0

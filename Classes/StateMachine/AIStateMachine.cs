@@ -1,9 +1,7 @@
 using GameSettings;
-using Globals;
 using Godot;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 
 namespace Game
 {

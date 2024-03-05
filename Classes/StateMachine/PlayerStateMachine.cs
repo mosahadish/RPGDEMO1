@@ -163,6 +163,8 @@ namespace Game
 			{
 				(Actor.CurrentWeapon as Bow).Release();
 				(Attack as PlayerAttack).ReleaseArrow(CurrentAttunement);
+				Animation.CurrentAttack = "Release";
+				//(Animation as PlayerAnimation).ReadyToShoot = false;
 				Attack.ReadyToShoot = false;
 			}
 		}
@@ -310,32 +312,20 @@ namespace Game
 		{
 			if (player.IsDodging()) return;
 			if (Actor.HasAimingWeapon() == false) return;
+
 			if (action == Actions.Aim)
 			{
-				//CancelSprint();
-
-				(Actor as Player).Camera._AimOn = true;
-				Movement.SetSpeed(Movement.WalkSpeed);
-				//Walk();	
-
 				if (Actor.CurrentWeapon is Bow)
 				{
-					//Draw bow string
-					DrawBow();
+					if (aMachine.state is PlayerAimingState == false)
+						aMachine.TransitionTo(nameof(PlayerAimingState));
 				}
 			}
 
 			if (action == Actions.AimCancel)
 			{
-				player.Camera._AimOn = false;
-				Attack.ReadyToShoot = false;
-				//CancelWalk();	
-
-				if (Actor.CurrentWeapon is Bow bow)
-				{
-					bow.Release();
-					Animation.AbortOneShot("Bow");
-				}
+				
+				aMachine.TransitionTo(nameof(PlayerIdleState));
 			}
 		}
 
@@ -465,13 +455,13 @@ namespace Game
 		
 		#region Temporary functions
 
-		private async void DrawBow()
-		{
-			//Animation.Transition("Bow"+CurrentAttunement, "Draw");
-			Animation.OneShot("Bow");
-			await ToSignal(GetTree().CreateTimer(0.6), SceneTreeTimer.SignalName.Timeout);
-			(player.CurrentWeapon as Bow).Draw();
-		}
+		// private async void DrawBow()
+		// {
+		// 	//Animation.Transition("Bow"+CurrentAttunement, "Draw");
+		// 	Animation.OneShot("Bow");
+		// 	await ToSignal(GetTree().CreateTimer(0.6), SceneTreeTimer.SignalName.Timeout);
+		// 	(player.CurrentWeapon as Bow).Draw();
+		// }
 
         #endregion
     }  

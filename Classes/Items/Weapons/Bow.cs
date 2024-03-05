@@ -9,11 +9,20 @@ public partial class Bow : Weapon
 
     public void Draw()
     {
+        if (animPlayer.IsPlaying())
+        {
+            animPlayer.Stop();
+        }
         animPlayer?.Play("Draw");
     }
     
     public void Release()
     {
+        if (animPlayer.IsPlaying())
+        {
+            animPlayer.Stop();
+        }
+
         animPlayer?.Play("Release");
     }
 }

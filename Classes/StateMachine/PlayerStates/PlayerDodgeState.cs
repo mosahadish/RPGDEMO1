@@ -12,9 +12,13 @@ namespace Game
         private Vector3 direction;
         private CameraComponent camera;
         private double dodgeTimer = DefaultTimer;
+        AnimationNodeStateMachinePlayback p;
+
+        private PlayerAnimation anim;
 
         public override void Enter(Dictionary<string, Vector2> msg)
         {   
+            anim??= (Animation as PlayerAnimation);
             if (msg.ContainsKey(Actions.Dodge)) InputDir = msg[Actions.Dodge];
             if (InputDir == Vector2.Zero) InputDir = Vector2.Down;
 
@@ -22,6 +26,9 @@ namespace Game
             
             dodgeTimer = DefaultTimer;
             (Actor as Player).Dodge();
+
+            GD.Print(anim.AnimTree.Get("parameters/playback"));
+            
         }
 
         public override void PhysicsUpdate(double delta)

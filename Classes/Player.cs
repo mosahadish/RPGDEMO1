@@ -38,7 +38,7 @@ namespace Game
 		#region Exported members
 		[Export(PropertyHint.Enum, Attunements.Lightning +
 		 "," + Attunements.Fire)]
-		public string CurrentAttunement { get; set; } = Attunements.Fire;
+		public string CurrentAttunement { get; set; }
 
 		[ExportCategory("Dependencies")]
 		[Export] public CameraComponent Camera;

@@ -17,7 +17,7 @@ namespace Game
 
         [Export(PropertyHint.Enum, Slots.Passive + ","+Slots.Head+","+ Slots.Body + "," + 
         Slots.Legs + "," + Slots.RightHand +"," + Slots.LeftHand)]
-		public string Type {get; set;} = Slots.Passive;
+		public string Type {get; set;}
 
         public override void _Ready()
         {
