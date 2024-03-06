@@ -26,9 +26,6 @@ namespace Game
             
             dodgeTimer = DefaultTimer;
             (Actor as Player).Dodge();
-
-            GD.Print(anim.AnimTree.Get("parameters/playback"));
-            
         }
 
         public override void PhysicsUpdate(double delta)

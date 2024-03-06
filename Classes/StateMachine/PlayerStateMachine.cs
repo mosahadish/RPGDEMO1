@@ -229,9 +229,7 @@ namespace Game
 
 			Move(Msg);
 			if (state is PlayerAttackState) return;
-			//if (player.Consuming == true) return;
-			
-
+		
 			Sprint(Msg);
 			Jump(Msg);
 			Dodge(Msg);
@@ -272,14 +270,21 @@ namespace Game
 		{
 			if (Msg.ContainsKey(Actions.Jump)) 
 			{
+				if (aMachine.state is PlayerSprintState)
+				{
+					aMachine.TransitionTo(nameof(PlayerIdleState));
+					Msg.Add(Actions.Sprint, Vector2.Zero);
+				}
 				TransitionTo(nameof(PlayerAirState), Msg);
+				Msg.Clear();
 			}
+
+			
 		}
 		private void Dodge(Dictionary<string, Vector2> Msg)
 		{
 			if (Msg.ContainsKey(Actions.Dodge) && Stam.HasEnough(Stam.DodgeConsumption)) 
 			{
-				//BlockRelease();
 				HandleCameraInput(Actions.AimCancel);
 				TransitionTo(nameof(PlayerDodgeState), Msg);
 			}
@@ -460,16 +465,5 @@ namespace Game
 			HandleAttackInput(msgHandleAttack);
 		}
 		
-		#region Temporary functions
-
-		// private async void DrawBow()
-		// {
-		// 	//Animation.Transition("Bow"+CurrentAttunement, "Draw");
-		// 	Animation.OneShot("Bow");
-		// 	await ToSignal(GetTree().CreateTimer(0.6), SceneTreeTimer.SignalName.Timeout);
-		// 	(player.CurrentWeapon as Bow).Draw();
-		// }
-
-        #endregion
     }  
 }

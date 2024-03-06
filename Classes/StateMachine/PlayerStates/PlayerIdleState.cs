@@ -17,8 +17,11 @@ namespace Game
 
         public override void PhysicsUpdate(double delta)
         {
-            if (player.IsAttacking() == false && player.IsDodging() == false)
-                Stam.IncreaseStamina(Stam.RegenRate);
+            if (player._InAir) return;
+            if (player.IsAttacking()) return;
+            if (player.IsDodging()) return;
+        
+            Stam.IncreaseStamina(Stam.RegenRate);
         }   
 
         public override void Update(double delta)

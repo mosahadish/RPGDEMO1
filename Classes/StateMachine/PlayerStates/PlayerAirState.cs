@@ -11,6 +11,7 @@ namespace Game
         private Vector3 newVelo;
 
         private double airTime = 0;
+        private bool sprint = false;
 
         public override void Enter(Dictionary<string, Vector2> Msg)
         {   
@@ -24,7 +25,13 @@ namespace Game
                 Actor.Velocity = newVelo;
                 (Animation as PlayerAnimation).RequestOneShot("Air");
             }
-            
+
+            if (Msg.ContainsKey(Actions.Sprint))
+            {
+                sprint = true;
+                Movement.SetSpeed(Movement.SprintSpeed);
+            }            
+            else sprint = false;
             // (Animation as PlayerAnimation).Fall = true;
 
             // (Animation as PlayerAnimation).FallState = "Light";
@@ -36,6 +43,8 @@ namespace Game
 
         public override void PhysicsUpdate(double delta)
         {
+            if (sprint) Stam.DecreaseStamina(Stam.DegenRate);
+
             newVelo = Actor.Velocity;
             newVelo.Y += -Movement.Gravity * (float)delta;
             airTime += delta;
@@ -59,6 +68,7 @@ namespace Game
             // }
             // (Animation as PlayerAnimation).Fall = false;
             // (Animation as PlayerAnimation).LandState = "Roll";
+            if (sprint) Movement.SetSpeed(Movement.Speed);
             Actor._InAir = false;
             Actor._CanRotate = true;
             airTime = 0;

@@ -412,9 +412,6 @@ namespace Game
 			_isDodging = true;
 			_CanRotate = false;
 			(Animation as PlayerAnimation).RequestOneShot("Dodge");
-			// if (HasWeapon())
-			// 	Animation.Transition(CurrentWeapon.Name + Animations.TransitionMovement, CurrentWeapon.Name + Animations.Dodge);
-			// else Animation.Transition(Animations.TransitionMovement, Animations.Dodge);
 		}
 
 		public void FinishDodging()
