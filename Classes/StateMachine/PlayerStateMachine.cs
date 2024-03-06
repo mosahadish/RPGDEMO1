@@ -272,7 +272,6 @@ namespace Game
 		{
 			if (Msg.ContainsKey(Actions.Jump)) 
 			{
-				player.ReleaseSprint(false);
 				TransitionTo(nameof(PlayerAirState), Msg);
 			}
 		}
