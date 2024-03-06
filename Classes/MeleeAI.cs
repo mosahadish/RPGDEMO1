@@ -13,7 +13,7 @@ namespace Game
             (Animation as AnimateAI).Transition("Attack");
             (Animation as AnimateAI).NodeTransition("Attack1");
 			_IsAttacking = true;
-            audio.Play(SoundEffects.SwordAttack1);
+            Audio.Play(SoundEffects.SwordAttack1);
             // Animation.AnimTree.Set("parameters/Attack/conditions/Attack1", false);
         }
 
@@ -22,7 +22,7 @@ namespace Game
             (Animation as AnimateAI).Transition("Attack");
             (Animation as AnimateAI).NodeTransition("Attack2");
 			_IsAttacking = true;
-            audio.Play(SoundEffects.SwordAttack2);
+            Audio.Play(SoundEffects.SwordAttack2);
             // Animation.AnimTree.Set("parameters/Attack/conditions/Attack2", false);
         }
 
@@ -31,7 +31,7 @@ namespace Game
             (Animation as AnimateAI).Transition("Attack");
             (Animation as AnimateAI).NodeTransition("Attack3");
 			_IsAttacking = true;
-            audio.Play(SoundEffects.SwordAttack3);
+            Audio.Play(SoundEffects.SwordAttack3);
             // Animation.AnimTree.Set("parameters/Attack/conditions/Attack3", false);
         }
 

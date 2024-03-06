@@ -130,8 +130,8 @@ namespace Game
 				if (Stam != null)
 					Stam.StaminaChanged += machine.OnStaminaChanged;
 
-				if (audio != null)
-					Equip.Audio = audio;
+				if (Audio != null)
+					Equip.Audio = Audio;
 
 				ItemUseSuccess += machine.OnItemUse;
 			}
@@ -298,7 +298,7 @@ namespace Game
 		{
 			(Animation as PlayerAnimation).BlockedAttack = true;
 			(Animation as PlayerAnimation).RequestOneShot("Offhand");
-			audio.Play(SoundEffects.ShieldBlock);
+			Audio.Play(SoundEffects.ShieldBlock);
 			_attackBlocked = true;
 			Stam.DecreaseStamina(damageToTake);
 		}
@@ -348,7 +348,7 @@ namespace Game
 			_IsAttacking = true;
 			(Animation as PlayerAnimation).MainAttack("Attack1");
 
-			audio.Play(CurrentAttunement + CurrentWeapon.Name + Animations.Attack1);
+			Audio.Play(CurrentAttunement + CurrentWeapon.Name + Animations.Attack1);
 
 			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
 		}
@@ -358,7 +358,7 @@ namespace Game
 			_IsAttacking = true;
 			(Animation as PlayerAnimation).MainAttack("Attack2");
 
-			audio.Play(CurrentAttunement + CurrentWeapon.Name + Animations.Attack2);
+			Audio.Play(CurrentAttunement + CurrentWeapon.Name + Animations.Attack2);
 
 			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
 		}
@@ -368,7 +368,7 @@ namespace Game
 			_IsAttacking = true;
 			(Animation as PlayerAnimation).MainAttack("Attack3");
 
-			audio.Play(CurrentAttunement + CurrentWeapon.Name + Animations.Attack3);
+			Audio.Play(CurrentAttunement + CurrentWeapon.Name + Animations.Attack3);
 
 			Stam.DecreaseStamina(CurrentWeapon.LightAttackStamConsumption);
 		}

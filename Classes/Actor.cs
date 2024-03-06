@@ -24,7 +24,7 @@ namespace Game
 		[Export] public Animate Animation;
 		[Export] public Stamina Stam;
 		[Export] public Health HP;
-		[Export] protected AudioHandler audio;
+		[Export] public AudioHandler Audio;
 		[Export] public Sprite3D LockOn;
 
 		public bool _InAir = false;
@@ -80,12 +80,12 @@ namespace Game
 				
 			HP?.TakeDamage(damageToTake);
 			staggerComp?.TakeDamage(damageToTake);
-			if (audio != null)
+			if (Audio != null)
 			{
 				if (hittingObject == "Arrow")
-					audio.Play(SoundEffects.ArrowBodyImpact);
+					Audio.Play(SoundEffects.ArrowBodyImpact);
 				if (hittingObject == "Sword")
-					audio.Play(SoundEffects.SwordFleshHit);
+					Audio.Play(SoundEffects.SwordFleshHit);
 			}
 		}
 
@@ -109,7 +109,7 @@ namespace Game
 				SMachine.TransitionTo(nameof(PlayerDeathState), null);
 			}
 	
-			audio?.Play("Death");
+			Audio?.Play("Death");
 			EmitSignal(SignalName.ActorDeathWithArgument, this);
 		}
 
@@ -166,13 +166,13 @@ namespace Game
 
 		public virtual void GotParried()
 		{
-			audio.Play("ParrySuccess");
+			Audio.Play("ParrySuccess");
 			EmitSignal(SignalName.ActorGotParried);
 		}
 
 		public virtual void GotStaggered()
 		{
-			audio.Play("Staggered");
+			Audio.Play("Staggered");
 			EmitSignal(SignalName.ActorGotStaggered);
 		}
     }

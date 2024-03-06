@@ -8,16 +8,21 @@ namespace Game
 	[GlobalClass]
 	public partial class CameraComponent : Node3D
 	{
+		[Signal] public delegate void AimWithArgumentEventHandler(bool aiming);
+
 		[ExportCategory("Camera Settings")]
 		[Export] private float deadZone;// = 0.15f;
 		[Export] private float lockOnMaxAngle;// = 60.0f;
 		[Export] private float lockOnMinAngle;  // = -35.0f;
 		[Export] private float hSensitivity;
 		[Export] private float vSensitivity;
+		[Export] private Vector3 defaultPosition;
+		[Export] private Vector3 aimPosition;
 
 		[ExportCategory("Dependencies")]
 		[Export] Player player;
 		[Export] private Camera3D camera;
+		[Export] private SpringArm3D cameraContainer;
 		[Export] PlayerStateMachine sMachine;
 		[Export] public LockOnComponent lockOnComponent;
 		
@@ -44,6 +49,8 @@ namespace Game
 
 		private Vector3 originalRotation;
 
+		private Tween tweener;
+
         public override void _Ready()
         {
             if (lockOnComponent != null)
@@ -53,6 +60,7 @@ namespace Game
 			}
 
 			originalRotation = Rotation;
+			tweener = CreateTween();
         }
 
 		public void ResetRotation()
@@ -79,6 +87,29 @@ namespace Game
 			{
 				if (Input.IsActionJustPressed(Actions.NextRightTarget)) lockOnComponent.FetchRightTarget();
 				if (Input.IsActionJustPressed(Actions.NextLeftTarget)) lockOnComponent.FetchLeftTarget();
+			}
+		}
+
+
+		public void SetAiming(bool aiming)
+		{
+			_AimOn = aiming;
+			EmitSignal(SignalName.AimWithArgument, aiming);
+			if (tweener != null)
+			{
+				tweener.Kill();
+				tweener = CreateTween();
+			}
+
+			if (aiming)
+			{
+				//cameraContainer.Position = aimPosition;
+				tweener.TweenProperty(cameraContainer, "position", aimPosition, 0.5);
+			}
+			else if (aiming == false)
+			{
+				//cameraContainer.Position = defaultPosition;
+				tweener.TweenProperty(cameraContainer, "position", defaultPosition, 0.3);
 			}
 		}
 

@@ -16,6 +16,7 @@ namespace Globals
         public const string SwordAttack3 = "SwordAttack3";
 
         public const string BowDraw = "BowDraw";
+        public const string BowRelease = "BowRelease";
         public const string ParrySuccess = "ParrySuccess";
     }
     public class Animations

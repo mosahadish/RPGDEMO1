@@ -3,11 +3,18 @@
 [ext_resource type="Script" path="res://Classes/PlayerComponents/CameraComponent.cs" id="1_10htj"]
 [ext_resource type="PackedScene" uid="uid://ewm4fax3gfyw" path="res://Scenes/Components/LockOnComponent.tscn" id="2_paqnu"]
 
-[node name="CameraComponent" type="Node3D" node_paths=PackedStringArray("lockOnComponent")]
+[node name="CameraComponent" type="Node3D" node_paths=PackedStringArray("camera", "cameraContainer", "lockOnComponent")]
 top_level = true
 script = ExtResource("1_10htj")
+deadZone = 0.2
+lockOnMaxAngle = 60.0
+lockOnMinAngle = -35.0
 hSensitivity = 3.0
 vSensitivity = 3.0
+defaultPosition = null
+aimPosition = null
+camera = NodePath("CameraContainer/Camera3D")
+cameraContainer = NodePath("CameraContainer")
 lockOnComponent = NodePath("LockOnComponent")
 
 [node name="CameraContainer" type="SpringArm3D" parent="."]

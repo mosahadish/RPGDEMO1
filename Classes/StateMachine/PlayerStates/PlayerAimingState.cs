@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Globals;
 using Godot;
 
 namespace Game
@@ -11,49 +12,28 @@ namespace Game
         private Player player;
 
         private double aimTimer;
-
-        AnimationNodeStateMachinePlayback p;
+        private bool playWeaponAnim;
         
-        public async override void Enter(Dictionary<string, Vector2> msg)
+        public override void Enter(Dictionary<string, Vector2> msg)
         {
             player??= Actor as Player;
             (Animation as PlayerAnimation).CurrentMovementState = "Walk";
             (Animation as PlayerAnimation).Aiming = true;
             (Animation as PlayerAnimation).RangeAttack("Draw");
 
-            p = (AnimationNodeStateMachinePlayback)(Animation as PlayerAnimation).AnimTree.Get("parameters/RangeState/playback");
-
-            player.Camera._AimOn = true;
+            player.Camera.SetAiming(true);
 			Movement.SetSpeed(Movement.WalkSpeed);
 
-            if (player.CurrentWeapon is Bow bow)
+            if (player.CurrentWeapon is Bow)
             {
                 aimTimer = bowDrawTimer;
-                await ToSignal(GetTree().CreateTimer(0.6), SceneTreeTimer.SignalName.Timeout);
-                bow.Draw(); //Bowstring animation
+                playWeaponAnim = true;
             }
         }
 
         public override void PhysicsUpdate(double delta)
         {
-            GD.Print((Animation as PlayerAnimation).ReadyToShoot);
-            if (player.Attack.ReadyToShoot == false)
-            {
-                aimTimer -= delta;
-                if (aimTimer <= 0)
-                {
-                    (Animation as PlayerAnimation).ReadyToShoot = true;
-                    player.Attack.ReadyToShoot = true;
-                    aimTimer = bowDrawTimer;
-                }
-
-            }
-
-            if ((Animation as PlayerAnimation).CurrentAttack == "Release")
-            {
-                (Animation as PlayerAnimation).CurrentAttack = "Draw";
-                (Animation as PlayerAnimation).ReadyToShoot = false;
-            }
+            HandleBow(delta);
         }
 
         public override void Update(double delta)
@@ -65,14 +45,54 @@ namespace Game
             player.Camera._AimOn = false;
 			player.Attack.ReadyToShoot = false;
             (Animation as PlayerAnimation).ReadyToShoot = false;
+            (Animation as PlayerAnimation).Aiming = false;
             Movement.SetSpeed(Movement.Speed);
 
             (Animation as PlayerAnimation).CurrentMovementState = "Run";
 
             if (Actor.CurrentWeapon is Bow bow)
             {
-                bow.Release();
-                Animation.AbortOneShot("Bow");
+                bow.Default();
+            }
+            
+            Animation.AbortOneShot("RangeAttack");
+            player.Camera.SetAiming(false);
+        }
+
+        private void HandleBow(double delta)
+        {
+            if (player.CurrentWeapon is Bow bow)
+            {
+                //While drawing
+                if (player.Attack.ReadyToShoot == false)
+                {
+                    aimTimer -= delta;
+                    //Finished drawing, now player is ready to shoot an arrow
+                    if (aimTimer <= 0)
+                    {
+                        (Animation as PlayerAnimation).ReadyToShoot = true;
+                        player.Attack.ReadyToShoot = true;
+
+                        //Restart timer, and play weaponAnim = true for next release
+                        aimTimer = bowDrawTimer;
+                        playWeaponAnim = true;
+                    }
+
+                }
+
+                //Play bowstring animation + audio
+                if (playWeaponAnim == true && aimTimer <= 0.15)
+                {
+                    playWeaponAnim = false;
+                    bow.Draw();
+                }
+
+                //If player just released an arrow, go back to Draw
+                if ((Animation as PlayerAnimation).CurrentAttack == "Release")
+                {
+                    (Animation as PlayerAnimation).CurrentAttack = "Draw";
+                    (Animation as PlayerAnimation).ReadyToShoot = false;
+                }
             }
         }
 

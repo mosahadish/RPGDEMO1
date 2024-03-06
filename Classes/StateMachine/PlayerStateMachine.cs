@@ -164,6 +164,7 @@ namespace Game
 				(Actor.CurrentWeapon as Bow).Release();
 				(Attack as PlayerAttack).ReleaseArrow(CurrentAttunement);
 				Animation.CurrentAttack = "Release";
+				//player.Audio.Play(SoundEffects.BowRelease);
 				//(Animation as PlayerAnimation).ReadyToShoot = false;
 				Attack.ReadyToShoot = false;
 			}

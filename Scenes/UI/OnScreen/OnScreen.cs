@@ -35,9 +35,17 @@ namespace Game
 			healthBar.MaxValue = health.MaxValue;
 			healthBar.Value = health.MaxValue;
 
-			player.AttunementChanged += OnAttunementChanged;
-			player.ActorDeathWithArgument += OnPlayerDeath;
-			player.PlayerResting += checkPointMenu.PlayerResting;
+			if (player != null)
+			{
+				player.AttunementChanged += OnAttunementChanged;
+				player.ActorDeathWithArgument += OnPlayerDeath;
+				player.PlayerResting += checkPointMenu.PlayerResting;
+
+				if (player.Camera != null)
+				{
+					player.Camera.AimWithArgument += OnAim;
+				}
+			}
 			
 			checkPointMenu.PlayerFinishedResting += player.LeaveCheckpoint;
 
@@ -55,6 +63,10 @@ namespace Game
             youDied.FadeIn();
         }
 
+		private void OnAim(bool aiming)
+		{
+			aim.Visible = aiming;
+		}
 
         private void OnWindowSizeChanged()
         {
