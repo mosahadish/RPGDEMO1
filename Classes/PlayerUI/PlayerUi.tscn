@@ -449,7 +449,8 @@ offset_bottom = 40.0
 [node name="Button" type="Button" parent="OnScreen/Hotbar/PanelContainer"]
 layout_mode = 2
 focus_mode = 0
-text = "1"
+text = "
+"
 alignment = 2
 icon_alignment = 1
 expand_icon = true

@@ -19,8 +19,10 @@ namespace Game
             player??= Actor as Player;
 
             (Animation as PlayerAnimation).CurrentMovementState = "Walk";
-           // (Animation as PlayerAnimation).BlendMovement(Vector2.Zero);
+           
             if (player.HasOffhand()) weaponToRedraw = player.CurrentOffhand;
+            else if (player.HasWeapon() && player.CurrentWeapon is Bow) weaponToRedraw = player.CurrentWeapon;
+
             player.Equip.SheatheWeapon(weaponToRedraw);
 
             (Animation as PlayerAnimation).UseItem = "Drink";

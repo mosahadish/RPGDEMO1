@@ -8,7 +8,7 @@ namespace Game
 	{
 
 	[Export] private TextureProgressBar bar;
-	[Export] private double hideTimer = 2;
+	[Export] private double hideTimer;
 	private Node parent;
 	private double timer;
 	private bool lockedOn;

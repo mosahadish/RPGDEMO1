@@ -87,7 +87,7 @@ namespace Game
             {
                 dodgeChance += (100-HP.AsPercent())/6;
                 
-                if (ShouldDodge())
+                if (SMachine.target.IsAttacking() && ShouldDodge())
                 {
                     rngResult = rng.RandiRange(0,99);
                     return nameof(AIDodgeState);
@@ -112,9 +112,11 @@ namespace Game
             return action;
         }
 
-        public bool ShouldDodge()
+        public bool ShouldDodge(bool roll = false)
         {
-            return SMachine.target.IsAttacking() && rngResult <= dodgeChance;
+            if (roll) rngResult = rng.RandiRange(0,99);
+            
+            return rngResult <= dodgeChance;
         }
 
         private bool ShouldAttack()

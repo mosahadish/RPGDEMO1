@@ -170,6 +170,9 @@ namespace Game
             if (area.GetParent() is Projectile proj) 
             {
                 if (proj.Spawner is Player player) target = player;
+                if (state is AIAttackState || state is AIStaggerState) return;
+                
+                if (AIActor.ShouldDodge(true)) TransitionTo(nameof(AIDodgeState));
             }
         }
 

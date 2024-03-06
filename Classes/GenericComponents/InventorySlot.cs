@@ -30,7 +30,15 @@ namespace Game
         public void UpdateQuantity()
         {
             //item.Quantity += addedQuant;
-            if (item.Quantity == 0) RemoveItem();
+            quantityLabel.Text = item.Quantity.ToString();
+            if (item.Quantity == 0)
+            {
+                if (item is HealPotion) 
+                {
+                    
+                }
+                else RemoveItem();
+            }
         }
 
         public void EquipItem(InventorySlot fromSlot)
@@ -76,7 +84,8 @@ namespace Game
             Icon = (Texture2D)itemToAdd.Texture;
             item = itemToAdd;
 
-            quantityLabel.Text = "";
+            if (itemToAdd is Consumable) quantityLabel.Text = item.Quantity.ToString();
+            else quantityLabel.Text = "";
             empty = false;
 
             if (item is Weapon) itemInfo += "Damage: " + (item as Weapon).Damage.ToString() + "\n";

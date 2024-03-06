@@ -45,21 +45,20 @@ namespace Game
 
 			else
 			{
-				if (Input.IsActionJustPressed(Actions.UseItem))
-				{
-					UseHotBarItem();
-
-					if (currentSlotInHotBar.IsEmpty())
+				if (currentSlotInHotBar.IsEmpty())
 					{
 						Clear();
 					}
 
-					else
-					{
-						if (currentSlotInHotBar.item is Consumable)
-							btn.Text = currentSlotInHotBar.item.Quantity.ToString();
-						else btn.Text = "";
-					}
+				else
+				{
+					if (currentSlotInHotBar.item is Consumable)
+						btn.Text = currentSlotInHotBar.item.Quantity.ToString();
+					else btn.Text = "";
+				}
+				if (Input.IsActionJustPressed(Actions.UseItem))
+				{
+					UseHotBarItem();
 				}
 				
 			}

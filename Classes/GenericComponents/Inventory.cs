@@ -33,6 +33,7 @@ namespace Game
         private Dictionary<string, InventorySlot> currentEquip = new();
 
 
+        private InventorySlot foundSlot;
         private InventorySlot focusedSlot;
         private InventorySlot fromSlot;
         private InventorySlot toSlot;
@@ -148,9 +149,32 @@ namespace Game
 
         private InventorySlot FindFirstEmptySlot()
         {
-            foreach (InventorySlot slot in inventory.GetChildren())
+            foreach (InventorySlot slot in inventory.GetChildren().Cast<InventorySlot>())
             {
                 if (slot.IsEmpty()) return slot;
+            }
+
+            return null;
+        }
+
+        private InventorySlot FindItemSlot(string itemName)
+        {
+            foreach (InventorySlot slot in inventory.GetChildren().Cast<InventorySlot>())
+            {
+                if (slot.IsEmpty()) continue;
+                if (slot.item.Name == itemName)
+                {
+                    return slot;
+                }
+            }
+
+            foreach (InventorySlot slot in hotbar.GetChildren().Cast<InventorySlot>())
+            {
+                if (slot.IsEmpty()) continue;
+                if (slot.item.Name == itemName)
+                {
+                    return slot;
+                }
             }
 
             return null;
@@ -268,6 +292,20 @@ namespace Game
         {
             lastUsedSlot = slot;
             EmitSignal(SignalName.UsedItemWithArgument, slot.item);
+        }
+
+        internal void ResetPlayerInventory()
+        {
+            foundSlot = FindItemSlot("HealPotion");
+
+            if (foundSlot == null) return;
+            foundSlot.item.Quantity = 5;
+            foundSlot.UpdateQuantity();
+        }
+
+        internal void OnPlayerDeath(Actor actor)
+        {
+            ResetPlayerInventory();
         }
     }
 }

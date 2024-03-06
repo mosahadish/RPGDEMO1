@@ -17,10 +17,7 @@ namespace Game
         [Export] public float MaxValue;
 
         private float currentVal;
-
         private Actor parent;
-
-        //[Export]
         private PackedScene takeDamageScene = (PackedScene)ResourceLoader.Load("res://Scenes/Components/damage_floater.tscn");
         private Node3D floaterInstance;
 

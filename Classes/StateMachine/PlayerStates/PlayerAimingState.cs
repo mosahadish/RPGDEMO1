@@ -63,6 +63,7 @@ namespace Game
         {
             if (player.CurrentWeapon is Bow bow)
             {
+                Stam.DecreaseStamina(Stam.DegenRate);
                 //While drawing
                 if (player.Attack.ReadyToShoot == false)
                 {

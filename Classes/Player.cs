@@ -28,10 +28,8 @@ namespace Game
 		#region Events/Signals
 
 		public event NotifyAttunement AttunementChanged;
-		[Signal]
-		public delegate void PlayerRestingEventHandler();
-		[Signal]
-		public delegate void ItemUseSuccessEventHandler();
+		[Signal] public delegate void PlayerRestingEventHandler();
+		[Signal] public delegate void ItemUseSuccessEventHandler();
 
 		#endregion
 
@@ -51,12 +49,10 @@ namespace Game
 		#endregion
 		public bool Consuming = false;
 		public bool CanInteract = true;
+		public Checkpoint lastVisitedCheckpoint;
+		public bool Resting = false;
 
 		#region Private members
-
-		
-		public bool Resting = false;
-		public Checkpoint lastVisitedCheckpoint;
 		private int AttunementIterator = 0;
 		private string[] arrAttunement = { Attunements.Fire, Attunements.Lightning };
 		private Vector3 frontDirection;
@@ -112,6 +108,8 @@ namespace Game
 				Interact.PickedUpItemWithArgument += PickedUpItem;
 				Inventory.UsedItemWithArgument += OnInventoryUsedItem;
 				ItemUseSuccess += Inventory.ItemUsed;
+				PlayerResting += Inventory.ResetPlayerInventory;
+				ActorDeathWithArgument += Inventory.OnPlayerDeath;
 			}
 			if (SMachine is PlayerStateMachine machine)
 			{
@@ -125,7 +123,7 @@ namespace Game
 				AttunementChanged += machine.OnAttunementChanged;
 
 				if (staggerComp != null)
-					ActorGotStaggered += SMachine.OnStagger;
+					ActorGotStaggered += machine.OnStagger;
 
 				if (Stam != null)
 					Stam.StaminaChanged += machine.OnStaminaChanged;
@@ -156,10 +154,12 @@ namespace Game
 			{
 				if (consumable.ConsumableType == ConsumableTypes.Heal)
 				{
-					HP.Heal(consumable.Consume());
-					Consuming = true;
-					//SMachine.TransitionTo(nameof(PlayerDrinkState), null);
-					EmitSignal(SignalName.ItemUseSuccess);
+					if (consumable.Quantity > 0)
+					{
+						HP.Heal(consumable.Consume());
+						Consuming = true;
+						EmitSignal(SignalName.ItemUseSuccess);
+					}
 				}
 			}
         }
@@ -171,6 +171,8 @@ namespace Game
 				Interact.PickedUpItemWithArgument -= Inventory.AddItem;
 				Inventory.UsedItemWithArgument -= OnInventoryUsedItem;
 				ItemUseSuccess -= Inventory.ItemUsed;
+				PlayerResting -= Inventory.ResetPlayerInventory;
+				ActorDeathWithArgument -= Inventory.OnPlayerDeath;
 			}
 			if (SMachine is PlayerStateMachine machine)
 			{
@@ -260,26 +262,6 @@ namespace Game
 		public Vector3 GetAimPoint()
 		{
 			return aim.GetAimPoint();
-		}
-
-		public void Sprint()
-		{
-			//(Animation as PlayerAnimation).CurrentMovementState = "Sprint";
-			// Movement._Sprinting = true;
-			// Movement.SetSpeed(Movement.SprintSpeed);
-			// Stam.Regen = false;
-			// Stam.Degen = true;
-		}
-
-		public void ReleaseSprint(bool changeSpeed = true)
-		{
-			if (Movement._Sprinting == false) return;
-			(Animation as PlayerAnimation).CurrentMovementState = "Run";
-			Movement._Sprinting = false;
-			if (changeSpeed)
-				Movement.SetSpeed(Movement.Speed);
-			Stam.Regen = true;
-			Stam.Degen = false;
 		}
 
 		#region Block
@@ -449,7 +431,6 @@ namespace Game
 		}
 
 		#endregion
-
 	}
 }
 

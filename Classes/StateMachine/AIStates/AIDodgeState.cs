@@ -9,7 +9,8 @@ namespace Game
 
         public override void Enter(Player target)
         {   
-            dirToDodge = target.GlobalPosition.DirectionTo(AIActor.GlobalPosition);
+            //dirToDodge = target.GlobalPosition.DirectionTo(AIActor.GlobalPosition);
+            dirToDodge = AIActor.Velocity.Normalized();
             AIActor.Dodge();
         }
 

@@ -73,7 +73,7 @@ namespace Game
         }
 
         
-		public void OnStagger()
+		public virtual void OnStagger()
         {
             if (state is PlayerDeathState) return;
             

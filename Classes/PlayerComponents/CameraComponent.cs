@@ -60,7 +60,6 @@ namespace Game
 			}
 
 			originalRotation = Rotation;
-			tweener = CreateTween();
         }
 
 		public void ResetRotation()
@@ -98,8 +97,8 @@ namespace Game
 			if (tweener != null)
 			{
 				tweener.Kill();
-				tweener = CreateTween();
 			}
+			tweener = CreateTween();
 
 			if (aiming)
 			{
@@ -142,7 +141,7 @@ namespace Game
 			weight = 0;
 			if (newTarget == null) 
 			{
-				Target.LockOn.Hide();
+				Target?.LockOn.Hide();
 				Target = null;
 			}
 			if (Target != newTarget)
