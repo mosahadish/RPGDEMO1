@@ -1,5 +1,6 @@
 using GameSettings;
 using Godot;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -131,6 +132,7 @@ namespace Game
 
         private void OnAnimationFinished(string anim)
         {
+            GD.Print(anim);
             if (anim.Contains("Parried") == false)
                 TransitionTo(nameof(AIEngageState));
         }

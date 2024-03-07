@@ -116,7 +116,7 @@ namespace Game
         {
             if (roll) rngResult = rng.RandiRange(0,99);
             
-            return rngResult <= dodgeChance;
+            return rngResult < dodgeChance;
         }
 
         private bool ShouldAttack()
@@ -124,7 +124,27 @@ namespace Game
             return rngResult <= attackChance;
         }
 
-        
+    
+        public void Dodge()
+        {
+            (Animation as AnimateAI).RequestOneShot("Dodge");
+            Movement.SetSpeed(Movement.DodgeSpeed);
+            _CanRotate = false;
+            dodging = true;
+        }
+
+        public void FinishDodging()
+        {
+            _CanRotate = true;
+            dodging = false; 
+        }
+
+        public bool IsDodging()
+        {
+            return dodging;
+        }
+
+        #region Testing Steering Behavior
         //https://code.tutsplus.com/understanding-steering-behaviors-wander--gamedev-1624t
         Vector3 circleCenter;
         Vector3 displacement;
@@ -147,24 +167,7 @@ namespace Game
             wanderForce = circleCenter + displacement;
             return wanderForce;
         }
+        #endregion
 
-        public void Dodge()
-        {
-            (Animation as AnimateAI).Transition("Dodge");
-            Movement.SetSpeed(Movement.DodgeSpeed);
-            _CanRotate = false;
-            dodging = true;
-        }
-
-        public void FinishDodging()
-        {
-            _CanRotate = true;
-            dodging = false; 
-        }
-
-        public bool IsDodging()
-        {
-            return dodging;
-        }
     }
 }

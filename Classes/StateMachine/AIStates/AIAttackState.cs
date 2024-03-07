@@ -11,13 +11,10 @@ namespace Game
         private float distToTarget;
         private RandomNumberGenerator rng = new();
         private float randI = 0;
-        private AnimationNodeStateMachinePlayback attackAnim;
         private string currentAnim;
 
         public override void Enter(Player target)
         {
-            attackAnim = (AnimationNodeStateMachinePlayback)Animation.AnimTree.Get("parameters/Attack/playback");
-            //attackAnim.
             this.target = target;
             randI = rng.RandiRange(0,10);
 
@@ -32,9 +29,11 @@ namespace Game
             else 
             {
                 if (AIActor is IMeleeAttacker melee)
-                if (randI <= 5) melee.Attack1();
-                else if (randI >= 9) melee.ComboAttack();
-                else melee.Attack2();
+                {
+                    if (randI <= 5) melee.Attack1();
+                    else if (randI >= 9) melee.ComboAttack();
+                    else melee.Attack2();
+                }
             }
         }
       
@@ -56,9 +55,6 @@ namespace Game
           public override void Exit()
         {
             (AIActor as IAttacker).FinishAttacking();
-
-            //Animation.Transition("Movement");
-            //Animation.NodeTransition("Engage");
             target = null;
         }
     }

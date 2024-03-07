@@ -21,14 +21,13 @@ namespace Game
         private double circleTimer;
         private float waitTimer;
         private int randIndex = 1;
-        private AnimationNodeStateMachinePlayback movementAnim;
 
         public override void Enter(Player target)
         {
-            movementAnim ??= (AnimationNodeStateMachinePlayback)Animation.AnimTree.Get("parameters/Movement/playback");
-            Animation.Transition("Movement");
+            // mation.Transition("Movement");
             //Animation.AnimTree.Set("parameters/Movement/conditions/Engage", true);
-            Animation.NodeTransition("Engage");
+            // Animation.NodeTransition("Engage");
+            Animation.CurrentMovementState = "Walk";
 
             this.target = target;
             distToTarget = 9999;
@@ -97,7 +96,8 @@ namespace Game
             blendPos.Y = 0;
             // Animation.BlendPosition("Engage", -1*blendPos);
             //Animation.AnimTree.Set("parameters/Movement/Engage/blend_position", -1*blendPos);
-            Animation.BlendPosition("", -1*blendPos);
+            //Animation.BlendPosition("", -1*blendPos);
+            Animation.BlendMovement(blendPos);
             Movement.HandleMovement(circleDir, delta);
         }
     }

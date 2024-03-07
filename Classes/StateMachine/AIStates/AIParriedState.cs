@@ -14,7 +14,9 @@ namespace Game
             Movement.SetSpeed(0);
             AIActor._CanRotate = false;
             AIActor.Velocity = Vector3.Zero;
-            Animation.Transition("Parried");
+            //Animation.Transition("Parried");
+            Animation.AbortOneShot(Animation.CurrentOneShot);
+            Animation.RequestOneShot("Parried");
         }
 
         public override void PhysicsUpdate(double delta)
@@ -33,7 +35,6 @@ namespace Game
 
         public override void Exit()
         {
-            Animation.Transition("Movement");
             AIActor._CanRotate = true;
             AIActor.Parried = false;
         }

@@ -26,7 +26,6 @@ namespace Game
         public override void Enter(Dictionary<string, Vector2> Msg)
         {
             player ??= (Actor as Player);
-           
             CalculateDirToFace();
 
             if (Msg.ContainsKey(Actions.LightAttack))

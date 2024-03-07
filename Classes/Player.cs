@@ -200,6 +200,7 @@ namespace Game
 		public void VisitedCheckPoint(Checkpoint checkpoint)
 		{
 			Resting = true;
+			Camera.lockOnComponent.Targetted(null);
 			HP.Heal(HP.MaxValue);
 			Equip.SheatheWeapon(CurrentWeapon);
 			Equip.SheatheWeapon(CurrentOffhand);

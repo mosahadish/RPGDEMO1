@@ -15,9 +15,10 @@ namespace Game
         {
             movementAnim ??= (AnimationNodeStateMachinePlayback)Animation.AnimTree.Get("parameters/Movement/playback");
             
-            Animation.Transition("Movement");
+            //Animation.Transition("Movement");
             //Animation.AnimTree.Set("parameters/Movement/conditions/Chase", true);
-            Animation.NodeTransition("Chase");
+            //Animation.NodeTransition("Chase");
+            Animation.CurrentMovementState = "Run";
 
 
             this.target = target;
@@ -47,7 +48,8 @@ namespace Game
             direction = AIActor.GlobalPosition.DirectionTo(target.GlobalPosition);
             direction += AIActor.DisplacementTest();
             
-            Animation.AnimTree.Set("parameters/Movement/Chase/blend_position", Vector2.Down);
+            Animation.BlendMovement(Vector2.Down);
+            //Animation.AnimTree.Set("parameters/Movement/Chase/blend_position", Vector2.Down);
             AIActor.LookInDirection(direction);
 
             Movement.HandleMovement(direction, delta);

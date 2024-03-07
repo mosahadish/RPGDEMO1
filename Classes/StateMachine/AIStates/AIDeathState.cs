@@ -15,12 +15,13 @@ namespace Game
             Movement.SetSpeed(0);
             AIActor._CanRotate = false;
             AIActor.Velocity = Vector3.Zero;
-            playback = (AnimationNodeStateMachinePlayback)Animation.AnimTree.Get("parameters/playback");
-            playback.Stop();
-            
+            // playback = (AnimationNodeStateMachinePlayback)Animation.AnimTree.Get("parameters/playback");
+            // playback.Stop();
+            Animation.AbortOneShot(Animation.CurrentOneShot);
+            Animation.RequestOneShot("Death");
 
-            Animation.Transition("Movement");
-            playback.Travel("Death", true);
+            // Animation.Transition("Movement");
+            // playback.Travel("Death", true);
         }
 
         public override void PhysicsUpdate(double delta)
@@ -40,7 +41,6 @@ namespace Game
         public override void Exit()
         {
             AIActor._CanRotate = true;
-            playback.Travel("Movement");
         }
     }
 }

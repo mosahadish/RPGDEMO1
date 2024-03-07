@@ -14,7 +14,9 @@ namespace Game
             Movement.SetSpeed(0);
             AIActor._CanRotate = false;
             AIActor.Velocity = Vector3.Zero;
-            Animation.Transition("Stagger");
+            //Animation.Transition("Stagger");
+            Animation.AbortOneShot(Animation.CurrentOneShot);
+            (Animation as AnimateAI).RequestOneShot("Stagger");
             AIActor.WeaponDamageOff();
         }
 
@@ -34,7 +36,7 @@ namespace Game
 
         public override void Exit()
         {
-            Animation.Transition("Movement");
+            //Animation.Transition("Movement");
             AIActor._CanRotate = true;
         }
     }

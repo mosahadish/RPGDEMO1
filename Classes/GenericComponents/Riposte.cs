@@ -22,7 +22,6 @@ namespace Game
 
         public override void _PhysicsProcess(double delta)
         {
-            GD.Print(target);
             if (target == null) SetPhysicsProcess(false);
 
             else if (target.Parried == false)
@@ -35,7 +34,6 @@ namespace Game
                 if (target.GlobalPosition.DistanceTo(Player.GlobalPosition) <= riposteRange)
                 {
                     (Player.Animation as PlayerAnimation).CurrentAttack = "Riposte";
-                    GD.Print("Riposte on");
                 }
             }
         }

@@ -5,48 +5,55 @@ using Godot;
 namespace Game
 {
 	[GlobalClass]
-	public partial class MeleeAI : AI, IMeleeAttacker
+	public partial class MeleeAI : AI, IMeleeAttacker, IBlocker
 	{
-        
+        private bool blocking;
+        bool IBlocker.Blocking { get {return blocking;} set {blocking = value;} }
+        bool IBlocker.AttackBlocked { get; set;}
+
+        public override void _Ready()
+        {
+            base._Ready();
+            (Animation as AnimateAI).CurrentWeaponState = "Sword";
+            (Animation as AnimateAI).CurrentOffhandState = "Shield";
+            (Animation as AnimateAI).CurrentMovementState = "Roam";
+        }
+
+        #region Attack
         public void Attack1()
         {
-            (Animation as AnimateAI).Transition("Attack");
-            (Animation as AnimateAI).NodeTransition("Attack1");
+            (Animation as AnimateAI).MainAttack("Attack1");;
+            // (Animation as AnimateAI).Transition("Attack");
+            // (Animation as AnimateAI).NodeTransition("Attack1");
 			_IsAttacking = true;
             Audio.Play(SoundEffects.SwordAttack1);
-            // Animation.AnimTree.Set("parameters/Attack/conditions/Attack1", false);
         }
 
         public void Attack2()
         {
-            (Animation as AnimateAI).Transition("Attack");
-            (Animation as AnimateAI).NodeTransition("Attack2");
+            (Animation as AnimateAI).MainAttack("Attack2");
 			_IsAttacking = true;
             Audio.Play(SoundEffects.SwordAttack2);
-            // Animation.AnimTree.Set("parameters/Attack/conditions/Attack2", false);
         }
 
         public void Attack3()
         {
-            (Animation as AnimateAI).Transition("Attack");
-            (Animation as AnimateAI).NodeTransition("Attack3");
+            (Animation as AnimateAI).MainAttack("Attack3");
 			_IsAttacking = true;
             Audio.Play(SoundEffects.SwordAttack3);
-            // Animation.AnimTree.Set("parameters/Attack/conditions/Attack3", false);
         }
 
         public void ComboAttack()
         {
-            (Animation as AnimateAI).Transition("Attack");
-            (Animation as AnimateAI).NodeTransition("ComboAttack");
-            //Animation.AnimTree.Set("parameters/Attack/conditions/ComboAttack", true);
+            (Animation as AnimateAI).MainAttack("ComboAttack");
 			_IsAttacking = true;
-
-            // Animation.AnimTree.Set("parameters/Attack/conditions/ComboAttack", false);
         }
 
         public void FinishAttacking()
         {
+            /*
+            Usually called when exiting AttackState
+            */
             _IsAttacking = false;
             WeaponDamageOff(); //anti bug measure when animation stops midway (stagger etc)
 			Movement.SetSpeed(Movement.CurrentSpeed);
@@ -81,5 +88,44 @@ namespace Game
         {
         }
 
+        
+        #endregion
+
+        #region Block
+        public void Block()
+        {
+            
+        }
+
+        public void BlockRelease()
+        {
+            
+        }
+
+        public void BlockHold()
+        {
+            
+        }
+
+        public void BlockedAttack(float damage)
+        {
+            
+        }
+
+        public void BlockCounterAttack()
+        {
+            
+        }
+
+        public bool IsBlocking()
+        {
+            return blocking;
+        }
+
+        public bool CanCounter()
+        {
+            return true;
+        }
+        #endregion
     }
 }
