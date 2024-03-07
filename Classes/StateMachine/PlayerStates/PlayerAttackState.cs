@@ -20,6 +20,7 @@ namespace Game
             base._Ready();
             //await ToSignal(Owner, "ready");
             player = Actor as Player; //why doesn't this work
+   
         }
 
         public override void Enter(Dictionary<string, Vector2> Msg)

@@ -45,7 +45,7 @@ namespace Game
 		[Export] public PlayerEquipmentHandler Equip;
 		[Export] Inventory Inventory;
 		[Export] private Aim aim;
-
+		[Export] private Riposte riposte;
 		#endregion
 		public bool Consuming = false;
 		public bool CanInteract = true;
@@ -133,7 +133,11 @@ namespace Game
 
 				ItemUseSuccess += machine.OnItemUse;
 			}
-
+			if (riposte != null)
+			{
+				ActorParrySuccessWithArgument += riposte.SetTarget;
+				riposte.Player = this;
+			}
 			if (Interact != null)
 			{
 				Interact.Player = this;

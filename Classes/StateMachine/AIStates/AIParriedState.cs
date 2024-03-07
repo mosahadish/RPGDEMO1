@@ -35,6 +35,7 @@ namespace Game
         {
             Animation.Transition("Movement");
             AIActor._CanRotate = true;
+            AIActor.Parried = false;
         }
     }
 }

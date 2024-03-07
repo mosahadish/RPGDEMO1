@@ -46,6 +46,7 @@ namespace Game
 		public override void PhysicsUpdate(double delta)
 		{
 			moveDir = CalcMoveDirection(InputDir);
+			if (InputDir.IsZeroApprox()) Actor.Velocity = Vector3.Zero;
 			//Running around according to the camera's direction
 			if ((!InputDir.Equals(Vector2.Zero) && camera._LockOn == false && camera._AimOn == false) || Movement._Sprinting)
 			{
@@ -79,7 +80,7 @@ namespace Game
 
 		public override void Exit()
 		{
-
+			animation.BlendMovement(Vector2.Zero);
 		}
 
 		private Vector3 CalcMoveDirection(Vector2 InputDir)

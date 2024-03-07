@@ -6,6 +6,7 @@ namespace Globals
 {
     public class SoundEffects
     {
+        public const string Drink = "Drink";
         public const string ShieldBlock = "ShieldBlock";
         public const string ArrowBodyImpact = "ArrowBodyImpact";
         public const string SwordFleshHit = "SwordFleshHit";

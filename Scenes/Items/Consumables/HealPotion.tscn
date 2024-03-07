@@ -5,8 +5,11 @@
 
 [node name="HealPotion" type="Node3D"]
 script = ExtResource("1_3p3rl")
+ConsumableType = "HEAL"
 value = 5.0
+MaxQuantity = 5
 Name = "HealPotion"
 Texture = ExtResource("2_wqi0h")
 Quantity = 5
 HoverText = "Heal you right up boi"
+Type = null

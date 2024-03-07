@@ -12,9 +12,10 @@ namespace Game
 		public string SubType {get; set;}
 
 		[ExportCategory("Stats")]
-		[Export] public float Damage;
+		[Export] public float DefaultDamage;
 		[Export] public float LightAttackStamConsumption;
 		[Export] public float HeavyAttackStamConsumption;
+		[Export] public float RiposteMultiplier;
 
 		
 
@@ -29,11 +30,13 @@ namespace Game
 		
 		public bool DamageOn = false; //Set this to true when swinging etc
 
-
+		public float currentDamage;
 		private List<Actor> bodiesToDamage = new List<Actor>();
 
         public override void _Ready()
         {
+			currentDamage = DefaultDamage;
+			
 			if (hitArea != null)
 			{
 				hitArea.BodyEntered += OnBodyEnteredHitArea;
@@ -42,6 +45,16 @@ namespace Game
 					hitArea.SetCollisionMaskValue(2, false);
 			}
         }
+
+		public void AddRiposte()
+		{
+			currentDamage *= RiposteMultiplier;
+		}
+
+		public void RestoreDefaultDamage()
+		{
+			currentDamage = DefaultDamage;
+		}
 
 		public void SetAttunement(string attun)
 		{
@@ -76,7 +89,7 @@ namespace Game
 					{
 						if (bodyToDamage.HasMethod("OnHit"))
 						{
-							bodyToDamage.OnHit(Damage, Wielder, Name);
+							bodyToDamage.OnHit(currentDamage, Wielder, Name);
 						}
 					}
 					bodiesToDamage.Clear();

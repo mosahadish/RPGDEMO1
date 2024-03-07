@@ -1,0 +1,46 @@
+[gd_scene load_steps=6 format=3 uid="uid://c8safpbw3jhf0"]
+
+[ext_resource type="AudioStream" uid="uid://w4cvrerr14df" path="res://addons/kenney rpg audio/footstep_0.ogg" id="1_76dpw"]
+[ext_resource type="Script" path="res://Classes/GenericComponents/FootSteps.cs" id="1_px3xs"]
+[ext_resource type="AudioStream" uid="uid://8oe4lctbk6md" path="res://addons/kenney rpg audio/footstep_1.ogg" id="2_k0d35"]
+[ext_resource type="AudioStream" uid="uid://s825mwib3ryu" path="res://addons/kenney rpg audio/footstep_2.ogg" id="3_eyx6c"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_1wx7x"]
+random_pitch = 1.25
+random_volume_offset_db = 1.5
+streams_count = 3
+stream_0/stream = ExtResource("1_76dpw")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("2_k0d35")
+stream_1/weight = 1.0
+stream_2/stream = ExtResource("3_eyx6c")
+stream_2/weight = 1.0
+
+[node name="FootSteps" type="AudioStreamPlayer3D" node_paths=PackedStringArray("rightFoot", "leftFoot", "leftRay", "rightRay")]
+stream = SubResource("AudioStreamRandomizer_1wx7x")
+volume_db = 1.2
+script = ExtResource("1_px3xs")
+rightFoot = NodePath("RightBone")
+leftFoot = NodePath("LeftBone")
+leftFootIdx = null
+rightFootIdx = null
+leftRay = NodePath("LeftBone/LeftFoot")
+rightRay = NodePath("RightBone/RightFoot")
+
+[node name="LeftBone" type="BoneAttachment3D" parent="."]
+use_external_skeleton = true
+external_skeleton = NodePath("")
+
+[node name="LeftFoot" type="RayCast3D" parent="LeftBone"]
+target_position = Vector3(0, -0.05, 0)
+collision_mask = 8
+debug_shape_thickness = 5
+
+[node name="RightBone" type="BoneAttachment3D" parent="."]
+use_external_skeleton = true
+external_skeleton = NodePath("")
+
+[node name="RightFoot" type="RayCast3D" parent="RightBone"]
+target_position = Vector3(0, -0.05, 0)
+collision_mask = 8
+debug_shape_thickness = 5

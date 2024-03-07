@@ -1,5 +1,6 @@
 using Godot;
 using System.Collections.Generic;
+using Globals;
 
 namespace Game
 {
@@ -13,6 +14,7 @@ namespace Game
         private Weapon weaponToRedraw = null;
 
         private double drinkTimer = defaultDrinkTime;
+        private bool playAudio;
 
         public override void Enter(Dictionary<string, Vector2> msg)
         {
@@ -27,6 +29,8 @@ namespace Game
 
             (Animation as PlayerAnimation).UseItem = "Drink";
 			(Animation as PlayerAnimation).RequestOneShot("UseItem");
+
+            playAudio = true;
             
             Movement.SetSpeed(Movement.WalkSpeed);
         }
@@ -34,6 +38,11 @@ namespace Game
         public override void PhysicsUpdate(double delta)
         {
             drinkTimer -= delta;
+            if (playAudio && drinkTimer < 1)
+            {
+                playAudio = false;
+                player.Audio.Play(SoundEffects.Drink);
+            }
             if (drinkTimer <= 0) 
             {
                 EmitSignal(SignalName.StateFinishedWithArgument, nameof(PlayerDrinkState));

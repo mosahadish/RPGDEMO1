@@ -299,7 +299,8 @@ namespace Game
             foundSlot = FindItemSlot("HealPotion");
 
             if (foundSlot == null) return;
-            foundSlot.item.Quantity = 5;
+
+            foundSlot.item.Quantity = (foundSlot.item as Consumable).MaxQuantity;
             foundSlot.UpdateQuantity();
         }
 

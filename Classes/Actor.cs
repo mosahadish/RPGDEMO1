@@ -16,6 +16,7 @@ namespace Game
 		public delegate void ActorGotParriedEventHandler();
 		[Signal]
 		public delegate void ActorGotStaggeredEventHandler();
+		[Signal] public delegate void ActorParrySuccessWithArgumentEventHandler(Actor actor);
 
 		[Export] public StateMachine SMachine;
 		[Export] public Stagger staggerComp;
@@ -29,7 +30,9 @@ namespace Game
 
 		public bool _InAir = false;
 		public bool _IsAttacking = false;
+		public bool Parried = false;
 
+		[Export] public bool CanBeRiposted;
 		[Export] public bool _CanRotate;
  		
 		
@@ -65,6 +68,7 @@ namespace Game
 				{
 					parry.DeactivateParryWindow();
 					hitter.GotParried();
+					EmitSignal(SignalName.ActorParrySuccessWithArgument, hitter);
 					return;
 				}
 			}
@@ -167,6 +171,7 @@ namespace Game
 		public virtual void GotParried()
 		{
 			Audio.Play("ParrySuccess");
+			Parried = true;
 			EmitSignal(SignalName.ActorGotParried);
 		}
 

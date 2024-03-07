@@ -13,7 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://1maggt1idyiv" path="res://Scenes/Items/Weapons/Sword.tscn" id="11_rx7gh"]
 [ext_resource type="PackedScene" uid="uid://odsxeljnokdn" path="res://Scenes/Items/Weapons/Bow.tscn" id="12_ha2fn"]
 [ext_resource type="PackedScene" uid="uid://bnu5rvi2ojq62" path="res://Scenes/Items/Weapons/Shield.tscn" id="13_g2ao4"]
-[ext_resource type="PackedScene" uid="uid://bwcnco5r8xygd" path="res://Scenes/Models/MeleeAI/MeleeAI.tscn" id="14_qhv36"]
+[ext_resource type="PackedScene" uid="uid://bwcnco5r8xygd" path="res://Scenes/Models/MeleeAI/MeleeAI.tscn" id="14_webxm"]
 [ext_resource type="PackedScene" uid="uid://cdg0ik5rv3mc3" path="res://Scenes/InteractableObjects/Checkpoint.tscn" id="15_82kga"]
 
 [sub_resource type="Environment" id="Environment_jyw0s"]
@@ -86,9 +86,8 @@ ItemScene = ExtResource("13_g2ao4")
 
 [node name="Enemies" type="Node" parent="."]
 
-[node name="MeleeAI" parent="Enemies" instance=ExtResource("14_qhv36")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 186.281, 151.433, 895.222)
-_CanRotate = null
+[node name="MeleeAI" parent="Enemies" instance=ExtResource("14_webxm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 187.084, 151.648, 896.889)
 
 [node name="Checkpoints" type="Node" parent="."]
 

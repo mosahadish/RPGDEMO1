@@ -88,7 +88,7 @@ namespace Game
             else quantityLabel.Text = "";
             empty = false;
 
-            if (item is Weapon) itemInfo += "Damage: " + (item as Weapon).Damage.ToString() + "\n";
+            if (item is Weapon) itemInfo += "Damage: " + (item as Weapon).currentDamage.ToString() + "\n";
             
             itemInfo += item.HoverText;
             TooltipText = itemInfo;

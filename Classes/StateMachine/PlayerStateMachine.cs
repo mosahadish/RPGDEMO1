@@ -73,6 +73,7 @@ namespace Game
 			if (state is PlayerParryingState) return;
 			if (state is PlayerDeathState) return;
 			if (state is PlayerPickUpState) return;
+			if (state is PlayerRiposteState) return;	
 
 		
 			if (Actor.HasParryingWeapon())
@@ -141,8 +142,15 @@ namespace Game
 						else if(player.IsBlocking()) nextAction = Actions.CounterLightAttack;
 
 						msgForState[nextAction] = vectorForState;
+
 						aMachine.TransitionTo(nameof(PlayerIdleState));
-						TransitionTo(nameof(PlayerAttackState), msgForState);
+
+						if (Animation.CurrentAttack == "Riposte")
+						{
+							TransitionTo(nameof(PlayerRiposteState), msgForState);
+						}
+
+						else TransitionTo(nameof(PlayerAttackState), msgForState);
 					}
 				}
 			} 
@@ -220,6 +228,7 @@ namespace Game
 			if (state is PlayerDeathState) return;
 			if (state is PlayerPickUpState) return;
 			if (state is PlayerDrinkState) return;
+			if (state is PlayerRiposteState) return;	
 
 			if (Actor.IsOnFloor() == false)
 			{
@@ -371,6 +380,10 @@ namespace Game
 				if (state is PlayerStaggerState == false)
 					TransitionTo(nameof(PlayerRunState), Msg);
 			}
+			if (stateName == nameof(PlayerRiposteState))
+			{
+				TransitionTo(nameof(PlayerRunState), Msg);
+			}
 			if (stateName == nameof(PlayerDodgeState))
 			{
 				if (Buffer.IsEmpty())
@@ -390,7 +403,7 @@ namespace Game
 		*/
 		public void OnAnimationFinished(string anim)
 		{
-			GD.Print(anim);
+			//GD.Print(anim);
 			if (anim.Contains("RestToStand")) TransitionTo(nameof(PlayerRunState), Msg);
 
 			else if (anim.Contains(Animations.AttackGeneral) && anim.Contains("Block") == false)
