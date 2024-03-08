@@ -14,6 +14,7 @@ namespace Game
         [Export] public float DodgeRange;
         [Export(PropertyHint.Range, "0,100,")] private float DodgeChancePercent;
         [Export(PropertyHint.Range, "0,100,")] private float AttackChancePercent;
+        [Export(PropertyHint.Range, "0,100,")] private float BlockChancePercent;
         [Export] private float canDecideTimer;
 		[Export] public Raycasts Raycasts;
 		private Vector3 desiredVelo;
@@ -28,6 +29,8 @@ namespace Game
         private int rngResult;
         private float dodgeChance;
         private float attackChance;
+        private float blockChance;
+        private float healthWeight;
 
         private bool dodging = false;
         bool IDodger.Dodging
@@ -47,6 +50,7 @@ namespace Game
 
             dodgeChance = DodgeChancePercent;
             attackChance = AttackChancePercent;
+            blockChance = BlockChancePercent;
 
             rng = new();
 
@@ -80,13 +84,36 @@ namespace Game
             //Reset to default
             dodgeChance = DodgeChancePercent;
             attackChance = AttackChancePercent;
+            blockChance = BlockChancePercent;
+
+            healthWeight = (100-HP.AsPercent())/6;
             
+            dodgeChance += healthWeight;
+            blockChance += healthWeight;
+
+
             if (_IsAttacking) return null;
+
+            if (SMachine.target.HasAimingWeapon())
+            {
+                if (ShouldBlock()) 
+                {
+                    rngResult = rng.RandiRange(0,99);
+                    return nameof(AIBlockState);
+                }
+            }
+
+            if (distToTarget <= AttackRange)
+            {
+                if (ShouldDodge())
+                {
+                    rngResult = rng.RandiRange(0,99);
+                    return nameof(AIBlockState);
+                }
+            }
 
             if (distToTarget <= DodgeRange)
             {
-                dodgeChance += (100-HP.AsPercent())/6;
-                
                 if (SMachine.target.IsAttacking() && ShouldDodge())
                 {
                     rngResult = rng.RandiRange(0,99);
@@ -97,8 +124,8 @@ namespace Game
             if (canDecide == false) return null;
 
             canDecide = false;
-
             rngResult = rng.RandiRange(0,99);
+
 
             if (distToTarget <= AttackRange) 
             {
@@ -112,6 +139,11 @@ namespace Game
             return action;
         }
 
+        public bool ShouldBlock()
+        {
+            return rngResult < blockChance;
+        }
+        
         public bool ShouldDodge(bool roll = false)
         {
             if (roll) rngResult = rng.RandiRange(0,99);

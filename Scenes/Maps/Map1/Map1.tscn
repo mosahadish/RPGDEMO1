@@ -88,6 +88,7 @@ ItemScene = ExtResource("13_g2ao4")
 
 [node name="MeleeAI" parent="Enemies" instance=ExtResource("14_webxm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 187.084, 151.648, 896.889)
+AttackChancePercent = 60.0
 
 [node name="Checkpoints" type="Node" parent="."]
 

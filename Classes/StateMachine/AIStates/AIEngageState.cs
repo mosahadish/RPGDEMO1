@@ -24,10 +24,8 @@ namespace Game
 
         public override void Enter(Player target)
         {
-            // mation.Transition("Movement");
-            //Animation.AnimTree.Set("parameters/Movement/conditions/Engage", true);
-            // Animation.NodeTransition("Engage");
             Animation.CurrentMovementState = "Walk";
+            Animation.OffhandBlend(0.8);
 
             this.target = target;
             distToTarget = 9999;

@@ -20,7 +20,6 @@ namespace Game
 		
 
 		[ExportCategory("Gameplay")]
-		[Export] private Area3D hitArea;
 		[Export] public bool _CanBlock = false; 
 		[Export] public bool _CanAim = false;
 
@@ -37,13 +36,22 @@ namespace Game
         {
 			currentDamage = DefaultDamage;
 			
-			if (hitArea != null)
+			if (HasNode("Area3D"))
 			{
+				Area3D hitArea = (Area3D) GetNode("Area3D");
 				hitArea.BodyEntered += OnBodyEnteredHitArea;
 				hitArea.BodyExited += OnBodyExitedHitArea;
+				
 				if (Wielder is AI)
 					hitArea.SetCollisionMaskValue(2, false);
 			}
+			// if (hitArea != null)
+			// {
+			// 	hitArea.BodyEntered += OnBodyEnteredHitArea;
+			// 	hitArea.BodyExited += OnBodyExitedHitArea;
+			// 	if (Wielder is AI)
+			// 		hitArea.SetCollisionMaskValue(2, false);
+			// }
         }
 
 		public void AddRiposte()

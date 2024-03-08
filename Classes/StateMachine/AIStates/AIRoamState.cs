@@ -18,6 +18,7 @@ namespace Game
         {            
             //Animation.Transition("Movement");
             //Animation.NodeTransition("Roam");     
+            Animation.OffhandBlend(0.0);
             Animation.CurrentMovementState = "Roam";     
             SetWanderTime();
             Movement.SetSpeed(Movement.WalkSpeed);

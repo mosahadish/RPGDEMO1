@@ -8,12 +8,17 @@ namespace Game
 	public partial class MeleeAI : AI, IMeleeAttacker, IBlocker
 	{
         private bool blocking;
+        private bool blockedAttack = false;
         bool IBlocker.Blocking { get {return blocking;} set {blocking = value;} }
-        bool IBlocker.AttackBlocked { get; set;}
+        bool IBlocker.AttackBlocked { get{return blockedAttack;} set {blockedAttack = value;}}
 
         public override void _Ready()
         {
             base._Ready();
+            
+            CurrentOffhand = (Weapon) GetNode("Visuals/Armature/Skeleton3D/BoneAttachment3D2/Node3D/Shield");
+            CurrentOffhand.Wielder = this;
+
             (Animation as AnimateAI).CurrentWeaponState = "Sword";
             (Animation as AnimateAI).CurrentOffhandState = "Shield";
             (Animation as AnimateAI).CurrentMovementState = "Roam";
@@ -94,27 +99,40 @@ namespace Game
         #region Block
         public void Block()
         {
-            
+            blocking = true;
         }
 
         public void BlockRelease()
         {
-            
+            blockedAttack = false;
+            blocking = false;
         }
 
         public void BlockHold()
         {
-            
+            (Animation as AnimateAI).CurrentMovementState = "Walk";
+			(Animation as AnimateAI).BlockedAttack = false;
+
+			blocking = true;
+			blockedAttack = false;
         }
 
         public void BlockedAttack(float damage)
         {
-            
+            (Animation as AnimateAI).BlockedAttack = true;
+            (Animation as AnimateAI).RequestOneShot("Offhand");
+            Audio.Play(SoundEffects.ShieldBlock);
+            blockedAttack = true;
         }
 
         public void BlockCounterAttack()
         {
-            
+            _CanRotate = false;
+			_IsAttacking = true;
+			
+			(Animation as AnimateAI).MainAttack(Animations.CounterLightAttack);
+			
+			blockedAttack = false;
         }
 
         public bool IsBlocking()
@@ -124,7 +142,12 @@ namespace Game
 
         public bool CanCounter()
         {
-            return true;
+            return blockedAttack;
+        }
+
+        public void ResetBlockedAttack()
+        {
+            blockedAttack = false;
         }
         #endregion
     }

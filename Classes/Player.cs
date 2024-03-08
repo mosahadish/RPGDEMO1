@@ -110,6 +110,7 @@ namespace Game
 				ItemUseSuccess += Inventory.ItemUsed;
 				PlayerResting += Inventory.ResetPlayerInventory;
 				ActorDeathWithArgument += Inventory.OnPlayerDeath;
+				Interact.Player = this;
 			}
 			if (SMachine is PlayerStateMachine machine)
 			{
@@ -137,10 +138,6 @@ namespace Game
 			{
 				ActorParrySuccessWithArgument += riposte.SetTarget;
 				riposte.Player = this;
-			}
-			if (Interact != null)
-			{
-				Interact.Player = this;
 			}
 		}
 

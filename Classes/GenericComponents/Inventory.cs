@@ -18,7 +18,7 @@ namespace Game
         [Signal]
         public delegate void UsedItemWithArgumentEventHandler(Item item);
 
-        [Export] Player player;
+        public Player player;
         [Export] private GridContainer inventory;
         [Export] private GridContainer equipment;
         [Export] public GridContainer hotbar;
@@ -43,7 +43,6 @@ namespace Game
 
         public async override void _Ready()
         {
-            base._Ready();
             currentEquip[Slots.Head] = headSlot;
             currentEquip[Slots.Body] = bodySlot;
             currentEquip[Slots.Legs] = legsSlot;
@@ -51,12 +50,15 @@ namespace Game
             currentEquip[Slots.LeftHand] = leftHandSlot;
 
             await ToSignal(Owner, "ready");
+            GD.Print("Inventory");
 
             AddItem(GameData.Instance.FetchItem("HealPotion"));
 
             Input.MouseMode = Input.MouseModeEnum.Hidden;
             SetProcess(false);
             Hide();
+
+            base._Ready();
         }
 
         public override void _Process(double delta)

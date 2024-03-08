@@ -5,9 +5,9 @@ namespace Game
 {
 	public partial class OnScreen : Control
 	{
-		[Export] private Player player;
-		[Export] private Stamina stam;
-		[Export] private Health health;
+		public Player player;
+		Stamina stam;
+		Health health;
 		[Export] private ProgressBar stamBar;
 		[Export] private ProgressBar healthBar;
 		[Export] private Label attun;
@@ -23,20 +23,20 @@ namespace Game
 		private Vector2 viewPortSize;
 		
 	// Called when the node enters the scene tree for the first time.
-		public override void _Ready()
+		public async override void _Ready()
 		{
-			attun.Text = player.CurrentAttunement;
-
-			stam.StaminaChanged += OnStaminaChanged;
-			stamBar.MaxValue = stam.MaxValue;
-			stamBar.Value = stam.MaxValue;
-
-			health.ValueChangedWithArgument += OnHealthChanged;
-			healthBar.MaxValue = health.MaxValue;
-			healthBar.Value = health.MaxValue;
+			await ToSignal(Owner, "ready");
+		
+			if (inventory != null && hotbar != null)
+			{
+				hotbar.HotbarInventory = inventory.hotbar;
+				hotbar.HotbarUsedWithArgument += inventory.OnHotBarItemUsed;
+			}
 
 			if (player != null)
 			{
+				//await ToSignal(player, "ready");
+				GD.Print("OnScreen");
 				player.AttunementChanged += OnAttunementChanged;
 				player.ActorDeathWithArgument += OnPlayerDeath;
 				player.PlayerResting += checkPointMenu.PlayerResting;
@@ -45,17 +45,32 @@ namespace Game
 				{
 					player.Camera.AimWithArgument += OnAim;
 				}
+
+					attun.Text = player.CurrentAttunement;
+
+				stam = player.Stam;
+				health = player.HP;
+				if (stam != null)
+				{
+					stam.StaminaChanged += OnStaminaChanged;
+					stamBar.MaxValue = stam.MaxValue;
+					stamBar.Value = stam.MaxValue;
+				}
+
+				if (health != null)
+				{
+					health.ValueChangedWithArgument += OnHealthChanged;
+					healthBar.MaxValue = health.MaxValue;
+					healthBar.Value = health.MaxValue;
+				}
 			}
 			
 			checkPointMenu.PlayerFinishedResting += player.LeaveCheckpoint;
 
-			if (inventory != null && hotbar != null)
-			{
-				hotbar.HotbarInventory = inventory.hotbar;
-				hotbar.HotbarUsedWithArgument += inventory.OnHotBarItemUsed;
-			}
-
 			GetViewport().SizeChanged += OnWindowSizeChanged;
+
+			base._Ready();
+			hotbar.MyReady();
 		}
 
         private void OnPlayerDeath(Actor actor)

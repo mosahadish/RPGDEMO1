@@ -10,7 +10,8 @@ namespace Game
     public partial class AIStateMachine : Node
     {
         Signal transitionedTo;
-
+        
+        [Export] AIActionStateMachine aMachine;
         [Export] Label3D StateLabel;
         [Export] Label3D DistLabel;
         [Export] public AIState initialState;
@@ -26,6 +27,8 @@ namespace Game
         private List<AI> bodiesToNotifyOfTarget = new();
         private float distToTarget = 9999; //Distance squared is faster to calculate, if necessary do it
         private bool chaseOutOfRange = true; //This is for when other enemies alert this one, or detected projectile
+
+        string nextAction = "";
     
         public async override void _Ready()
         {
@@ -107,7 +110,17 @@ namespace Game
                         TransitionTo(nameof(AIEngageState));
                     else 
                     {
-                        TransitionTo(AIActor.DecideOnNextAction(distToTarget));
+                        nextAction = AIActor.DecideOnNextAction(distToTarget);
+                        if (nextAction == nameof(AIBlockState))
+                        {
+                            if (aMachine.state is AIBlockState == false)
+                                aMachine.TransitionTo(nextAction);
+                        }
+                        else
+                        {
+                            if (aMachine.state is AIIdleState)
+                                TransitionTo(nextAction);
+                        }
                     }
                 }
                 else if (target != null && distToTarget > AIActor.CircleRange +1) 

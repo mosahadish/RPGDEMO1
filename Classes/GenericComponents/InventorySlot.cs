@@ -7,7 +7,7 @@ namespace Game
     [GlobalClass]
     public partial class InventorySlot : Button
     {
-        [Export] Label quantityLabel;
+        Label quantityLabel;
 
         public Item item = null;
 
@@ -22,6 +22,7 @@ namespace Game
         public override void _Ready()
         {
             base._Ready();
+            quantityLabel = (Label) GetNode("Label");
             if (Type == Slots.Passive) return;
             Text = Type;
         }

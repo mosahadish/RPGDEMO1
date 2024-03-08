@@ -9,20 +9,16 @@ namespace Game
     {
 
         private Vector3 direction = Vector3.Zero;
-        private AnimationNodeStateMachinePlayback movementAnim;
+
 
         public override void Enter(Player target)
         {
-            movementAnim ??= (AnimationNodeStateMachinePlayback)Animation.AnimTree.Get("parameters/Movement/playback");
-            
-            //Animation.Transition("Movement");
-            //Animation.AnimTree.Set("parameters/Movement/conditions/Chase", true);
-            //Animation.NodeTransition("Chase");
+            this.target = target;
             Animation.CurrentMovementState = "Run";
 
+            if (AIActor.HasOffhand() && AIActor.CurrentOffhand is Shield)
+                Animation.OffhandBlend(0.8);
 
-            this.target = target;
-           
             Movement.SetSpeed(Movement.Speed);
         }
 

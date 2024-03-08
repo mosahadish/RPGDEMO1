@@ -24,8 +24,6 @@ namespace Game
             currentOffhand = player.CurrentOffhand;
             offhandType = currentOffhand.GetType().Name;
 
-            // currentTransition = (string)Animation.AnimTree.Get("parameters/"+ offhandType +"/current_state");
-            // Animation.Transition(offhandType, "Parry");
             (Animation as PlayerAnimation).Parry = true;
             (Animation as PlayerAnimation).BlendMovement(Vector2.Zero);
             (Animation as PlayerAnimation).RequestOneShot("Offhand");

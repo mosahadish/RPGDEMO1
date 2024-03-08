@@ -19,5 +19,7 @@ namespace Game
         bool IsBlocking();
 
         bool CanCounter();
+
+        void ResetBlockedAttack();
     }
 }

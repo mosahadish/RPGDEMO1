@@ -15,7 +15,7 @@ namespace Game
 		[Export] private ActionStateMachine aMachine;
 		[Export] private PlayerAnimation Animation;
 		[Export] private Stamina Stam;
-		[Export] private InputBuffer Buffer;
+		[Export] public InputBuffer Buffer;
 		[Export] new PlayerMovement Movement;
 		private string CurrentAttunement;
 		private string CurrentWeaponName;

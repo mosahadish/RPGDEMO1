@@ -8,7 +8,7 @@ namespace Game
     {
         [Export] State initialState;
         public State state;
-        [Export] public Player Player;
+        [Export] public Player Actor;
         public PlayerAnimation Animation;
         public PlayerMovement Movement;
         public Stamina Stam;
@@ -19,13 +19,13 @@ namespace Game
             await ToSignal(GetParent(), "ready");
             state = initialState;
             
-            Movement = Player.Movement;
-            Animation = Player.Animation as PlayerAnimation;
-            Stam = Player.Stam;
+            Movement = Actor.Movement;
+            Animation = Actor.Animation as PlayerAnimation;
+            Stam = Actor.Stam;
 
             foreach (State c in GetChildren().Cast<State>())
             {
-                c.Actor = Player;
+                c.Actor = Actor;
                 c.Movement = Movement;
                 c.Animation = Animation;
                 c.Stam = Stam;

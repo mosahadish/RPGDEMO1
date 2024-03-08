@@ -6,6 +6,7 @@ namespace Game
 {
     public abstract partial class AIState : Node
     {
+        [Signal] public delegate void StateFinishedWithArgumentEventHandler(string stateName);
         public AI AIActor;
         public Movement Movement;
         public Attack Attack;

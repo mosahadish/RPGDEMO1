@@ -1,15 +1,13 @@
 using Game;
 using GameSettings;
 using Godot;
-using System;
 
 namespace Game
 {
     public partial class Debug : Control
     {
 
-        [Export] private Player player;
-        [Export] private InputBuffer inputBuffer;
+        public Player player;
         [Export] private Label debugMode;
         [Export] private Label state;
         [Export] private Label aiming;
@@ -21,12 +19,18 @@ namespace Game
         [Export] private Label FPS;
 
         private StateMachine stateMachine;
+        private InputBuffer inputBuffer;
 
         public async override void _Ready()
         {
-            await ToSignal(Owner, "ready");
             base._Ready();
-            stateMachine = player.SMachine;
+            await ToSignal(Owner, "ready");
+            if (player != null)
+                {
+                    await ToSignal(player, "ready");
+                    stateMachine = player.SMachine;
+                    inputBuffer = (stateMachine as PlayerStateMachine).Buffer;
+                }     
         }
 
         public override void _Process(double delta)

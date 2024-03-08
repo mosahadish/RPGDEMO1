@@ -17,15 +17,28 @@ namespace Game
 		private InventorySlot[] slotsInHotbar = new InventorySlot[4];
 		private InventorySlot currentSlotInHotBar;
 		// Called when the node enters the scene tree for the first time.
-		public async override void _Ready()
+		public override void _Ready()
+		{
+			base._Ready();
+			SetPhysicsProcess(false);
+			SetProcess(false);
+		}
+
+		public void MyReady()
 		{
 			int i = 0;
-			await ToSignal(GetParent(), "ready");
+
+			//await ToSignal(GetParent(), "ready");
+			GD.Print("Hotbar");
+
 			foreach (InventorySlot slot in HotbarInventory.GetChildren().Cast<InventorySlot>())
 			{
 				slotsInHotbar[i] = slot;
 				i++;
 			}
+
+			SetPhysicsProcess(true);
+			SetProcess(true);
 		}
 
 		// Called every frame. 'delta' is the elapsed time since the previous frame.
