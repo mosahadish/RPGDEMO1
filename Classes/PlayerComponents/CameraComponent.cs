@@ -122,11 +122,15 @@ namespace Game
 
 		private void LockedRotation(double delta)
 		{
-			if (Target != null)
+			if (Target != null && Target.Dead == false)
 				{
 					LookAtTarget(delta);
 				}
-			else _LockOn = false;
+			else 
+			{
+				ReleaseLockOn();
+				_LockOn = false;
+			}
 		}
 
 		public void LockOnTarget()
@@ -155,10 +159,6 @@ namespace Game
 		public void ReleaseLockOn()
 		{
 			_LockOn = false;
-			// Target.LockOn.Hide();
-			// Target = null;
-			// distToTarget = 500;
-			// tempDistance = 500;
 			lockOnComponent.Targetted(null);
 		}
 
