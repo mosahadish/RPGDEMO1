@@ -90,6 +90,10 @@ namespace Game
 		}
 
 
+		/*
+		Called from the StateMachine, in response to Aim input
+		Zooms in/out according to the input
+		*/
 		public void SetAiming(bool aiming)
 		{
 			_AimOn = aiming;
@@ -113,6 +117,9 @@ namespace Game
 		}
 
 
+		/*
+		Called by the StateMachine when locking on
+		*/
         public bool FindClosestTarget()
 		{
 			Target = lockOnComponent.FetchClosestTarget();
@@ -120,6 +127,10 @@ namespace Game
 			return Target != null;
 		}
 
+
+		/*
+		Handles LockedRotation, look at target as long as it's not null and alive
+		*/
 		private void LockedRotation(double delta)
 		{
 			if (Target != null && Target.Dead == false)
