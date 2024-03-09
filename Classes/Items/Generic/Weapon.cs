@@ -87,6 +87,7 @@ namespace Game
         private void OnBodyEnteredHitArea(Node3D body)
 		{
 			if (body == Wielder) return;
+			if (body is AI && Wielder is AI) return;
 
 			if (body is Actor actor)
 			{
