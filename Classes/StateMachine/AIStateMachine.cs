@@ -193,11 +193,13 @@ namespace Game
 
         public void OnStagger()
         {
+            aMachine.TransitionTo(nameof(AIIdleState));
             TransitionTo(nameof(AIStaggerState));
         }
 
         public void OnParry()
         {
+            aMachine.TransitionTo(nameof(AIIdleState));
             TransitionTo(nameof(AIParriedState));
         }
     }   

@@ -15,6 +15,7 @@ namespace Game
             player ??= Actor as Player;
             player._CanRotate = false;
             player.CurrentWeapon.AddRiposte();
+            player.Vulnerable = false;
             riposteTimer = DefaultTime;
             Movement.SetSpeed(0);
             (Animation as PlayerAnimation).MainAttack("Riposte");
@@ -42,6 +43,7 @@ namespace Game
             (Animation as PlayerAnimation).CurrentAttack = "";
             (Animation as PlayerAnimation).CurrentMovementState = "Run";
             Movement.SetSpeed(Movement.Speed);
+            player.Vulnerable = true;
             player._CanRotate = true;
             riposteTimer = DefaultTime;
         }

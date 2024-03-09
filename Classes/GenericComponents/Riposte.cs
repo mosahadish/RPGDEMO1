@@ -26,6 +26,7 @@ namespace Game
 
             else if (target.Parried == false)
             {   
+                (Player.Animation as PlayerAnimation).CurrentAttack = "";
                 target = null;
             }
             
@@ -35,6 +36,7 @@ namespace Game
                 {
                     (Player.Animation as PlayerAnimation).CurrentAttack = "Riposte";
                 }
+                else (Player.Animation as PlayerAnimation).CurrentAttack = "";
             }
         }
 

@@ -101,8 +101,11 @@ namespace Game
 			if (state is PlayerAttackState) return;
 			if (state is PlayerDodgeState) return;
 			if (state is PlayerAirState) return;	
+			if (aMachine.state is PlayerDrinkState) return;
+			if (aMachine.state is PlayerBlockState) return;
 			if (Stam.HasEnough((player.CurrentOffhand as ParryingObject).StaminaConsumption) == false) return;
-			
+
+			aMachine.TransitionTo(nameof(PlayerIdleState));
 			TransitionTo(nameof(PlayerParryingState), Msg);
 		}
 

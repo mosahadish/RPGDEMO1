@@ -31,6 +31,7 @@ namespace Game
 		public bool _InAir = false;
 		public bool _IsAttacking = false;
 		public bool Parried = false;
+		public bool Vulnerable = true;
 
 		[Export] public bool CanBeRiposted;
 		[Export] public bool _CanRotate;
@@ -55,6 +56,7 @@ namespace Game
         public void OnHit(float incDamage, Actor hitter, string hittingObject)
 		{
 			if (Dead) return;
+			if (Vulnerable == false) return;
 
 			if (this is IDodger dodger)
 				if (dodger.IsDodging()) return;

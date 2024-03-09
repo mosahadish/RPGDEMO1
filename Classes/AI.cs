@@ -105,7 +105,7 @@ namespace Game
 
             if (distToTarget <= AttackRange)
             {
-                if (ShouldDodge())
+                if (ShouldBlock())
                 {
                     rngResult = rng.RandiRange(0,99);
                     return nameof(AIBlockState);

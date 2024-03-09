@@ -87,10 +87,24 @@ ItemScene = ExtResource("13_g2ao4")
 [node name="Enemies" type="Node" parent="."]
 
 [node name="MeleeAI" parent="Enemies" instance=ExtResource("14_webxm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 187.084, 151.648, 896.889)
-AttackChancePercent = 60.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 185.312, 151.411, 892.726)
+
+[node name="MeleeAI2" parent="Enemies" instance=ExtResource("14_webxm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 144.176, 133.572, 911.878)
+DodgeChancePercent = 100.0
+
+[node name="MeleeAI3" parent="Enemies" instance=ExtResource("14_webxm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 115.668, 121.103, 881.13)
+DodgeChancePercent = 35.0
+
+[node name="MeleeAI4" parent="Enemies" instance=ExtResource("14_webxm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 119.304, 121.365, 882.651)
+AttackChancePercent = 100.0
 
 [node name="Checkpoints" type="Node" parent="."]
 
 [node name="Checkpoint" parent="Checkpoints" instance=ExtResource("15_82kga")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 174.804, 150.483, 874.481)
+
+[node name="Checkpoint2" parent="Checkpoints" instance=ExtResource("15_82kga")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 146.785, 120.369, 840.153)
