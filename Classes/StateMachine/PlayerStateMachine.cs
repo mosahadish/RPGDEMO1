@@ -74,6 +74,7 @@ namespace Game
 			if (state is PlayerDeathState) return;
 			if (state is PlayerPickUpState) return;
 			if (state is PlayerRiposteState) return;	
+			if (aMachine.state is PlayerDrinkState) return;
 
 		
 			if (Actor.HasParryingWeapon())
@@ -230,17 +231,21 @@ namespace Game
 			if (state is PlayerParryingState) return;
 			if (state is PlayerDeathState) return;
 			if (state is PlayerPickUpState) return;
-			if (state is PlayerDrinkState) return;
 			if (state is PlayerRiposteState) return;	
-
+			
 			if (Actor.IsOnFloor() == false)
 			{
-				if ((state is PlayerAirState) == false) TransitionTo(nameof(PlayerAirState), Msg);
+				if ((state is PlayerAirState) == false) 
+				{
+					aMachine.TransitionTo(nameof(PlayerIdleState));
+					TransitionTo(nameof(PlayerAirState), Msg);
+				}
 				return;
 			}
 
 			Move(Msg);
 			if (state is PlayerAttackState) return;
+			if (aMachine.state is PlayerDrinkState) return;
 		
 			Sprint(Msg);
 			Jump(Msg);
@@ -406,8 +411,15 @@ namespace Game
 		*/
 		public void OnAnimationFinished(string anim)
 		{
-			//GD.Print(anim);
-			if (anim.Contains("RestToStand")) TransitionTo(nameof(PlayerRunState), Msg);
+			GD.Print(anim);
+			if (anim.Contains("RestToStand"))
+			{
+				TransitionTo(nameof(PlayerRunState), Msg);
+			}
+			else if (anim.Contains("Unsheathe") || anim.Contains("Sheathe"))
+			{
+				aMachine.TransitionTo(nameof(PlayerIdleState));
+			}
 
 			else if (anim.Contains(Animations.AttackGeneral) && anim.Contains("Block") == false)
 			{
@@ -420,15 +432,18 @@ namespace Game
 		public void OnAttunementChanged(string attun)
 		{
 			CurrentAttunement = attun;
-			(Animation as PlayerAnimation).UpdateAttunement(attun);
+			Animation.UpdateAttunement(attun);
 		}
 
 		public void OnStaminaChanged(float value)
 		{
 			if (value == 0)
 			{
-				if (aMachine.state is PlayerBlockState)
-					aMachine.TransitionTo(nameof(PlayerIdleState));
+				if (aMachine.state is PlayerBlockState && player.CanCounter())
+				{
+					TransitionTo(nameof(PlayerStaggerState), Msg);
+				}
+				aMachine.TransitionTo(nameof(PlayerIdleState));
 			}
 		}
 
@@ -436,15 +451,22 @@ namespace Game
 		{
 			if (weapon == null)
 			{
+				Animation.Sheathe = true;
+				//aMachine.TransitionTo(nameof(PlayerChangeWeaponState));
 				CurrentWeaponName = "Unarmed";
 			} 
+
 			else 
 			{
+				Animation.Unsheathe = true;
 				CurrentWeaponName = weapon.Name;
 			}
 
+			
 			Animation.CurrentWeaponState = CurrentWeaponName;
+			
 			Attack.CurrentWeapon = weapon;
+			if (CurrentWeaponName != "Unarmed") aMachine.TransitionTo(nameof(PlayerChangeWeaponState));
 		}
 
 		public void OnOffhandChanged(Weapon weapon)

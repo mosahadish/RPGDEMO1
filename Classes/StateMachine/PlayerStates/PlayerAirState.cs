@@ -7,6 +7,7 @@ namespace Game
     [GlobalClass]
     public partial class PlayerAirState : State
     {
+        const double takeDamgeTime = 2;
         private Vector2 inputDir;
         private Vector3 newVelo;
 
@@ -60,17 +61,15 @@ namespace Game
 
         public override void Exit()
         {
-            GD.Print(airTime);
-            // if (airTime >= 2)
-            // {
-            //     airTime *= 5;
-            //     Actor.HP.TakeDamage((float)airTime);
-            // }
-            // (Animation as PlayerAnimation).Fall = false;
-            // (Animation as PlayerAnimation).LandState = "Roll";
             if (sprint) Movement.SetSpeed(Movement.Speed);
             Actor._InAir = false;
             Actor._CanRotate = true;
+
+            if (airTime >= takeDamgeTime)
+            {
+                Actor.HP.TakeDamage((float)airTime*6);
+            }
+
             airTime = 0;
         }
     }

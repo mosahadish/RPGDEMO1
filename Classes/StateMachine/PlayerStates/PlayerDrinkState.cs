@@ -14,14 +14,21 @@ namespace Game
         private Weapon weaponToRedraw = null;
 
         private double drinkTimer = defaultDrinkTime;
+        private double healTick;
+        private double healValue;
         private bool playAudio;
 
         public override void Enter(Dictionary<string, Vector2> msg)
         {
             player??= Actor as Player;
-
             (Animation as PlayerAnimation).CurrentMovementState = "Walk";
-           
+            player.Consuming = true;
+
+            healValue = player.itemToConsume.Consume();
+            player.itemToConsume = null;
+
+            healTick = healValue / defaultDrinkTime;
+
             if (player.HasOffhand()) weaponToRedraw = player.CurrentOffhand;
             else if (player.HasWeapon() && player.CurrentWeapon is Bow) weaponToRedraw = player.CurrentWeapon;
 
@@ -38,6 +45,8 @@ namespace Game
         public override void PhysicsUpdate(double delta)
         {
             drinkTimer -= delta;
+            player.HP.Heal((float)(healTick * delta));
+
             if (playAudio && drinkTimer < 1)
             {
                 playAudio = false;

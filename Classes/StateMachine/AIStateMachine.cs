@@ -110,22 +110,37 @@ namespace Game
                         TransitionTo(nameof(AIEngageState));
                     else 
                     {
-                        nextAction = AIActor.DecideOnNextAction(distToTarget);
-                        if (nextAction == nameof(AIBlockState))
+                        if (nextAction == nameof(AIAttackState))
                         {
-                            if (aMachine.state is AIBlockState == false)
-                                aMachine.TransitionTo(nextAction);
-                        }
-                        else
-                        {
-                            if (aMachine.state is AIIdleState)
+                            if (target.Consuming)
                                 TransitionTo(nextAction);
                         }
+
+                        else 
+                        {
+                            nextAction = AIActor.DecideOnNextAction(distToTarget);
+                            if (nextAction == nameof(AIBlockState))
+                            {
+                                if (aMachine.state is AIBlockState == false)
+                                    aMachine.TransitionTo(nextAction);
+                            }
+                            else
+                            {
+                                if (aMachine.state is AIIdleState)
+                                    TransitionTo(nextAction);
+                            }
+                        }
+
+                        nextAction = "";
                     }
                 }
                 else if (target != null && distToTarget > AIActor.CircleRange +1) 
                 {
-                    if (state is AIChaseState == false && state is AIAttackState == false) TransitionTo(nameof(AIChaseState));
+                    if (state is AIChaseState == false && state is AIAttackState == false) 
+                    {
+                        TransitionTo(nameof(AIChaseState));
+                        if (target.Consuming) nextAction = nameof(AIAttackState);
+                    }
                 }
             }
         }

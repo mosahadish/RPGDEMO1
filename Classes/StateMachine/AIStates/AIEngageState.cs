@@ -38,6 +38,7 @@ namespace Game
         public override void PhysicsUpdate(double delta)
         {
             circleTimer -= delta;
+
             if (circleTimer <= 0)
             {
                 randIndex = rng.RandiRange(0,1);
@@ -53,21 +54,15 @@ namespace Game
             else distToTarget = 9999;
           
             
-            if (distToTarget < AIActor.AttackRange*0.8)
+            if (distToTarget < AIActor.AttackRange*0.5)
             {
                 dirToTarget = -dirToTarget;
                 Movement.HandleMovement(dirToTarget, delta);
-                //blendPos.X = 0;
-                //blendPos.Y = dirToTarget.Z;
-                //Animation.BlendPosition("Engage", -1*blendPos);
             }
 
             else if (distToTarget > AIActor.AttackRange)
             {
                 Movement.HandleMovement(dirToTarget, delta);
-                //blendPos.X = 0;
-                //blendPos.Y = dirToTarget.Z;
-                //Animation.BlendPosition("Engage", -1*blendPos);
             }
 
             CircleAround(delta);

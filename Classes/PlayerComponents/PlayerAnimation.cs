@@ -26,6 +26,8 @@ namespace Game
     public string LandState = "";
     public bool Aiming = false;
     public bool ReadyToShoot = false;
+    public bool Sheathe = false;
+    public bool Unsheathe = false;
 
     public override void _Ready()
     {

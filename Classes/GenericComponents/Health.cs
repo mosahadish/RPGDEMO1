@@ -56,6 +56,8 @@ namespace Game
 
         public void TakeDamage(float damageToTake)
         {
+            if (parent.Dead == true) return;
+            
             currentVal -= damageToTake;
             if (currentVal <= 0) 
             {

@@ -91,6 +91,10 @@ namespace Game
             dodgeChance += healthWeight;
             blockChance += healthWeight;
 
+            if(SMachine.target.Consuming)
+                attackChance *= 2;
+
+
 
             if (_IsAttacking) return null;
 

@@ -46,7 +46,7 @@ namespace Game
 
 		private Timer deathTimer = new();
 
-		public bool Dead;
+		public bool Dead = false;
 
         public override void _Ready()
         {
@@ -56,6 +56,7 @@ namespace Game
         public void OnHit(float incDamage, Actor hitter, string hittingObject)
 		{
 			if (Dead) return;
+			
 			if (Vulnerable == false) return;
 
 			if (this is IDodger dodger)
@@ -97,6 +98,8 @@ namespace Game
 
 		public virtual void OnDeath()
 		{
+			if (Dead == true) return;
+
 			Dead = true;
 			SetPhysicsProcess(false);
 			SetProcess(false);

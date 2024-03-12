@@ -51,6 +51,7 @@ namespace Game
 		public bool CanInteract = true;
 		public Checkpoint lastVisitedCheckpoint;
 		public bool Resting = false;
+		public Consumable itemToConsume;
 
 		#region Private members
 		private int AttunementIterator = 0;
@@ -149,7 +150,7 @@ namespace Game
 
         private void OnInventoryUsedItem(Item item)
         {
-			if (_IsAttacking == true || _isDodging == true || _isBlocking == true || _InAir == true || Consuming == true) return;
+			if (_IsAttacking == true || _isDodging == true || _isBlocking == true || _InAir == true) return;
 			
             if (item is Consumable consumable)
 			{
@@ -157,8 +158,9 @@ namespace Game
 				{
 					if (consumable.Quantity > 0)
 					{
-						HP.Heal(consumable.Consume());
-						Consuming = true;
+						itemToConsume = consumable;
+						//HP.Heal(consumable.Consume());
+						//Consuming = true;
 						EmitSignal(SignalName.ItemUseSuccess);
 					}
 				}
@@ -219,6 +221,7 @@ namespace Game
 
 		public void Respawn()
 		{
+			_CanRotate = true;
 			Camera.lockOnComponent.Targetted(null);
 			Equip.SheatheWeapon(CurrentWeapon);
 			Equip.SheatheWeapon(CurrentOffhand);

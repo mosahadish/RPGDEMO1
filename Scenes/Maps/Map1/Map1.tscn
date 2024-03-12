@@ -88,14 +88,18 @@ ItemScene = ExtResource("13_g2ao4")
 
 [node name="MeleeAI" parent="Enemies" instance=ExtResource("14_webxm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 185.312, 151.411, 892.726)
+AttackChancePercent = 75.0
+BlockChancePercent = 20.0
 
 [node name="MeleeAI2" parent="Enemies" instance=ExtResource("14_webxm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 144.176, 133.572, 911.878)
 DodgeChancePercent = 100.0
+AttackChancePercent = 80.0
 
 [node name="MeleeAI3" parent="Enemies" instance=ExtResource("14_webxm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 115.668, 121.103, 881.13)
 DodgeChancePercent = 35.0
+AttackChancePercent = 100.0
 
 [node name="MeleeAI4" parent="Enemies" instance=ExtResource("14_webxm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 119.304, 121.365, 882.651)
